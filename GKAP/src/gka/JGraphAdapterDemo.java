@@ -20,6 +20,7 @@ import org.jgraph.graph.GraphModel;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.ListenableGraph;
+import org.jgrapht.WeightedGraph;
 import org.jgrapht.ext.JGraphModelAdapter;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.DefaultEdge;
@@ -43,9 +44,9 @@ import com.mxgraph.swing.mxGraphComponent;
 
 /**
  * A demo applet that shows how to use JGraph to visualize JGraphT graphs.
- *
+ * 
  * @author Barak Naveh
- *
+ * 
  * @since Aug 3, 2003
  */
 public class JGraphAdapterDemo extends JApplet {
@@ -71,9 +72,10 @@ public class JGraphAdapterDemo extends JApplet {
 		// Directed, Unweighted
 //    	Graph<EigenerKnoten, DefaultWeightedEdge> graph4 = new DirectedPseudograph<V, E>(arg0);
 		// Directed, Weighted
-//		Graph<EigenerKnoten, DefaultWeightedEdge> graph2 = new DirectedWeightedPseudograph(arg0);
+//		Graph<String, DefaultWeightedEdge> graph2 = new DirectedWeightedPseudograph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
 
-		
+//		DefaultWeightedEdge e = graph2.addEdge("v1", "v2");
+//		((DirectedWeightedPseudograph<String, DefaultWeightedEdge>)graph2).setEdgeWeight(e, 11.0);
     	
     	// Setup ListenerGraph
 		// ADT GRAPH

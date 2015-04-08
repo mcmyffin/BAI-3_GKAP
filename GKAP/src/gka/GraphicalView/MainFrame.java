@@ -1,10 +1,22 @@
 package gka.GraphicalView;
 
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import gka.Exceptions.AccessException;
+import gka.Exceptions.FileNotFoundException;
+import gka.Exceptions.GraphBuildException;
+import gka.Exceptions.WrongFileTypeException;
+import gka.GraphBuilder.Extension.OwnEdge;
+import gka.GraphBuilder.Extension.OwnVertex;
+import gka.GraphVisualControler.GraphManager;
+import gka.GraphVisualControler.IGraphManager;
+
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
-import javax.naming.InitialContext;
+import javax.media.j3d.ConeSound;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -13,14 +25,18 @@ import javax.swing.JMenuBar;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Dimension2D;
 
+import javax.swing.JCheckBox;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
+import org.jgraph.JGraph;
+
 public class MainFrame extends JFrame implements ActionListener{
 
+	// control Class
+	IGraphManager gmanager;
 	
 
 	/**
@@ -39,10 +55,13 @@ public class MainFrame extends JFrame implements ActionListener{
 		});
 	}
 
+	
 	/**
 	 * Create the frame.
 	 */
 	public MainFrame() {
+		
+		gmanager = new GraphManager();
 		init();
 	}
 	
@@ -67,8 +86,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuBar = new JMenuBar();
 		menuBar.setBorderPainted(false);
 		menuBar.setBackground(new Color(153, 153, 255));
-		menuBar.setBounds(0, 0, 678, 21);
-		contentPane.add(menuBar);
+		setJMenuBar(menuBar);
 		
 		// Menu File settings
 		menuFile = new JMenu("File");
@@ -136,16 +154,65 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuItem_Reload.addActionListener(this);
 		menuHelp.add(menuItem_Reload);
 		
+		// Menu MoveMode
+		moveMode = new JCheckBox("Move Mode");
+		moveMode.setActionCommand(moveMode.getText());
+		moveMode.addActionListener(this);
+		moveMode.setBackground(Color.LIGHT_GRAY);
+		menuBar.add(moveMode);
+		
 		// DrawPane settings
-		drawPane = new JPanel();
-		Dimension drawPaneDimension = new Dimension();
-		drawPane.setBounds(0, 21, this.getWidth(), this.getHeight());
-		drawPane.setBackground(Color.green);
-		contentPane.add(drawPane);
+//		drawPane = new JPanel();
+//		drawPane.setBounds(0, 21, this.getWidth(), this.getHeight());
+//		drawPane.setBackground(Color.green);
+//		contentPane.add(drawPane);
 		
 		setLocationRelativeTo(null);
 	
 	}
+	
+	// Methods
+	
+	void open(String path){
+		
+		if(path !=  null || !path.isEmpty())
+		{
+			
+			try {
+				
+				VisualizationViewer<OwnVertex, OwnEdge> vv = gmanager.loadGraph(path);				
+				
+				
+				for(Component c: contentPane.getComponents()){
+					
+					if(((Object) c) instanceof VisualizationViewer){
+						
+						contentPane.remove(c);
+					}
+				}
+				
+				contentPane.add(vv);
+				
+				this.pack();
+				
+			} catch (FileNotFoundException | WrongFileTypeException
+					| AccessException | GraphBuildException e) {
+			
+				String message = e.getMessage();
+				WarningDialog warningDialog = new WarningDialog(this, true, "ein Problem ist aufgetreten", message);
+			}
+		}
+	}
+	
+	private void addVertex(){
+		
+		OwnVertex v1 = new OwnVertex("bla");
+		gmanager.addVertexAt(v1, 100, 100);
+		this.pack();
+		
+	}
+	
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -160,6 +227,11 @@ public class MainFrame extends JFrame implements ActionListener{
 			else if(e.getActionCommand().equals(menuItem_OpenFile.getText()))
 			{
 				System.out.println("open File");
+				
+				FileChooser fileChooser = new FileChooser(this, true, FileChooser.LOAD_MODE);
+				fileChooser.setVisible(true);
+				
+				
 			}
 			else if(e.getActionCommand().equals(menuItem_SaveFile.getText()))
 			{
@@ -177,6 +249,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			if(e.getActionCommand().equals(menuItem_AddVertex.getText()))
 			{
 				System.out.println("add Vertex");
+				addVertex();
 			}
 			else if(e.getActionCommand().equals(menuItem_AddEdge.getText()))
 			{
@@ -197,6 +270,16 @@ public class MainFrame extends JFrame implements ActionListener{
 			{
 				// todo manual reload graph in panel
 				System.out.println("reload");
+			}
+		}
+		// Menu MoveMode
+		{
+			
+			if(e.getActionCommand().equals(moveMode.getText())){
+				
+				if(moveMode.isSelected()) gmanager.setPicMode();
+				else gmanager.setTrasformMode();
+				
 			}
 		}
 		
@@ -228,6 +311,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenuItem menuItem_RemoveVertex;
 	private JMenuItem menuItem_RemoveEdge;	
 	private JMenuItem menuItem_Reload;
+	private JCheckBox moveMode;
 	
 	
 }

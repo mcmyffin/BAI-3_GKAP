@@ -42,7 +42,7 @@ public class WarningDialog extends JDialog implements ActionListener{
 	private void init(){
 		
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
 		setTitle(dialogTitel);
 		setBounds(100, 100, 400, 145);

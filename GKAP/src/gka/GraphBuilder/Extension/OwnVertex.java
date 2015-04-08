@@ -1,16 +1,16 @@
 package gka.GraphBuilder.Extension;
 
-public class OwnVertex {
+public class OwnVertex{
 	
 	private String 	_name;
-	private int	 	_attribute = -1;
+	private int	 	_attribute = 0;
 	
 	private int		_xPos;
 	private int		_yPos;
 	
 	
 	public OwnVertex(String name){
-		
+		super();
 		this._name = name;
 	}
 	
@@ -59,9 +59,21 @@ public class OwnVertex {
 	public void set_yPos(int _yPos) {
 		this._yPos = _yPos;
 	}
-	
-	
-	
-	
 
+	@Override
+	public String toString() {
+		return _name;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this) {
+			return true;
+		} else if(!(obj instanceof OwnVertex)) {
+			return false;
+		} else {
+			OwnVertex other = (OwnVertex) obj;
+			return get_name().equals(other.get_name());
+		}
+	}
 }

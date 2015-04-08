@@ -1,5 +1,9 @@
 package gka.FileManager;
 
+import gka.Exceptions.AccessException;
+import gka.Exceptions.FileNotFoundException;
+import gka.Exceptions.WrongFileTypeException;
+
 import java.io.File;
 import java.util.List;
 
@@ -10,18 +14,20 @@ import java.util.List;
  */
 public class FileManager implements IFileManager{
 
+	FileLoader loader;
 	
+	public FileManager() {
+		loader = new FileLoader();
+	}
 	
 	
 	@Override
-	public List<String> loadFile(File path) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> loadFile(File path) throws FileNotFoundException, WrongFileTypeException, AccessException {
+		return loader.loadFile(path);
 	}
 
 	@Override
 	public boolean saveFile(File path, boolean ifExistsOverride, List<String> content) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

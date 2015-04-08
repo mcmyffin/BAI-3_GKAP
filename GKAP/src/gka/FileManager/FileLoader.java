@@ -1,5 +1,9 @@
 package gka.FileManager;
 
+import gka.Exceptions.AccessException;
+import gka.Exceptions.FileNotFoundException;
+import gka.Exceptions.WrongFileTypeException;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -12,17 +16,14 @@ public class FileLoader {
 	public final String fileType = ".graph";
 	
 	
-	public List<String> loadFile(String path){
+	public List<String> loadFile(File loadedFile) throws FileNotFoundException, WrongFileTypeException, AccessException{
 		
 		
-		File loadedFile = new File(path);
-		
-		// pre check
-		if(!loadedFile.exists()) return null; // todo exception
-		if(!loadedFile.isFile()) return null; // todo exception
-		if(!loadedFile.getName().endsWith(fileType)) return null; // todo exception
-		
-		if(!loadedFile.canRead()) return null;
+		// precondition
+		if(!loadedFile.exists()) throw new FileNotFoundException();
+		if(!loadedFile.isFile()) throw new FileNotFoundException();
+		if(!loadedFile.getName().endsWith(fileType)) throw new WrongFileTypeException();
+		if(!loadedFile.canRead()) throw new AccessException();
 		
 		List<String> 	resultList = new ArrayList<String>();
 		FileReader  	fr;
@@ -35,7 +36,10 @@ public class FileLoader {
 			
 			String line;
 			while((line = br.readLine()) != null){
-				resultList.add(line);
+				
+				// delete empty lines
+				if(!line.isEmpty()) resultList.add(line);
+
 			}
 			
 			br.close();
@@ -46,7 +50,6 @@ public class FileLoader {
 			// todo exception
 		
 		}
-		
 		return resultList;
 	}
 	
