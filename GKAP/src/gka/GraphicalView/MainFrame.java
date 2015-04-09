@@ -6,6 +6,7 @@ import gka.Exceptions.AccessException;
 import gka.Exceptions.FileNotFoundException;
 import gka.Exceptions.GraphBuildException;
 import gka.Exceptions.WrongFileTypeException;
+import gka.GraphBuilder.GraphBuilder;
 import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
 import gka.GraphVisualControler.GraphManager;
@@ -30,8 +31,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
-
-import org.jgraph.JGraph;
 
 public class MainFrame extends JFrame implements ActionListener{
 
@@ -156,9 +155,10 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		// Menu MoveMode
 		moveMode = new JCheckBox("Move Mode");
+		moveMode.setEnabled(false);
 		moveMode.setActionCommand(moveMode.getText());
 		moveMode.addActionListener(this);
-		moveMode.setBackground(Color.LIGHT_GRAY);
+		moveMode.setBackground(new Color(153, 153, 255));
 		menuBar.add(moveMode);
 		
 		// DrawPane settings
@@ -174,25 +174,20 @@ public class MainFrame extends JFrame implements ActionListener{
 	// Methods
 	
 	void open(String path){
-		
 		if(path !=  null || !path.isEmpty())
 		{
-			
 			try {
 				
 				VisualizationViewer<OwnVertex, OwnEdge> vv = gmanager.loadGraph(path);				
 				
-				
 				for(Component c: contentPane.getComponents()){
-					
 					if(((Object) c) instanceof VisualizationViewer){
-						
 						contentPane.remove(c);
 					}
 				}
 				
 				contentPane.add(vv);
-				
+				moveMode.setEnabled(true);
 				this.pack();
 				
 			} catch (FileNotFoundException | WrongFileTypeException
@@ -204,15 +199,59 @@ public class MainFrame extends JFrame implements ActionListener{
 		}
 	}
 	
-	private void addVertex(){
+	void addVertex(OwnVertex v1){
 		
-		OwnVertex v1 = new OwnVertex("bla");
-		gmanager.addVertexAt(v1, 100, 100);
-		this.pack();
-		
+		if(!gmanager.addVertex(v1)){
+			WarningDialog wd = new WarningDialog(this, true, "Add Vertex", "'"+v1.get_name()+"' already exists");
+			wd.setVisible(true);
+		}
+		else this.repaint();
 	}
 	
+	void addEdge(OwnEdge e, OwnVertex s_v, OwnVertex t_v){
+		
+		if(e == null || s_v == null || t_v == null){
+			WarningDialog wd = new WarningDialog(this, true, "Add Edge",  "is impossible");
+			wd.setVisible(true);
+		}
+		
+		if(!gmanager.addEdge(e, s_v, t_v)){
+			
+			WarningDialog wd = new WarningDialog(this, true, "Add Edge", "ERROR with Edge");
+			wd.setVisible(true);
+		}
+		
+		this.repaint();
+	}
 	
+	void deleteVertex(OwnVertex v1){
+		
+		if(v1 == null)
+		{
+			WarningDialog wd = new WarningDialog(this, true, "Delete Vertex",  "Vertex not found !");
+			wd.setVisible(true);
+		}
+		else
+		{
+			if(!gmanager.removeVertex(v1))
+			{
+				WarningDialog wd = new WarningDialog(this, true, "Delete Vertex",  "delete problem");
+				wd.setVisible(true);
+			}
+		}
+		
+		this.repaint();
+	}
+	
+	void deleteEdge(long id){
+		
+		if(!gmanager.removeEdge(id))
+		{
+			WarningDialog wd = new WarningDialog(this, true, "Delete Edge",  "delete problem");
+			wd.setVisible(true);
+		}
+		this.repaint();
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -249,19 +288,28 @@ public class MainFrame extends JFrame implements ActionListener{
 			if(e.getActionCommand().equals(menuItem_AddVertex.getText()))
 			{
 				System.out.println("add Vertex");
-				addVertex();
+				CreateVertex vertexDialog = new CreateVertex(this, true, gmanager.getGraphType());
+				vertexDialog.setVisible(true);
 			}
 			else if(e.getActionCommand().equals(menuItem_AddEdge.getText()))
 			{
 				System.out.println("add Edge");
+				boolean weighted = gmanager.getGraphType().contains(GraphBuilder.WEIGHTED);
+				
+				CreateEdge edgeDialog = new CreateEdge(this, true, weighted);
+				edgeDialog.setVisible(true);
 			}
 			else if(e.getActionCommand().equals(menuItem_RemoveVertex.getText()))
 			{
 				System.out.println("remove Vertex");
+				DeleteVertex delVertexDialog = new DeleteVertex(this, true);
+				delVertexDialog.setVisible(true);
 			}
 			else if(e.getActionCommand().equals(menuItem_RemoveEdge.getText()))
 			{
 				System.out.println("remove Edge");
+				DeleteEdge delEdgeDialog = new DeleteEdge(this, true);
+				delEdgeDialog.setVisible(true);
 			}
 		}
 		// Menu Help

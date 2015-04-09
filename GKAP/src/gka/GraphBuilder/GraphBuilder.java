@@ -17,18 +17,22 @@ import gka.GraphBuilder.Extension.OwnVertex;
 public class GraphBuilder implements IGraphBuilder{
 
 	private Graph<OwnVertex,OwnEdge> graph;
+	private String graphType;
 	
-	private final static String UNDIRECTED = "UNDIRECTED";
-	private final static String UNDIRECTED_WEIGHTED = "UNDIRECTED_WEIGHTED";
-	private final static String UNDIRECTED_ATTRIBUTED = "UNDIRECTED_ATTRIBUTED";
-	private final static String UNDIRECTED_WEIGHTED_ATTRIBUTED = "UNDIRECTED_WEIGHTED_ATTRIBUTED";
-	private final static String DIRECTED   = "DIRECTED";
-	private final static String DIRECTED_WEIGHTED   = "DIRECTED_WEIGHTED";
-	private final static String DIRECTED_ATTRIBUTED   = "DIRECTED_ATTRIBUTED";
-	private final static String DIRECTED_WEIGHTED_ATTRIBUTED   = "DIRECTED_WEIGHTED_ATTRIBUTED";
+	public final static String UNDIRECTED = "UNDIRECTED";
+	public final static String UNDIRECTED_WEIGHTED = "UNDIRECTED_WEIGHTED";
+	public final static String UNDIRECTED_ATTRIBUTED = "UNDIRECTED_ATTRIBUTED";
+	public final static String UNDIRECTED_WEIGHTED_ATTRIBUTED = "UNDIRECTED_WEIGHTED_ATTRIBUTED";
+	public final static String DIRECTED   = "DIRECTED";
+	public final static String DIRECTED_WEIGHTED   = "DIRECTED_WEIGHTED";
+	public final static String DIRECTED_ATTRIBUTED   = "DIRECTED_ATTRIBUTED";
+	public final static String DIRECTED_WEIGHTED_ATTRIBUTED   = "DIRECTED_WEIGHTED_ATTRIBUTED";
 	
-	private List<OwnVertex> vertexes = new ArrayList();
-	private List<OwnEdge> edges = new ArrayList();
+	public final static String WEIGHTED = "WEIGHTED";
+	public final static String ATTRIBUTED = "ATTRIBUTED";
+	
+	private List<OwnVertex> vertices = new ArrayList();
+	private List<OwnEdge>   edges = new ArrayList();
 	
 	/**Implemented Interface
 	 * @throws GraphBuildException **/
@@ -42,6 +46,7 @@ public class GraphBuilder implements IGraphBuilder{
 			case(GraphBuilder.UNDIRECTED):
 				
 				graph  = new UndirectedSparseGraph<OwnVertex, OwnEdge>();
+				graphType = GraphBuilder.UNDIRECTED;
 				
 				System.out.println("undr");
 				fillGraph(list);
@@ -51,6 +56,7 @@ public class GraphBuilder implements IGraphBuilder{
 			case(GraphBuilder.UNDIRECTED_ATTRIBUTED):
 				
 				graph  = new UndirectedSparseGraph<OwnVertex, OwnEdge>();
+				graphType = GraphBuilder.UNDIRECTED_ATTRIBUTED;
 			
 				System.out.println("undr_attr");
 				fillAttributedGraph(list);
@@ -60,6 +66,7 @@ public class GraphBuilder implements IGraphBuilder{
 			case(GraphBuilder.UNDIRECTED_WEIGHTED):
 			
 				graph  = new UndirectedSparseGraph<OwnVertex, OwnEdge>();
+				graphType = GraphBuilder.UNDIRECTED_WEIGHTED;
 			
 				System.out.println("undr_weight");
 				fillWeightedGraph(list);
@@ -69,6 +76,7 @@ public class GraphBuilder implements IGraphBuilder{
 			case(GraphBuilder.UNDIRECTED_WEIGHTED_ATTRIBUTED):
 				
 				graph  = new UndirectedSparseGraph<OwnVertex, OwnEdge>();
+				graphType = GraphBuilder.UNDIRECTED_WEIGHTED_ATTRIBUTED;
 			
 				System.out.println("undr_weight_attr");
 				fillWeightedAttributedGraph(list);
@@ -78,6 +86,7 @@ public class GraphBuilder implements IGraphBuilder{
 			case(GraphBuilder.DIRECTED):
 				
 				graph = new DirectedSparseGraph<OwnVertex, OwnEdge>();
+				graphType = GraphBuilder.DIRECTED;
 				
 				System.out.println("dir");
 				fillGraph(list);
@@ -87,6 +96,7 @@ public class GraphBuilder implements IGraphBuilder{
 			case(GraphBuilder.DIRECTED_WEIGHTED):
 				
 				graph = new DirectedSparseGraph<OwnVertex, OwnEdge>();
+				graphType = GraphBuilder.DIRECTED_WEIGHTED;
 			
 				System.out.println("dir_weight");
 				fillGraph(list);
@@ -96,6 +106,7 @@ public class GraphBuilder implements IGraphBuilder{
 			case(GraphBuilder.DIRECTED_ATTRIBUTED):
 				
 				graph = new DirectedSparseGraph<OwnVertex, OwnEdge>();
+				graphType = GraphBuilder.DIRECTED_ATTRIBUTED;
 			
 				System.out.println("dir_attr");
 				fillGraph(list);
@@ -105,6 +116,7 @@ public class GraphBuilder implements IGraphBuilder{
 			case(GraphBuilder.DIRECTED_WEIGHTED_ATTRIBUTED):
 			
 				graph = new DirectedSparseGraph<OwnVertex, OwnEdge>();
+				graphType = GraphBuilder.DIRECTED_WEIGHTED_ATTRIBUTED;
 			
 				System.out.println("dir_weight_attr");
 				fillGraph(list);
@@ -135,21 +147,21 @@ public class GraphBuilder implements IGraphBuilder{
 				OwnEdge   edge = new OwnEdge();
 				
 				if(!addVertex(vertex1)){
-					vertex1 = getVertexByName(vertex1);
+					vertex1 = getVertexByName(vertex1.get_name());
 				}
 				
 				if(!addVertex(vertex2)){
-					vertex2 = getVertexByName(vertex2);
+					vertex2 = getVertexByName(vertex2.get_name());
 				}
 				
-				graph.addEdge(edge,vertex1, vertex2);
+				addEdge(edge,vertex1, vertex2);
 				
 			}
 			else
 			{
 				// only a Vertex
 				OwnVertex vertex1 = new OwnVertex(lineSpaceFree);
-				graph.addVertex(vertex1);
+				addVertex(vertex1);
 			}
 		}
 		
@@ -208,20 +220,20 @@ public class GraphBuilder implements IGraphBuilder{
 				OwnEdge edge = new OwnEdge();
 				
 				if(!addVertex(vertex1)){
-					vertex1 = getVertexByName(vertex1);
+					vertex1 = getVertexByName(vertex1.get_name());
 				}
 				
 				if(!addVertex(vertex2)){
-					vertex2 = getVertexByName(vertex2);
+					vertex2 = getVertexByName(vertex2.get_name());
 				}
 				
-				graph.addEdge(edge,vertex1, vertex2);
+				addEdge(edge,vertex1, vertex2);
 				
 			}else{
 
 				// Only a Vertex
 				OwnVertex vertex1 = new OwnVertex(lineSpaceFree);
-				graph.addVertex(vertex1);
+				addVertex(vertex1);
 				
 			}
 		}
@@ -249,21 +261,21 @@ public class GraphBuilder implements IGraphBuilder{
 				OwnEdge edge = new OwnEdge(weight);
 				
 				if(!addVertex(vertex1)){
-					vertex1 = getVertexByName(vertex1);
+					vertex1 = getVertexByName(vertex1.get_name());
 				}
 				
 				if(!addVertex(vertex2)){
-					vertex2 = getVertexByName(vertex2);
+					vertex2 = getVertexByName(vertex2.get_name());
 				}
 				
-				graph.addEdge(edge,vertex1, vertex2);
+				addEdge(edge,vertex1, vertex2);
 				
 			}
 			else
 			{
 				// only a Vertex
 				OwnVertex vertex1 = new OwnVertex(lineSpaceFree);
-				graph.addVertex(vertex1);
+				addVertex(vertex1);
 			}
 		}
 	}
@@ -327,14 +339,14 @@ public class GraphBuilder implements IGraphBuilder{
 				OwnEdge edge = new OwnEdge(weight);
 				
 				if(!addVertex(vertex1)){
-					vertex1 = getVertexByName(vertex1);
+					vertex1 = getVertexByName(vertex1.get_name());
 				}
 				
 				if(!addVertex(vertex2)){
-					vertex2 = getVertexByName(vertex2);
+					vertex2 = getVertexByName(vertex2.get_name());
 				}
 				
-				graph.addEdge(edge,vertex1, vertex2);
+				addEdge(edge,vertex1, vertex2);
 			}
 			
 			else
@@ -343,36 +355,9 @@ public class GraphBuilder implements IGraphBuilder{
 				
 				// todo to check at attribute
 				OwnVertex vertex1 = new OwnVertex(lineSpaceFree);
-				graph.addVertex(vertex1);
+				addVertex(vertex1);
 			}
 		}
-	}
-	
-	public boolean addVertex(OwnVertex vertex){
-		
-		if(!vertexes.contains(vertex))
-		{
-			vertexes.add(vertex);
-			return graph.addVertex(vertex);
-		}
-		else
-		{
-			System.out.println("vorhanden");
-			return false;
-		}
-	}
-	
-	private OwnVertex getVertexByName(OwnVertex v){
-		
-		for(OwnVertex vertex1 : graph.getVertices()){
-			
-			if(vertex1.equals(v)){
-				System.out.println("gleich");
-				return vertex1;
-			}
-		}
-		
-		return null;
 	}
 	
 	/*
@@ -455,8 +440,114 @@ public class GraphBuilder implements IGraphBuilder{
 		}
 	}
 
+	@Override
+	public String getGraphType() {
+		return graphType;
+	}
+
+	@Override
+	public List<OwnVertex> getAllVertices() {
+		return this.vertices;
+	}
+
+	@Override
+	public boolean addVertex(OwnVertex vertex){
+		
+		if(!vertices.contains(vertex))
+		{
+			
+			return graph.addVertex(vertex) && vertices.add(vertex);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	@Override
+	public OwnVertex getVertexByName(String v){
+		
+		for(OwnVertex vertex1 : graph.getVertices()){
+			
+			if(vertex1.get_name().equals(v)){
+				return vertex1;
+			}
+		}
+		return null;
+	}
+
+	private OwnEdge getEdgeByID(long id){
+		
+		for(OwnEdge e : edges){
+		
+			if(e.getID() == id) return e;
+		}
+		return null;
+	}
+	
+	@Override
+	public boolean removeVertex(OwnVertex vertex) {
+		
+		OwnVertex v = getVertexByName(vertex.get_name());
+		if(v == null) return false;
+		
+		boolean res = graph.removeVertex(v) && vertices.remove(v);
+		reloadEdges();
+		
+		return res;
+	}
+
+	@Override
+	public boolean addEdge(OwnEdge edge, OwnVertex vertex1, OwnVertex vertex2) {
+
+		if(!edges.contains(edge))
+		{
+			return graph.addEdge(edge, vertex1, vertex2) && edges.add(edge);
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean removeEdge(long edgeID) {
+
+		OwnEdge e = getEdgeByID(edgeID);
+		if(e == null) return false;
+		
+		boolean res = graph.removeEdge(e) && edges.remove(e);
+		reloadEdges();
+		
+		return res;
+	}
+
+	@Override
+	public List<OwnEdge> getAllEdges() {
+		return edges;
+	}
 	
 	
+	private void reloadEdges(){
+
+		if(edges.size() == graph.getEdgeCount()) return;
+		
+		List<OwnEdge> res = new ArrayList<OwnEdge>();
+		for(OwnEdge edge : graph.getEdges()){
+			
+			res.add(edge);
+		}
+		edges = res;
+	}
 	
+	private void reloadVertices(){
+		
+		if(vertices.size() == graph.getVertexCount()) return;
+		
+		List<OwnVertex> res = new ArrayList<OwnVertex>();
+		for(OwnVertex vertex : graph.getVertices()){
+			
+			res.add(vertex);
+		}
+		vertices = res;
+	}
 
 }

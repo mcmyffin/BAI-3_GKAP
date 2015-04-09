@@ -26,10 +26,26 @@ public class OwnEdge{
 		this._weight = weight;
 	}
 	
+	public long getID(){
+		return _id;
+	}
+	
 	@Override
 	public String toString(){
 		
-		return (_weight == 0 ? "E_"+_id : "W_"+_weight);
+		return ("E "+_id);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this) {
+			return true;
+		} else if(!(obj instanceof OwnEdge)) {
+			return false;
+		} else {
+			OwnEdge other = (OwnEdge) obj;
+			return _id == other.getID(); 
+		}
 	}
 
 	

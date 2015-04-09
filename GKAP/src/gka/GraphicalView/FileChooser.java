@@ -46,7 +46,10 @@ public class FileChooser extends JDialog implements ActionListener {
 			details.actionPerformed(null);
 			
 			contentPanel.add(fileChooser);
-		}	
+		}
+		
+		//*******
+		setLocationRelativeTo(null);
 	}
 	
 	

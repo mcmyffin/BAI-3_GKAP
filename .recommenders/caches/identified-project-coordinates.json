@@ -1,1 +1,1 @@
-[[{"location":"/home/dima/Studium/4_Semester_SoSe205/Git/BAI-3_GKAP/GKAP","type":"PROJECT","hints":{"PROJECT_NAME":"GKAP"}},"ABSENT"],[{"location":"/usr/lib/jvm/java-8-oracle","type":"JRE","hints":{"EXECUTION_ENVIRONMENT":"JavaSE-1.7"}},"jre:jre:1.7.0"]]
+[[{"location":"/home/dima/Studium/4_Semester_SoSe205/Git/BAI-3_GKAP/lib/Graph_JUNG/jar/jung-api-2.0.1.jar","type":"JAR","hints":{}},"net.sf.jung:jung-api:2.0.1"],[{"location":"/usr/lib/jvm/java-8-oracle","type":"JRE","hints":{}},"jre:jre:1.8.0"]]

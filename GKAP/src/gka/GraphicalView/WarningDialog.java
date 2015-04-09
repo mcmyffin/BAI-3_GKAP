@@ -72,6 +72,9 @@ public class WarningDialog extends JDialog implements ActionListener{
 				getRootPane().setDefaultButton(okButton);
 			}
 		}
+		
+		//*******
+		setLocationRelativeTo(null);
 	}
 	
 	@Override

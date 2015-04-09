@@ -6,6 +6,7 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.swing.SwingConstants;
 import javax.vecmath.Point2d;
@@ -82,14 +83,22 @@ public class GraphManager implements IGraphManager{
 	}
 
 	@Override
-	public void addVertexAt(OwnVertex vertex, int x, int y) {
-
+	public boolean addVertexAt(OwnVertex vertex, int x, int y) {
 		
-		adtGraph.addVertex(vertex);
+		boolean isAdded = graphBuilder.addVertex(vertex);
+		if(!isAdded) return false;
 		
 		layout.setLocation(vertex, new Point2D.Double(x,y));
+		return isAdded;
 	}
 
+	@Override
+	public boolean addVertex(OwnVertex vertex) {
+		
+		Random rand = new Random();
+		return addVertexAt(vertex, rand.nextInt(300), rand.nextInt(300));	
+	}	
+	
 	@Override
 	public void setTrasformMode() {
 	
@@ -105,23 +114,38 @@ public class GraphManager implements IGraphManager{
 	}
 
 	@Override
-	public void addEdge(OwnVertex v1, OwnVertex v2) {
-
-		// todo
+	public boolean addEdge(OwnEdge edge, OwnVertex v1, OwnVertex v2) {
+		return graphBuilder.addEdge(edge, v1, v2);
 	}
 
 	@Override
 	public boolean removeVertex(OwnVertex vertex) {
-		
-		// todo
-		return false;
+		return graphBuilder.removeVertex(vertex);
 	}
 
 	@Override
-	public boolean removeEdge(OwnEdge edge) {
-		
-		// todo
-		return false;
+	public boolean removeEdge(long id) {
+		return graphBuilder.removeEdge(id);
+	}
+
+	@Override
+	public String getGraphType() {
+		return graphBuilder.getGraphType();
+	}
+
+	@Override
+	public List<OwnVertex> getAllVertices() {
+		return graphBuilder.getAllVertices();
+	}
+
+	@Override
+	public OwnVertex getVertexByName(String name) {
+		return graphBuilder.getVertexByName(name);
+	}
+
+	@Override
+	public List<OwnEdge> getAllEdges() {
+		return graphBuilder.getAllEdges();
 	}
 	
 	

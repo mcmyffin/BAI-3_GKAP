@@ -20,4 +20,17 @@ public interface IGraphBuilder {
 	 * 		The specific Graph decides based with list content
 	 */
 	public Graph<OwnVertex, OwnEdge> buildGraph(List<String> list) throws GraphBuildException;
+	
+	public boolean addVertex(OwnVertex vertex);
+	public boolean removeVertex(OwnVertex vertex);
+	
+	public boolean addEdge(OwnEdge edge, OwnVertex v1, OwnVertex v2);
+	public boolean removeEdge(long edgeID);
+	
+	public List<OwnVertex> getAllVertices();
+	public List<OwnEdge> getAllEdges();
+	
+	public OwnVertex getVertexByName(String name);
+	
+	public String getGraphType();
 }
