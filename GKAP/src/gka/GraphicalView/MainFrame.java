@@ -26,6 +26,7 @@ import javax.swing.JMenuBar;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JCheckBox;
 import javax.swing.JMenu;
@@ -35,26 +36,9 @@ import javax.swing.JSeparator;
 public class MainFrame extends JFrame implements ActionListener{
 
 	// control Class
-	IGraphManager gmanager;
-	
+	IGraphManager gmanager;	
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame frame = new MainFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	
 	/**
 	 * Create the frame.
 	 */
@@ -161,17 +145,8 @@ public class MainFrame extends JFrame implements ActionListener{
 		moveMode.setBackground(new Color(153, 153, 255));
 		menuBar.add(moveMode);
 		
-		// DrawPane settings
-//		drawPane = new JPanel();
-//		drawPane.setBounds(0, 21, this.getWidth(), this.getHeight());
-//		drawPane.setBackground(Color.green);
-//		contentPane.add(drawPane);
-		
 		setLocationRelativeTo(null);
-	
 	}
-	
-	// Methods
 	
 	void open(String path){
 		if(path !=  null || !path.isEmpty())
@@ -196,6 +171,19 @@ public class MainFrame extends JFrame implements ActionListener{
 				String message = e.getMessage();
 				WarningDialog warningDialog = new WarningDialog(this, true, "ein Problem ist aufgetreten", message);
 			}
+		}
+	}
+	
+	void save(File path){
+		if(gmanager.saveGraph(path)){
+		
+			WarningDialog wd = new WarningDialog(this, true, "Save Graph", "Graph saved");
+			wd.setVisible(true);
+		}
+		else
+		{
+			WarningDialog wd = new WarningDialog(this, true, "Save Graph", "Graph can not save !");
+			wd.setVisible(true);
 		}
 	}
 	
@@ -266,15 +254,15 @@ public class MainFrame extends JFrame implements ActionListener{
 			else if(e.getActionCommand().equals(menuItem_OpenFile.getText()))
 			{
 				System.out.println("open File");
-				
 				FileChooser fileChooser = new FileChooser(this, true, FileChooser.LOAD_MODE);
 				fileChooser.setVisible(true);
-				
-				
+
 			}
 			else if(e.getActionCommand().equals(menuItem_SaveFile.getText()))
 			{
 				System.out.println("save File");
+				FileChooser fileChooser = new FileChooser(this, true, FileChooser.SAVE_MODE);
+				fileChooser.setVisible(true);
 			}
 			else if(e.getActionCommand().equals(menuItem_Quit.getText()))
 			{
@@ -327,18 +315,14 @@ public class MainFrame extends JFrame implements ActionListener{
 				
 				if(moveMode.isSelected()) gmanager.setPicMode();
 				else gmanager.setTrasformMode();
-				
 			}
 		}
-		
-		
 	}
 	
 	// Component declaration
 	
 	// Panel components
 	private JPanel contentPane;
-	private JPanel drawPane;
 	
 	// Separator components
 	private JSeparator separator;
@@ -360,6 +344,4 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenuItem menuItem_RemoveEdge;	
 	private JMenuItem menuItem_Reload;
 	private JCheckBox moveMode;
-	
-	
 }

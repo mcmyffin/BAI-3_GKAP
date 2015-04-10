@@ -47,12 +47,14 @@ public class GraphManager implements IGraphManager{
 	
 	public GraphManager(){
 		
-		this.fileManager = new FileManager();
-		this.graphBuilder = new GraphBuilder();
+		
 	}
 	
 	@Override
 	public VisualizationViewer<OwnVertex, OwnEdge> loadGraph(String path) throws FileNotFoundException, WrongFileTypeException, AccessException, GraphBuildException{
+		
+		this.fileManager = new FileManager();
+		this.graphBuilder = new GraphBuilder();
 		
 		List<String> listContent = fileManager.loadFile(new File(path));
 		adtGraph= graphBuilder.buildGraph(listContent);
@@ -146,6 +148,14 @@ public class GraphManager implements IGraphManager{
 	@Override
 	public List<OwnEdge> getAllEdges() {
 		return graphBuilder.getAllEdges();
+	}
+
+	@Override
+	public boolean saveGraph(File path) {
+		
+		List<String> g = graphBuilder.getSaveableGraph();
+		
+		return fileManager.saveFile(path, g);
 	}
 	
 	

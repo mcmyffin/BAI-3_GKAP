@@ -56,8 +56,18 @@ public class CreateVertex extends JDialog implements ActionListener{
 		
 		super(parent,modal);
 		
+		init();
 		this.parent = (MainFrame) parent;
 		this.graphType = graphType;
+		
+		graphType();
+		preloadVertices();
+		
+
+	}
+	
+	
+	private void init(){
 		
 		setTitle("Create Vertex");
 		setBounds(100, 100, 274, 205);
@@ -152,16 +162,16 @@ public class CreateVertex extends JDialog implements ActionListener{
 			);
 			buttonPane.setLayout(gl_buttonPane);
 			
-			preloadVertices();
+			
 		}
 		
 		// *****
 		setLocationRelativeTo(null);
 	}
 	
-	private void graphType(String type){
+	private void graphType(){
 		
-		if(type.contains(GraphBuilder.ATTRIBUTED)){
+		if(graphType.contains(GraphBuilder.ATTRIBUTED)){
 			
 			attributField.setEnabled(true);
 		}
@@ -200,15 +210,23 @@ public class CreateVertex extends JDialog implements ActionListener{
 				// WEIGHTED EDGE?
 				if(graphType.contains(GraphBuilder.WEIGHTED))
 				{
-					// todo with weighted edge
-					WarningDialog w = new WarningDialog(null, false, "ERROR", "NOT IMPLEMENTED NOW !!!");
-					w.setVisible(true);
+					String attr = (attributField.getText().length() > 0? attributField.getText() : "0");
+					int attr1 = Integer.parseInt(attr);
+					
+					String v_2 = connectToBox.getSelectedItem().toString();
+					
+					OwnVertex v1 = new OwnVertex(vertexNameField.getText());
+					OwnVertex v2 = parent.gmanager.getVertexByName(v_2);
+					
+					parent.addVertex(v1);
 					this.dispose();
+					
+					CreateEdge edgeDialog = new CreateEdge(parent, true, true, v1, v2);
+					edgeDialog.setVisible(true);
 				}
 				// ELSE
 				else
-				{
-					System.out.println("vertex with edge");
+				{					
 					String attr = (attributField.getText().length() > 0? attributField.getText() : "0");
 					int attr1 = Integer.parseInt(attr);
 					

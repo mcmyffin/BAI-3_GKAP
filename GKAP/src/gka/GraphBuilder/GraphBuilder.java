@@ -8,6 +8,7 @@ import javax.jws.soap.SOAPBinding;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.util.Pair;
 import gka.Exceptions.GraphBuildException;
 import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
@@ -18,6 +19,7 @@ public class GraphBuilder implements IGraphBuilder{
 
 	private Graph<OwnVertex,OwnEdge> graph;
 	private String graphType;
+	private String header;
 	
 	public final static String UNDIRECTED = "UNDIRECTED";
 	public final static String UNDIRECTED_WEIGHTED = "UNDIRECTED_WEIGHTED";
@@ -378,6 +380,9 @@ public class GraphBuilder implements IGraphBuilder{
 			// remove header
 			list.remove(0);
 			
+			// save header
+			header = firstLine;
+			
 			// delete Whitespace
 			// safety lower Case
 			String line = (firstLine.replaceAll("\\s+", "")).toLowerCase();
@@ -548,6 +553,63 @@ public class GraphBuilder implements IGraphBuilder{
 			res.add(vertex);
 		}
 		vertices = res;
+	}
+
+	
+	@Override
+	public List<String> getSaveableGraph() {
+		
+		List<String> res = new ArrayList();
+		List<OwnVertex> vertexWithEdge = new ArrayList<OwnVertex>();
+		res.add(header);
+		
+		for(OwnEdge edge : graph.getEdges()){
+			
+			Pair<OwnVertex> pair = graph.getEndpoints(edge);
+			
+			OwnVertex s_v = pair.getFirst();
+			OwnVertex t_v = pair.getSecond();
+			
+			String v1 = s_v.get_name();
+			String a1 = s_v.get_attribute()+"";
+			
+			String v2 = t_v.get_name();
+			String a2 = t_v.get_attribute()+"";
+			
+			String weight = edge.getWeight()+"";
+			String line;
+			
+			if(graphType.contains(GraphBuilder.WEIGHTED) && graphType.contains(GraphBuilder.ATTRIBUTED))
+			{
+				line = v1+":"+a1+" , "+v2+":"+a2+" :: "+weight;
+			}
+			else if(graphType.contains(GraphBuilder.WEIGHTED))
+			{
+				line = v1+" , "+v2+" :: "+weight;
+			}
+			else if(graphType.contains(GraphBuilder.ATTRIBUTED))
+			{
+				line = v1+":"+a1+" , "+v2+":"+a2;
+			}else
+			{
+				line = v1+" , "+v2;
+			}
+			
+			vertexWithEdge.add(s_v);
+			vertexWithEdge.add(t_v);
+			res.add(line);
+		}
+		
+		if(vertexWithEdge.size() != graph.getVertexCount()){
+			// todo add Vertex without Edges
+			for(OwnVertex v : graph.getVertices()){
+				if(!vertexWithEdge.contains(v)){
+					res.add(v.get_name());
+				}
+			}
+		}
+		
+		return res;
 	}
 
 }

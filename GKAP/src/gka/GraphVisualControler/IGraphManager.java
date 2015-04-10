@@ -1,5 +1,6 @@
 package gka.GraphVisualControler;
 
+import java.io.File;
 import java.util.List;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -26,6 +27,8 @@ public interface IGraphManager {
 	public List<OwnVertex> getAllVertices();
 	public List<OwnEdge> getAllEdges();
 	public OwnVertex getVertexByName(String name);
+	
+	public boolean saveGraph(File path);
 	
 	public void setTrasformMode();
 	public void setPicMode();

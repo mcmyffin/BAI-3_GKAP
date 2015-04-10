@@ -35,5 +35,5 @@ public interface IFileManager {
 	 * 			"path" not exists,
 	 * 			Write Permission available.
 	 */
-	public boolean saveFile(File path, boolean ifExistsOverride, List<String> content);
+	public boolean saveFile(File path, List<String> content);
 }

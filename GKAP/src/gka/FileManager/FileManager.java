@@ -15,9 +15,11 @@ import java.util.List;
 public class FileManager implements IFileManager{
 
 	FileLoader loader;
+	FileSaver  saver;
 	
 	public FileManager() {
 		loader = new FileLoader();
+		saver = new FileSaver();
 	}
 	
 	
@@ -27,8 +29,19 @@ public class FileManager implements IFileManager{
 	}
 
 	@Override
-	public boolean saveFile(File path, boolean ifExistsOverride, List<String> content) {
-		return false;
+	public boolean saveFile(File path, List<String> content) {
+		
+		String fileName = path.getName();
+		String pathFolder = (path.getPath()).replace(fileName, "");
+		
+		
+		boolean saveResult = saver.saveFile(content, pathFolder, fileName);
+		for(int i = 1; !saveResult && i < 21; i++){
+			
+			saveResult = saver.saveFile(content, pathFolder, fileName+"_"+i);
+		}
+		
+		return saveResult;
 	}
 
 }

@@ -33,4 +33,6 @@ public interface IGraphBuilder {
 	public OwnVertex getVertexByName(String name);
 	
 	public String getGraphType();
+	
+	public List<String> getSaveableGraph();
 }
