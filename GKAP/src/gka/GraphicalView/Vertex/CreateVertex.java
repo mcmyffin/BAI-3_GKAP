@@ -1,8 +1,10 @@
-package gka.GraphicalView;
+package gka.GraphicalView.Vertex;
 
 import gka.GraphBuilder.GraphBuilder;
 import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
+import gka.GraphicalView.MainFrame;
+import gka.GraphicalView.Edge.CreateEdge;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -62,8 +64,6 @@ public class CreateVertex extends JDialog implements ActionListener{
 		
 		graphType();
 		preloadVertices();
-		
-
 	}
 	
 	
@@ -223,6 +223,7 @@ public class CreateVertex extends JDialog implements ActionListener{
 					
 					CreateEdge edgeDialog = new CreateEdge(parent, true, true, v1, v2);
 					edgeDialog.setVisible(true);
+
 				}
 				// ELSE
 				else

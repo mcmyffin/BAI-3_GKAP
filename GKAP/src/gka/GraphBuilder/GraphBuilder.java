@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.jws.soap.SOAPBinding;
 
+import edu.uci.ics.jung.graph.DirectedOrderedSparseMultigraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedOrderedSparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.Pair;
 import gka.Exceptions.GraphBuildException;
@@ -34,7 +36,7 @@ public class GraphBuilder implements IGraphBuilder{
 	public final static String ATTRIBUTED = "ATTRIBUTED";
 	
 	private List<OwnVertex> vertices = new ArrayList();
-	private List<OwnEdge>   edges = new ArrayList();
+	private List<OwnEdge>   edges    = new ArrayList();
 	
 	/**Implemented Interface
 	 * @throws GraphBuildException **/
@@ -47,7 +49,7 @@ public class GraphBuilder implements IGraphBuilder{
 			
 			case(GraphBuilder.UNDIRECTED):
 				
-				graph  = new UndirectedSparseGraph<OwnVertex, OwnEdge>();
+				graph  = new UndirectedOrderedSparseMultigraph<OwnVertex, OwnEdge>();
 				graphType = GraphBuilder.UNDIRECTED;
 				
 				System.out.println("undr");
@@ -57,7 +59,7 @@ public class GraphBuilder implements IGraphBuilder{
 				
 			case(GraphBuilder.UNDIRECTED_ATTRIBUTED):
 				
-				graph  = new UndirectedSparseGraph<OwnVertex, OwnEdge>();
+				graph  = new UndirectedOrderedSparseMultigraph<OwnVertex, OwnEdge>();
 				graphType = GraphBuilder.UNDIRECTED_ATTRIBUTED;
 			
 				System.out.println("undr_attr");
@@ -67,7 +69,7 @@ public class GraphBuilder implements IGraphBuilder{
 				
 			case(GraphBuilder.UNDIRECTED_WEIGHTED):
 			
-				graph  = new UndirectedSparseGraph<OwnVertex, OwnEdge>();
+				graph  = new UndirectedOrderedSparseMultigraph<OwnVertex, OwnEdge>();
 				graphType = GraphBuilder.UNDIRECTED_WEIGHTED;
 			
 				System.out.println("undr_weight");
@@ -77,7 +79,7 @@ public class GraphBuilder implements IGraphBuilder{
 				
 			case(GraphBuilder.UNDIRECTED_WEIGHTED_ATTRIBUTED):
 				
-				graph  = new UndirectedSparseGraph<OwnVertex, OwnEdge>();
+				graph  = new UndirectedOrderedSparseMultigraph<OwnVertex, OwnEdge>();
 				graphType = GraphBuilder.UNDIRECTED_WEIGHTED_ATTRIBUTED;
 			
 				System.out.println("undr_weight_attr");
@@ -87,7 +89,7 @@ public class GraphBuilder implements IGraphBuilder{
 				
 			case(GraphBuilder.DIRECTED):
 				
-				graph = new DirectedSparseGraph<OwnVertex, OwnEdge>();
+				graph = new DirectedOrderedSparseMultigraph<OwnVertex, OwnEdge>();
 				graphType = GraphBuilder.DIRECTED;
 				
 				System.out.println("dir");
@@ -97,7 +99,7 @@ public class GraphBuilder implements IGraphBuilder{
 				
 			case(GraphBuilder.DIRECTED_WEIGHTED):
 				
-				graph = new DirectedSparseGraph<OwnVertex, OwnEdge>();
+				graph = new DirectedOrderedSparseMultigraph<OwnVertex, OwnEdge>();
 				graphType = GraphBuilder.DIRECTED_WEIGHTED;
 			
 				System.out.println("dir_weight");
@@ -107,7 +109,7 @@ public class GraphBuilder implements IGraphBuilder{
 				
 			case(GraphBuilder.DIRECTED_ATTRIBUTED):
 				
-				graph = new DirectedSparseGraph<OwnVertex, OwnEdge>();
+				graph = new DirectedOrderedSparseMultigraph<OwnVertex, OwnEdge>();
 				graphType = GraphBuilder.DIRECTED_ATTRIBUTED;
 			
 				System.out.println("dir_attr");
@@ -117,7 +119,7 @@ public class GraphBuilder implements IGraphBuilder{
 				
 			case(GraphBuilder.DIRECTED_WEIGHTED_ATTRIBUTED):
 			
-				graph = new DirectedSparseGraph<OwnVertex, OwnEdge>();
+				graph = new DirectedOrderedSparseMultigraph<OwnVertex, OwnEdge>();
 				graphType = GraphBuilder.DIRECTED_WEIGHTED_ATTRIBUTED;
 			
 				System.out.println("dir_weight_attr");

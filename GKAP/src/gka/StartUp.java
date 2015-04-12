@@ -13,14 +13,10 @@ public class StartUp{
     {
     
     	EventQueue.invokeLater(new Runnable() {
-		public void run() {
-			try {
-				MainFrame frame = new MainFrame();
-				frame.setVisible(true);
-			} catch (Exception e) {
-				e.printStackTrace();
+			public void run() {
+					MainFrame frame = new MainFrame();
+					frame.setVisible(true);
 			}
-		}
 		});
     
     }

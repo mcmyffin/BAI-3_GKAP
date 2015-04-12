@@ -2,6 +2,7 @@ package gka.GraphicalView;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import gka.AlgorithmManager.AlgoReport;
 import gka.Exceptions.AccessException;
 import gka.Exceptions.FileNotFoundException;
 import gka.Exceptions.GraphBuildException;
@@ -11,6 +12,12 @@ import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
 import gka.GraphVisualControler.GraphManager;
 import gka.GraphVisualControler.IGraphManager;
+import gka.GraphicalView.Algorithm.ResultDialog;
+import gka.GraphicalView.Algorithm.SearchDialog;
+import gka.GraphicalView.Edge.CreateEdge;
+import gka.GraphicalView.Edge.DeleteEdge;
+import gka.GraphicalView.Vertex.CreateVertex;
+import gka.GraphicalView.Vertex.DeleteVertex;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -36,7 +43,7 @@ import javax.swing.JSeparator;
 public class MainFrame extends JFrame implements ActionListener{
 
 	// control Class
-	IGraphManager gmanager;	
+	public IGraphManager gmanager;	
 
 
 	/**
@@ -128,6 +135,17 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuItem_RemoveEdge.addActionListener(this);
 		menuEdit.add(menuItem_RemoveEdge);
 		
+		menuEdit.setEnabled(false);
+		
+		menuAlgorithm = new JMenu("Algorithm");
+		menuAlgorithm.setEnabled(false);
+		menuBar.add(menuAlgorithm);
+		
+		menuItem_BFS = new JMenuItem("BFS");
+		menuItem_BFS.setActionCommand(menuItem_BFS.getText());
+		menuItem_BFS.addActionListener(this);
+		menuAlgorithm.add(menuItem_BFS);
+		
 		// Menu Help settings
 		menuHelp = new JMenu("Help");
 		menuBar.add(menuHelp);
@@ -136,6 +154,8 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuItem_Reload.setActionCommand(menuItem_Reload.getText());
 		menuItem_Reload.addActionListener(this);
 		menuHelp.add(menuItem_Reload);
+		
+		menuHelp.setEnabled(false);
 		
 		// Menu MoveMode
 		moveMode = new JCheckBox("Move Mode");
@@ -148,13 +168,11 @@ public class MainFrame extends JFrame implements ActionListener{
 		setLocationRelativeTo(null);
 	}
 	
-	void open(String path){
+	public void open(String path){
 		if(path !=  null || !path.isEmpty())
 		{
 			try {
-				
 				VisualizationViewer<OwnVertex, OwnEdge> vv = gmanager.loadGraph(path);				
-				
 				for(Component c: contentPane.getComponents()){
 					if(((Object) c) instanceof VisualizationViewer){
 						contentPane.remove(c);
@@ -163,6 +181,9 @@ public class MainFrame extends JFrame implements ActionListener{
 				
 				contentPane.add(vv);
 				moveMode.setEnabled(true);
+				menuEdit.setEnabled(true);
+				menuAlgorithm.setEnabled(true);
+				menuHelp.setEnabled(true);
 				this.pack();
 				
 			} catch (FileNotFoundException | WrongFileTypeException
@@ -174,7 +195,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		}
 	}
 	
-	void save(File path){
+	public void save(File path){
 		if(gmanager.saveGraph(path)){
 		
 			WarningDialog wd = new WarningDialog(this, true, "Save Graph", "Graph saved");
@@ -187,7 +208,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		}
 	}
 	
-	void addVertex(OwnVertex v1){
+	public void addVertex(OwnVertex v1){
 		
 		if(!gmanager.addVertex(v1)){
 			WarningDialog wd = new WarningDialog(this, true, "Add Vertex", "'"+v1.get_name()+"' already exists");
@@ -196,7 +217,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		else this.repaint();
 	}
 	
-	void addEdge(OwnEdge e, OwnVertex s_v, OwnVertex t_v){
+	public void addEdge(OwnEdge e, OwnVertex s_v, OwnVertex t_v){
 		
 		if(e == null || s_v == null || t_v == null){
 			WarningDialog wd = new WarningDialog(this, true, "Add Edge",  "is impossible");
@@ -212,7 +233,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		this.repaint();
 	}
 	
-	void deleteVertex(OwnVertex v1){
+	public void deleteVertex(OwnVertex v1){
 		
 		if(v1 == null)
 		{
@@ -231,7 +252,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		this.repaint();
 	}
 	
-	void deleteEdge(long id){
+	public void deleteEdge(long id){
 		
 		if(!gmanager.removeEdge(id))
 		{
@@ -239,6 +260,20 @@ public class MainFrame extends JFrame implements ActionListener{
 			wd.setVisible(true);
 		}
 		this.repaint();
+	}
+	
+	public void startBFS(OwnVertex start, OwnVertex target){
+		
+		if(start == null || target == null)
+		{
+			WarningDialog wd = new WarningDialog(this, true, "Algorithm ERROR",  "Algorithm problem");
+			wd.setVisible(true);
+		}
+		
+		AlgoReport report = gmanager.breadthFirstSearch(start, target);
+		
+		ResultDialog resultDialog= new ResultDialog(this, true, report);
+		resultDialog.setVisible(true);
 	}
 
 	@Override
@@ -253,14 +288,14 @@ public class MainFrame extends JFrame implements ActionListener{
 			}
 			else if(e.getActionCommand().equals(menuItem_OpenFile.getText()))
 			{
-				System.out.println("open File");
+				// Open File
 				FileChooser fileChooser = new FileChooser(this, true, FileChooser.LOAD_MODE);
 				fileChooser.setVisible(true);
 
 			}
 			else if(e.getActionCommand().equals(menuItem_SaveFile.getText()))
 			{
-				System.out.println("save File");
+				// Save File
 				FileChooser fileChooser = new FileChooser(this, true, FileChooser.SAVE_MODE);
 				fileChooser.setVisible(true);
 			}
@@ -275,13 +310,13 @@ public class MainFrame extends JFrame implements ActionListener{
 		{
 			if(e.getActionCommand().equals(menuItem_AddVertex.getText()))
 			{
-				System.out.println("add Vertex");
+				// Add Vertex
 				CreateVertex vertexDialog = new CreateVertex(this, true, gmanager.getGraphType());
 				vertexDialog.setVisible(true);
 			}
 			else if(e.getActionCommand().equals(menuItem_AddEdge.getText()))
 			{
-				System.out.println("add Edge");
+				// Add Edge
 				boolean weighted = gmanager.getGraphType().contains(GraphBuilder.WEIGHTED);
 				
 				CreateEdge edgeDialog = new CreateEdge(this, true, weighted);
@@ -289,15 +324,24 @@ public class MainFrame extends JFrame implements ActionListener{
 			}
 			else if(e.getActionCommand().equals(menuItem_RemoveVertex.getText()))
 			{
-				System.out.println("remove Vertex");
+				// Remove Vertex
 				DeleteVertex delVertexDialog = new DeleteVertex(this, true);
 				delVertexDialog.setVisible(true);
 			}
 			else if(e.getActionCommand().equals(menuItem_RemoveEdge.getText()))
 			{
-				System.out.println("remove Edge");
+				// Remove Edge
 				DeleteEdge delEdgeDialog = new DeleteEdge(this, true);
 				delEdgeDialog.setVisible(true);
+			}
+		}
+		// Menu Algorithm
+		{
+			if(e.getActionCommand().equals(menuItem_BFS.getText()))
+			{
+				SearchDialog sad = new SearchDialog(this, true, SearchDialog.BEADTHFIRSTSEARCH);
+				sad.setVisible(true);
+				
 			}
 		}
 		// Menu Help
@@ -333,6 +377,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenuBar menuBar;
 	private JMenu menuFile;
 	private JMenu menuEdit;
+	private JMenu menuAlgorithm;
 	private JMenu menuHelp;
 	private JMenuItem menuItem_NewFile;
 	private JMenuItem menuItem_OpenFile;
@@ -343,5 +388,6 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenuItem menuItem_RemoveVertex;
 	private JMenuItem menuItem_RemoveEdge;	
 	private JMenuItem menuItem_Reload;
+	private JMenuItem menuItem_BFS;
 	private JCheckBox moveMode;
 }

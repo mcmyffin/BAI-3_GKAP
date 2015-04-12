@@ -1,7 +1,8 @@
-package gka.GraphicalView;
+package gka.GraphicalView.Edge;
 
 import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
+import gka.GraphicalView.MainFrame;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -42,6 +43,7 @@ public class CreateEdge extends JDialog implements ActionListener{
 	public CreateEdge(Frame parent, boolean modal, boolean isWeighted) {
 		
 		super(parent, modal);
+		
 		this.parent = (MainFrame) parent;
 		this.isWeightedGraph = isWeighted;
 		init();
@@ -51,9 +53,16 @@ public class CreateEdge extends JDialog implements ActionListener{
 	
 	public CreateEdge(Frame parent, boolean modal, boolean isWeighted, OwnVertex v1, OwnVertex v2){
 		
-		this(parent, modal, isWeighted);
+		super(parent, modal);
+		
+		this.parent = (MainFrame) parent;
+		this.isWeightedGraph = isWeighted;
 		this.s_preset = v1;
 		this.t_preset = v2;
+		
+		init();
+		checkGraphType();
+		preloadVertices();
 	}
 	
 
@@ -134,14 +143,31 @@ public class CreateEdge extends JDialog implements ActionListener{
 
 	private void preloadVertices(){
 		
-		if(s_preset != null && t_preset != null) return;
+		if(s_preset != null && t_preset != null)
+		{
+			System.out.println("preload Setted Vertices");
+			preloadSettedVertices(s_preset, t_preset);
+		}
+		else
+		{
+			System.out.println("preload all Vertices");
+			s_vBox.removeAllItems();
+			t_vBox.removeAllItems();
+			for(OwnVertex v : parent.gmanager.getAllVertices()){
+				
+				s_vBox.addItem(v.get_name());
+				t_vBox.addItem(v.get_name());
+			}
+		}
+	}
+	
+	private void preloadSettedVertices(OwnVertex v1, OwnVertex v2){
 		s_vBox.removeAllItems();
 		t_vBox.removeAllItems();
-		for(OwnVertex v : parent.gmanager.getAllVertices()){
-			
-			s_vBox.addItem(v.get_name());
-			t_vBox.addItem(v.get_name());
-		}
+		
+		s_vBox.addItem(v1.get_name());
+		t_vBox.addItem(v2.get_name());
+		
 	}
 	
 	@Override

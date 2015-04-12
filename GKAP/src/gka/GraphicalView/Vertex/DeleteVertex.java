@@ -1,6 +1,7 @@
-package gka.GraphicalView;
+package gka.GraphicalView.Vertex;
 
-import gka.GraphBuilder.Extension.OwnEdge;
+import gka.GraphBuilder.Extension.OwnVertex;
+import gka.GraphicalView.MainFrame;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -16,44 +17,46 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 
-public class DeleteEdge extends JDialog implements ActionListener{
+public class DeleteVertex extends JDialog implements ActionListener{
 
 	private final JPanel contentPanel = new JPanel();
-	private JComboBox edgeBox;
+	private JComboBox vertexBox;
 	private JButton okButton;
 	private JButton cancelButton;
 	
 	private MainFrame parent;
 
 
+
 	/**
 	 * Create the dialog.
 	 */
-	public DeleteEdge(Frame parent, boolean modal) {
+	public DeleteVertex(Frame parent, boolean modal) {
+		
 		super(parent, modal);
 		this.parent = (MainFrame) parent;
 		
 		init();
-		preloadEdges();
+		preloadVertices();
 	}
-	
+
 	private void init(){
 		
-		setTitle("Delete Edge");
-		setBounds(100, 100, 280, 148);
+		setTitle("Delete Vertex");
+		setBounds(100, 100, 320, 140);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			JLabel lblSelectEdge = new JLabel("Select Edge");
-			lblSelectEdge.setBounds(12, 31, 99, 15);
-			contentPanel.add(lblSelectEdge);
+			JLabel lblNewLabel = new JLabel("Select Vertex");
+			lblNewLabel.setBounds(12, 28, 115, 15);
+			contentPanel.add(lblNewLabel);
 		}
 		{
-			edgeBox = new JComboBox(new DefaultComboBoxModel<String>());
-			edgeBox.setBounds(129, 26, 137, 24);
-			contentPanel.add(edgeBox);
+			vertexBox = new JComboBox(new DefaultComboBoxModel<String>());
+			vertexBox.setBounds(145, 23, 161, 24);
+			contentPanel.add(vertexBox);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -77,30 +80,31 @@ public class DeleteEdge extends JDialog implements ActionListener{
 		this.setLocationRelativeTo(null);
 	}
 
-	private void preloadEdges(){
+	private void preloadVertices(){
 		
-		edgeBox.removeAllItems();
+		vertexBox.removeAllItems();
 		
-		for(OwnEdge edge : parent.gmanager.getAllEdges()){
-			
-			edgeBox.addItem(edge.getID());
+		for(OwnVertex v : parent.gmanager.getAllVertices()){
+			vertexBox.addItem(v.get_name());
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		// Ok Button
+
+		// OK Button
 		if(e.getActionCommand().equals(okButton.getText()))
 		{
-			if(edgeBox.getSelectedItem() != null)
-			{
-				long id = Long.parseLong(edgeBox.getSelectedItem().toString());
-				parent.deleteEdge(id);
+			if(vertexBox.getSelectedItem() != null){
+				
+				OwnVertex v = parent.gmanager.getVertexByName(vertexBox.getSelectedItem().toString());
+				parent.deleteVertex(v);
+				
 				this.dispose();
 			}
+			
 		}
-		// cancel Button
+		// Cancel Button
 		else if(e.getActionCommand().equals(cancelButton.getText()))
 		{
 			this.dispose();
