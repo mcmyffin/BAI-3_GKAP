@@ -10,7 +10,10 @@ tmp/
 local.properties
 .settings/
 .loadpath
-.recommenders/
+.recommenders/index/
+.recommenders/repository/
+.recommenders/*
+.recommenders
 
 # Eclipse Core
 .project
