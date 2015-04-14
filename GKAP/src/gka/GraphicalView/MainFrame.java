@@ -85,6 +85,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuItem_NewFile = new JMenuItem("New File");
 		menuItem_NewFile.setActionCommand(menuItem_NewFile.getText());
 		menuItem_NewFile.addActionListener(this);
+		menuItem_NewFile.setEnabled(false);
 		menuFile.add(menuItem_NewFile);
 		
 		separator_2 = new JSeparator();
@@ -158,12 +159,12 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuHelp.setEnabled(false);
 		
 		// Menu MoveMode
-		moveMode = new JCheckBox("Move Mode");
-		moveMode.setEnabled(false);
-		moveMode.setActionCommand(moveMode.getText());
-		moveMode.addActionListener(this);
-		moveMode.setBackground(new Color(153, 153, 255));
-		menuBar.add(moveMode);
+		pickMode = new JCheckBox("Pick Mode");
+		pickMode.setEnabled(false);
+		pickMode.setActionCommand(pickMode.getText());
+		pickMode.addActionListener(this);
+		pickMode.setBackground(new Color(153, 153, 255));
+		menuBar.add(pickMode);
 		
 		setLocationRelativeTo(null);
 	}
@@ -180,7 +181,7 @@ public class MainFrame extends JFrame implements ActionListener{
 				}
 				
 				contentPane.add(vv);
-				moveMode.setEnabled(true);
+				pickMode.setEnabled(true);
 				menuEdit.setEnabled(true);
 				menuAlgorithm.setEnabled(true);
 				menuHelp.setEnabled(true);
@@ -191,6 +192,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 				String message = e.getMessage();
 				WarningDialog warningDialog = new WarningDialog(this, true, "ein Problem ist aufgetreten", message);
+				warningDialog.setVisible(true);
 			}
 		}
 	}
@@ -348,16 +350,15 @@ public class MainFrame extends JFrame implements ActionListener{
 		{
 			if(e.getActionCommand().equals(menuItem_Reload.getText()))
 			{
-				// todo manual reload graph in panel
-				System.out.println("reload");
+				this.repaint();
 			}
 		}
 		// Menu MoveMode
 		{
 			
-			if(e.getActionCommand().equals(moveMode.getText())){
+			if(e.getActionCommand().equals(pickMode.getText())){
 				
-				if(moveMode.isSelected()) gmanager.setPicMode();
+				if(pickMode.isSelected()) gmanager.setPicMode();
 				else gmanager.setTrasformMode();
 			}
 		}
@@ -389,5 +390,5 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenuItem menuItem_RemoveEdge;	
 	private JMenuItem menuItem_Reload;
 	private JMenuItem menuItem_BFS;
-	private JCheckBox moveMode;
+	private JCheckBox pickMode;
 }

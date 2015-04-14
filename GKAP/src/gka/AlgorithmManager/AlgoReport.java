@@ -1,7 +1,9 @@
 package gka.AlgorithmManager;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import gka.GraphBuilder.Extension.OwnVertex;
 
@@ -12,14 +14,14 @@ public class AlgoReport {
 	private long startInMillSec;
 	private double totalTimeInSec = 0.0;
 	
-	private List<OwnVertex>  visitedVertices;
+	private Set<OwnVertex>  visitedVertices;
 	private List<OwnVertex>  path;
 	
 	
 	public AlgoReport(String algName){
 		
 		this.algName = algName;
-		visitedVertices = new ArrayList<OwnVertex>();
+		visitedVertices = new HashSet<OwnVertex>();
 		path = new ArrayList<OwnVertex>();
 	}
 	
@@ -28,7 +30,6 @@ public class AlgoReport {
 	}
 	
 	public void addVisitedNode(OwnVertex v){
-		if(visitedVertices.contains(v)) return;
 		this.visitedVertices.add(v);
 	}
 	
@@ -50,6 +51,15 @@ public class AlgoReport {
 		return this.algName;
 	}
 	
+	public List<OwnVertex> getPath(){
+		List<OwnVertex> result = new ArrayList<OwnVertex>();
+		
+		for(int i = path.size()-1; i >= 0 ; i--){
+			result.add(path.get(i));
+		}
+		return result;
+	}
+	
 	@Override
 	public String toString(){
 		String line1  = "Algorithm: "+algName;
@@ -60,7 +70,7 @@ public class AlgoReport {
 		
 		String line4  = "Vertices count: "+path.size();
 		String line5  = "Total Visited: "+visitedVertices.size();
-		String line6  = "Path: "+path.toString();
+		String line6  = "Path: "+getPath().toString();
 		String line7  = "Visited : "+visitedVertices.toString();
 		
 		String result = line1+"\n"+line12+"\n"+line2+"\n"+line3+"\n"+line4+"\n"+line5+"\n\n"+line6+"\n\n"+line7;

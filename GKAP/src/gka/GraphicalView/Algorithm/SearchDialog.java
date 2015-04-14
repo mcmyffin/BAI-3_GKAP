@@ -82,7 +82,7 @@ public class SearchDialog extends JDialog implements ActionListener{
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				cancelButton = new JButton("Cancel");
 				cancelButton.setActionCommand(cancelButton.getText());
 				cancelButton.addActionListener(this);
 				buttonPane.add(cancelButton);
@@ -115,8 +115,8 @@ public class SearchDialog extends JDialog implements ActionListener{
 				OwnVertex v1 = parent.gmanager.getVertexByName(startVertexBox.getSelectedItem().toString());
 				OwnVertex v2 = parent.gmanager.getVertexByName(targetVertexBox.getSelectedItem().toString());
 				
-				parent.startBFS(v1, v2);
 				this.dispose();
+				parent.startBFS(v1, v2);
 			}
 		}
 		else if(e.getActionCommand().equals(cancelButton.getText()))
