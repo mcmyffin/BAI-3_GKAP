@@ -7,8 +7,6 @@ import gka.GraphicalView.MainFrame;
 
 public class StartUp{
 	
-
-	
     public static void main(String [] args)
     {
     
