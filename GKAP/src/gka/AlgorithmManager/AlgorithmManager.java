@@ -25,4 +25,10 @@ public class AlgorithmManager implements IAlgorithManager{
 		return reporter;
 	}
 
+	@Override
+	public AlgoReport startDijkstra(OwnVertex start_node, OwnVertex goal_node) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
