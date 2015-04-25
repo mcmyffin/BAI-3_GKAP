@@ -20,9 +20,35 @@ public class AlgorithmManager implements IAlgorithManager{
 		
 		reporter.startTimer();
 		bfs.startbreadthSearch();
-		System.out.println(reporter.stopTimer());
+		reporter.stopTimer();
 		
 		return reporter;
+	}
+
+	@Override
+	public AlgoReport startDijkstra(OwnVertex start_node, OwnVertex goal_node) {
+		
+		AlgoReport reporter = new AlgoReport("Dijkstra");
+		Dijkstra dijkstra = new Dijkstra(_graph, start_node, goal_node, reporter);
+		
+		reporter.startTimer();
+		dijkstra.startDijkstra();
+		reporter.stopTimer();
+		
+		return reporter;
+	}
+
+	@Override
+	public AlgoReport startASternchen(OwnVertex start_node, OwnVertex goal_node) {
+
+		AlgoReport reporter = new AlgoReport("A*");
+		ASternchen asternchen = new ASternchen(_graph, start_node, goal_node, reporter);
+		
+		reporter.startTimer();
+		asternchen.startASternchen();
+		reporter.startTimer();
+		
+		return reporter; 
 	}
 
 }
