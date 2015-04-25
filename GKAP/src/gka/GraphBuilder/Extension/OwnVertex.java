@@ -58,8 +58,9 @@ public class OwnVertex implements Comparable<OwnVertex>{
 	@Override
 	public boolean equals(Object obj) {
 		
-		if(obj == this) {
-			return true;
+		if(obj == this){
+			return true;			
+		}
 		else if(!(obj instanceof OwnVertex)) {
 			return false;
 		} else {
