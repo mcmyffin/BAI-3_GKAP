@@ -1,17 +1,13 @@
 package gka.GraphBuilder.Extension;
 
-import java.util.Comparator;
-
-public class OwnVertex implements Comparable<OwnVertex>, Comparator<OwnVertex>{
+public class OwnVertex implements Comparable<OwnVertex>{
 	
 	private String 	_name;
 	private int	 	_attribute = 0;
-	
 	private int		_level = 0;
 	
 	
 	public OwnVertex(String name){
-		super();
 		set_name(name);
 	}
 	
@@ -35,8 +31,8 @@ public class OwnVertex implements Comparable<OwnVertex>, Comparator<OwnVertex>{
 		this._name = name;
 	}
 
-	public void set_attribute(int _attribute) {
-		this._attribute = _attribute;
+	public void set_attribute(int attribute) {
+		this._attribute = attribute;
 	}
 
 	public void set_level(int lvl){
@@ -61,9 +57,10 @@ public class OwnVertex implements Comparable<OwnVertex>, Comparator<OwnVertex>{
 
 	@Override
 	public boolean equals(Object obj) {
+		
 		if(obj == this) {
 			return true;
-		} else if(!(obj instanceof OwnVertex)) {
+		else if(!(obj instanceof OwnVertex)) {
 			return false;
 		} else {
 			OwnVertex other = (OwnVertex) obj;
@@ -74,12 +71,6 @@ public class OwnVertex implements Comparable<OwnVertex>, Comparator<OwnVertex>{
 	@Override
 	public int compareTo(OwnVertex o) {
 		return Integer.compare(get_level(), o.get_level());
+//		return 0;
 	}
-
-	@Override
-	public int compare(OwnVertex o1, OwnVertex o2) {
-		return Integer.compare(o1.get_level(), o2.get_level());
-	}
-	
-	
 }
