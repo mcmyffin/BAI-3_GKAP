@@ -1,6 +1,5 @@
 package gka.GraphicalView;
 
-import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import gka.AlgorithmManager.AlgoReport;
 import gka.Exceptions.AccessException;
@@ -21,10 +20,7 @@ import gka.GraphicalView.Vertex.DeleteVertex;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.EventQueue;
 
-import javax.media.j3d.ConeSound;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -39,6 +35,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class MainFrame extends JFrame implements ActionListener{
 
@@ -137,7 +135,8 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuEdit.add(menuItem_RemoveEdge);
 		
 		menuEdit.setEnabled(false);
-		
+
+		// Menu Algorithm
 		menuAlgorithm = new JMenu("Algorithm");
 		menuAlgorithm.setEnabled(false);
 		menuBar.add(menuAlgorithm);
@@ -146,6 +145,16 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuItem_BFS.setActionCommand(menuItem_BFS.getText());
 		menuItem_BFS.addActionListener(this);
 		menuAlgorithm.add(menuItem_BFS);
+		
+		menuItem_Dijkstra = new JMenuItem("Dijkstra");
+		menuItem_Dijkstra.setActionCommand(menuItem_Dijkstra.getText());
+		menuItem_Dijkstra.addActionListener(this);
+		menuAlgorithm.add(menuItem_Dijkstra);
+		
+		menuItem_ASternchen = new JMenuItem("A*");
+		menuItem_ASternchen.setActionCommand(menuItem_ASternchen.getText());
+		menuItem_ASternchen.addActionListener(this);
+		menuAlgorithm.add(menuItem_ASternchen);
 		
 		// Menu Help settings
 		menuHelp = new JMenu("Help");
@@ -210,23 +219,27 @@ public class MainFrame extends JFrame implements ActionListener{
 		}
 	}
 	
-	public void addVertex(OwnVertex v1){
+	public void addVertex(String v1){
 		
 		if(!gmanager.addVertex(v1)){
-			WarningDialog wd = new WarningDialog(this, true, "Add Vertex", "'"+v1.get_name()+"' already exists");
+			WarningDialog wd = new WarningDialog(this, true, "Add Vertex", "'"+v1+"' already exists");
 			wd.setVisible(true);
 		}
 		else this.repaint();
 	}
 	
-	public void addEdge(OwnEdge e, OwnVertex s_v, OwnVertex t_v){
+	public void addVertex(String v1, int attribute){
 		
-		if(e == null || s_v == null || t_v == null){
-			WarningDialog wd = new WarningDialog(this, true, "Add Edge",  "is impossible");
+		if(!gmanager.addVertex(v1, attribute)){
+			WarningDialog wd = new WarningDialog(this, true, "Add Vertex", "'"+v1+"' already exists");
 			wd.setVisible(true);
 		}
+		else this.repaint();
+	}
+	
+	public void addEdge(int weight, String s_v, String t_v){
 		
-		if(!gmanager.addEdge(e, s_v, t_v)){
+		if(!gmanager.addEdge(weight, s_v, t_v)){
 			
 			WarningDialog wd = new WarningDialog(this, true, "Add Edge", "ERROR with Edge");
 			wd.setVisible(true);
@@ -235,7 +248,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		this.repaint();
 	}
 	
-	public void deleteVertex(OwnVertex v1){
+	public void deleteVertex(String v1){
 		
 		if(v1 == null)
 		{
@@ -264,20 +277,47 @@ public class MainFrame extends JFrame implements ActionListener{
 		this.repaint();
 	}
 	
-	public void startBFS(OwnVertex start, OwnVertex target){
+	public void startBFS(String start, String target){
 		
-		if(start == null || target == null)
-		{
-			WarningDialog wd = new WarningDialog(this, true, "Algorithm ERROR",  "Algorithm problem");
-			wd.setVisible(true);
-		}
-		
-		AlgoReport report = gmanager.breadthFirstSearch(start, target);
+		AlgoReport report = gmanager.startBreadthFirstSearch(start, target);
 		
 		ResultDialog resultDialog= new ResultDialog(this, true, report);
 		resultDialog.setVisible(true);
 	}
 
+	public void startDijkstra(String start, String target){
+		
+		try{
+			AlgoReport report = gmanager.startDijkstra(start, target);
+
+			ResultDialog resultDialog = new ResultDialog(this, true, report);
+			resultDialog.setVisible(true);
+		
+		// BECAUSE ITS NOT IMPLEMENTED		
+		}catch(NotImplementedException ex){
+		
+			WarningDialog wd = new WarningDialog(this, true, "NOT IMPLEMENTED", "NEED MORE MANPOWER TO DO THIS");
+			wd.setVisible(true);
+		}
+		
+	}
+	
+	public void startASternchen(String start, String target){
+		
+		try{
+			AlgoReport report = gmanager.startASternchen(start, target);
+			
+			ResultDialog resultDialog = new ResultDialog(this, true, report);
+			resultDialog.setVisible(true);
+		
+		// BECAUSE ITS NOT IMPLEMENTED
+		}catch(NotImplementedException ex){
+		
+			WarningDialog wd = new WarningDialog(this, true, "NOT IMPLEMENTED", "NEED MORE MANPOWER TO DO THIS");
+			wd.setVisible(true);
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -343,7 +383,16 @@ public class MainFrame extends JFrame implements ActionListener{
 			{
 				SearchDialog sad = new SearchDialog(this, true, SearchDialog.BEADTHFIRSTSEARCH);
 				sad.setVisible(true);
-				
+			}
+			else if(e.getActionCommand().equals(menuItem_Dijkstra.getText()))
+			{
+				SearchDialog sad = new SearchDialog(this, true, SearchDialog.DIJKSTRA);
+				sad.setVisible(true);
+			}
+			if(e.getActionCommand().equals(menuItem_ASternchen.getText()))
+			{
+				SearchDialog sad = new SearchDialog(this, true, SearchDialog.ASTERNCHEN);
+				sad.setVisible(true);
 			}
 		}
 		// Menu Help
@@ -390,5 +439,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenuItem menuItem_RemoveEdge;	
 	private JMenuItem menuItem_Reload;
 	private JMenuItem menuItem_BFS;
+	private JMenuItem menuItem_Dijkstra;
+	private JMenuItem menuItem_ASternchen;
 	private JCheckBox pickMode;
 }

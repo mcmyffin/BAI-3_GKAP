@@ -8,13 +8,10 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JSeparator;
 
 import java.awt.Color;
 
 import javax.swing.JLabel;
-
-import java.awt.GridLayout;
 
 import javax.swing.SwingConstants;
 

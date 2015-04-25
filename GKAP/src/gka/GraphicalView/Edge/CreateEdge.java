@@ -1,7 +1,5 @@
 package gka.GraphicalView.Edge;
 
-import gka.GraphBuilder.Extension.OwnEdge;
-import gka.GraphBuilder.Extension.OwnVertex;
 import gka.GraphicalView.MainFrame;
 
 import java.awt.BorderLayout;
@@ -19,7 +17,6 @@ import javax.swing.JSeparator;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -29,14 +26,14 @@ public class CreateEdge extends JDialog implements ActionListener{
 	private final JPanel contentPanel = new JPanel();
 	private JButton okButton;
 	private JButton cancelButton;
-	private JComboBox s_vBox;
-	private JComboBox t_vBox;
+	private JComboBox<String> s_vBox;
+	private JComboBox<String> t_vBox;
 	private JSpinner weightSpinner;
 
 	private MainFrame parent;
 	private boolean isWeightedGraph;
-	private OwnVertex s_preset = null;
-	private OwnVertex t_preset = null;
+	private String s_preset = null;
+	private String t_preset = null;
 	/**
 	 * Create the dialog.
 	 */
@@ -51,7 +48,7 @@ public class CreateEdge extends JDialog implements ActionListener{
 		preloadVertices();
 	}
 	
-	public CreateEdge(Frame parent, boolean modal, boolean isWeighted, OwnVertex v1, OwnVertex v2){
+	public CreateEdge(Frame parent, boolean modal, boolean isWeighted, String v1, String v2){
 		
 		super(parent, modal);
 		
@@ -153,20 +150,20 @@ public class CreateEdge extends JDialog implements ActionListener{
 			System.out.println("preload all Vertices");
 			s_vBox.removeAllItems();
 			t_vBox.removeAllItems();
-			for(OwnVertex v : parent.gmanager.getAllVertices()){
+			for(String v : parent.gmanager.getAllVerticesAsString()){
 				
-				s_vBox.addItem(v.get_name());
-				t_vBox.addItem(v.get_name());
+				s_vBox.addItem(v);
+				t_vBox.addItem(v);
 			}
 		}
 	}
 	
-	private void preloadSettedVertices(OwnVertex v1, OwnVertex v2){
+	private void preloadSettedVertices(String v1, String v2){
 		s_vBox.removeAllItems();
 		t_vBox.removeAllItems();
 		
-		s_vBox.addItem(v1.get_name());
-		t_vBox.addItem(v2.get_name());
+		s_vBox.addItem(v1);
+		t_vBox.addItem(v2);
 		
 	}
 	
@@ -180,12 +177,11 @@ public class CreateEdge extends JDialog implements ActionListener{
 
 				int weight = Integer.parseInt(weightSpinner.getValue().toString());
 				
-				OwnVertex v1 = parent.gmanager.getVertexByName(s_vBox.getSelectedItem().toString());
-				OwnVertex v2 = parent.gmanager.getVertexByName(t_vBox.getSelectedItem().toString());
-				OwnEdge edge = new OwnEdge(weight);
+				String v1 = s_vBox.getSelectedItem().toString();
+				String v2 = t_vBox.getSelectedItem().toString();
 				
-				parent.addEdge(edge, v1, v2);
 				this.dispose();
+				parent.addEdge(weight, v1, v2);
 			}
 		}
 		// Cancel Button

@@ -1,41 +1,28 @@
 package gka.GraphicalView.Vertex;
 
 import gka.GraphBuilder.GraphBuilder;
-import gka.GraphBuilder.Extension.OwnEdge;
-import gka.GraphBuilder.Extension.OwnVertex;
 import gka.GraphicalView.MainFrame;
 import gka.GraphicalView.Edge.CreateEdge;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.ComboBoxModel;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
-import javax.swing.BoxLayout;
 
 import java.awt.Frame;
-import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.beans.FeatureDescriptor;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
@@ -46,7 +33,7 @@ public class CreateVertex extends JDialog implements ActionListener{
 	private JTextField attributField;
 	private JButton okButton;
 	private JButton cancelButton;
-	private JComboBox connectToBox;
+	private JComboBox<String> connectToBox;
 
 	private MainFrame parent;
 	private String    graphType;
@@ -188,9 +175,9 @@ public class CreateVertex extends JDialog implements ActionListener{
 		connectToBox.removeAllItems();
 		connectToBox.addItem(defaultItem);
 		
-		for(OwnVertex v : parent.gmanager.getAllVertices()){
+		for(String v : parent.gmanager.getAllVerticesAsString()){
 			
-			connectToBox.addItem(v.get_name());
+			connectToBox.addItem(v);
 		}
 		
 		
@@ -213,10 +200,10 @@ public class CreateVertex extends JDialog implements ActionListener{
 					String attr = (attributField.getText().length() > 0? attributField.getText() : "0");
 					int attr1 = Integer.parseInt(attr);
 					
-					String v_2 = connectToBox.getSelectedItem().toString();
+					;
 					
-					OwnVertex v1 = new OwnVertex(vertexNameField.getText());
-					OwnVertex v2 = parent.gmanager.getVertexByName(v_2);
+					String v1 = vertexNameField.getText();
+					String v2 = connectToBox.getSelectedItem().toString();
 					
 					parent.addVertex(v1);
 					this.dispose();
@@ -231,15 +218,12 @@ public class CreateVertex extends JDialog implements ActionListener{
 					String attr = (attributField.getText().length() > 0? attributField.getText() : "0");
 					int attr1 = Integer.parseInt(attr);
 					
-					String v_2 = connectToBox.getSelectedItem().toString();
+					String v1 = vertexNameField.getText();
+					String v2 = connectToBox.getSelectedItem().toString();
 					
-					OwnVertex v1 = new OwnVertex(vertexNameField.getText());
-					OwnVertex v2 = parent.gmanager.getVertexByName(v_2);
-					OwnEdge edge = new OwnEdge();
-					
-					parent.addVertex(v1);
-					parent.addEdge(edge, v1, v2);
 					this.dispose();
+					parent.addVertex(v1, attr1);
+					parent.addEdge(0, v1, v2);
 					
 				}
 			}
@@ -249,7 +233,8 @@ public class CreateVertex extends JDialog implements ActionListener{
 				System.out.println("only vertex");
 				String attr = (attributField.getText().length() > 0? attributField.getText() : "0");
 				int attr1 = Integer.parseInt(attr);
-				parent.addVertex(new OwnVertex(vertexNameField.getText(), attr1));	
+				
+				parent.addVertex(vertexNameField.getText(), attr1);	
 				
 				this.dispose();
 			}

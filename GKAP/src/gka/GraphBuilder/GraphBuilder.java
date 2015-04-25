@@ -1,13 +1,13 @@
 package gka.GraphBuilder;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Scanner;
 
 import edu.uci.ics.jung.graph.DirectedOrderedSparseMultigraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedOrderedSparseMultigraph;
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.Pair;
 import gka.Exceptions.GraphBuildException;
 import gka.GraphBuilder.Extension.OwnEdge;
@@ -15,26 +15,28 @@ import gka.GraphBuilder.Extension.OwnVertex;
 
 
 
+
 public class GraphBuilder implements IGraphBuilder{
 
+	private Scanner scanner;
 	private Graph<OwnVertex,OwnEdge> graph;
 	private String graphType;
 	private String header;
 	
 	public final static String UNDIRECTED = "UNDIRECTED";
-	public final static String UNDIRECTED_WEIGHTED = "UNDIRECTED_WEIGHTED";
-	public final static String UNDIRECTED_ATTRIBUTED = "UNDIRECTED_ATTRIBUTED";
+	public final static String UNDIRECTED_WEIGHTED 	= "UNDIRECTED_WEIGHTED";
+	public final static String UNDIRECTED_ATTRIBUTED= "UNDIRECTED_ATTRIBUTED";
 	public final static String UNDIRECTED_WEIGHTED_ATTRIBUTED = "UNDIRECTED_WEIGHTED_ATTRIBUTED";
 	public final static String DIRECTED   = "DIRECTED";
-	public final static String DIRECTED_WEIGHTED   = "DIRECTED_WEIGHTED";
-	public final static String DIRECTED_ATTRIBUTED   = "DIRECTED_ATTRIBUTED";
+	public final static String DIRECTED_WEIGHTED   	= "DIRECTED_WEIGHTED";
+	public final static String DIRECTED_ATTRIBUTED  = "DIRECTED_ATTRIBUTED";
 	public final static String DIRECTED_WEIGHTED_ATTRIBUTED   = "DIRECTED_WEIGHTED_ATTRIBUTED";
 	
-	public final static String WEIGHTED = "WEIGHTED";
-	public final static String ATTRIBUTED = "ATTRIBUTED";
+	public final static String WEIGHTED 	= "WEIGHTED";
+	public final static String ATTRIBUTED 	= "ATTRIBUTED";
 	
-	private List<OwnVertex> vertices = new ArrayList();
-	private List<OwnEdge>   edges    = new ArrayList();
+//	private List<OwnVertex> vertices = new ArrayList();
+//	private List<OwnEdge>   edges    = new ArrayList();
 	
 	/**Implemented Interface
 	 * @throws GraphBuildException **/
@@ -101,7 +103,7 @@ public class GraphBuilder implements IGraphBuilder{
 				graphType = GraphBuilder.DIRECTED_WEIGHTED;
 			
 				System.out.println("dir_weight");
-				fillGraph(list);
+				fillWeightedGraph(list);
 				
 				return graph;
 				
@@ -131,6 +133,7 @@ public class GraphBuilder implements IGraphBuilder{
 	
 	private void fillGraph(List<String> list){
 	
+		
 		for(String line : list){
 			
 			String lineSpaceFree = line.replaceAll("\\s+", "");
@@ -148,22 +151,15 @@ public class GraphBuilder implements IGraphBuilder{
 				OwnVertex vertex2 = new OwnVertex(v2);
 				OwnEdge   edge = new OwnEdge();
 				
-				if(!addVertex(vertex1)){
-					vertex1 = getVertexByName(vertex1.get_name());
-				}
+				graph.addEdge(edge,vertex1, vertex2);					
 				
-				if(!addVertex(vertex2)){
-					vertex2 = getVertexByName(vertex2.get_name());
-				}
-				
-				addEdge(edge,vertex1, vertex2);
 				
 			}
 			else
 			{
 				// only a Vertex
 				OwnVertex vertex1 = new OwnVertex(lineSpaceFree);
-				addVertex(vertex1);
+				graph.addVertex(vertex1);
 			}
 		}
 		
@@ -221,21 +217,14 @@ public class GraphBuilder implements IGraphBuilder{
 				OwnVertex vertex2 = new OwnVertex(v2, v2_attr);
 				OwnEdge edge = new OwnEdge();
 				
-				if(!addVertex(vertex1)){
-					vertex1 = getVertexByName(vertex1.get_name());
-				}
+				graph.addEdge(edge,vertex1, vertex2);
 				
-				if(!addVertex(vertex2)){
-					vertex2 = getVertexByName(vertex2.get_name());
-				}
-				
-				addEdge(edge,vertex1, vertex2);
 				
 			}else{
 
 				// Only a Vertex
 				OwnVertex vertex1 = new OwnVertex(lineSpaceFree);
-				addVertex(vertex1);
+				graph.addVertex(vertex1);
 				
 			}
 		}
@@ -248,36 +237,31 @@ public class GraphBuilder implements IGraphBuilder{
 			
 			String lineSpaceFree = line.replaceAll("\\s+", "");
 			
-			if(lineSpaceFree.contains(",") && lineSpaceFree.contains("::"))
+			if(lineSpaceFree.contains(","))
 			{
-				// weighted Graph (Directed/ Undirected)
-				// split by "::"
-				String[] splitInTwo = lineSpaceFree.split("::");
-				String[] vertexInfo = splitInTwo[0].split(",");
-				String v1 		= vertexInfo[0];
-				String v2 		= vertexInfo[1];
-				int weight		= Integer.parseInt(splitInTwo[1]);
-				
-				OwnVertex vertex1 = new OwnVertex(v1);
-				OwnVertex vertex2 = new OwnVertex(v2);
-				OwnEdge edge = new OwnEdge(weight);
-				
-				if(!addVertex(vertex1)){
-					vertex1 = getVertexByName(vertex1.get_name());
+				if(lineSpaceFree.contains("::")){
+					
+					// weighted Graph (Directed/ Undirected)
+					// split by "::"
+					String[] splitInTwo = lineSpaceFree.split("::");
+					String[] vertexInfo = splitInTwo[0].split(",");
+					String v1 		= vertexInfo[0];
+					String v2 		= vertexInfo[1];
+					int weight		= Integer.parseInt(splitInTwo[1]);
+					
+					OwnVertex vertex1 = new OwnVertex(v1);
+					OwnVertex vertex2 = new OwnVertex(v2);
+					OwnEdge edge = new OwnEdge(weight);
+
+					graph.addEdge(edge,vertex1, vertex2);					
 				}
-				
-				if(!addVertex(vertex2)){
-					vertex2 = getVertexByName(vertex2.get_name());
-				}
-				
-				addEdge(edge,vertex1, vertex2);
 				
 			}
 			else
 			{
 				// only a Vertex
 				OwnVertex vertex1 = new OwnVertex(lineSpaceFree);
-				addVertex(vertex1);
+				graph.addVertex(vertex1);
 			}
 		}
 	}
@@ -340,24 +324,14 @@ public class GraphBuilder implements IGraphBuilder{
 				OwnVertex vertex2 = new OwnVertex(v2, a2);
 				OwnEdge edge = new OwnEdge(weight);
 				
-				if(!addVertex(vertex1)){
-					vertex1 = getVertexByName(vertex1.get_name());
-				}
-				
-				if(!addVertex(vertex2)){
-					vertex2 = getVertexByName(vertex2.get_name());
-				}
-				
-				addEdge(edge,vertex1, vertex2);
+				graph.addEdge(edge, vertex1, vertex2);					
 			}
-			
 			else
 			{
 				// only a Vertex
-				
 				// todo to check at attribute
 				OwnVertex vertex1 = new OwnVertex(lineSpaceFree);
-				addVertex(vertex1);
+				graph.addVertex(vertex1);
 			}
 		}
 	}
@@ -451,63 +425,81 @@ public class GraphBuilder implements IGraphBuilder{
 	}
 
 	@Override
-	public List<OwnVertex> getAllVertices() {
-		return this.vertices;
+	public Collection<OwnVertex> getAllVertices() {
+		return this.graph.getVertices();
+	}
+	
+	@Override
+	public List<String> getAllVerticesAsString(){
+		
+		List<String> vertices = new ArrayList<>();
+		for(OwnVertex v : graph.getVertices()){
+			
+			vertices.add(v.get_name());
+		}
+		return vertices;
 	}
 
 	@Override
-	public boolean addVertex(OwnVertex vertex){
+	public boolean addVertex(String vertex){
 		
-		if(!vertices.contains(vertex))
-		{
-			
-			return graph.addVertex(vertex) && vertices.add(vertex);
-		}
-		else
-		{
-			return false;
-		}
+		return this.graph.addVertex(new OwnVertex(vertex));
+	}
+	
+	@Override
+	public boolean addVertex(String vertex, int attribute){
+		
+		return this.graph.addVertex(new OwnVertex(vertex, attribute));
 	}
 	
 	@Override
 	public OwnVertex getVertexByName(String v){
 		
-		for(OwnVertex vertex1 : graph.getVertices()){
-			
-			if(vertex1.get_name().equals(v)){
-				return vertex1;
+		OwnVertex vertex = new OwnVertex(v);
+		if(this.graph.containsVertex(vertex)){
+		
+			for(OwnVertex aVertex : graph.getVertices()){
+				
+				if(aVertex.equals(vertex)) return aVertex;
 			}
 		}
+		
 		return null;
 	}
 
 	private OwnEdge getEdgeByID(long id){
 		
-		for(OwnEdge e : edges){
-		
-			if(e.getID() == id) return e;
+		OwnEdge edge = new OwnEdge(id);
+		if(graph.containsEdge(edge)){
+			
+			for(OwnEdge aEdge : graph.getEdges()){
+				
+				if(aEdge.equals(edge)) return aEdge;
+			}
 		}
+		
 		return null;
 	}
 	
 	@Override
-	public boolean removeVertex(OwnVertex vertex) {
+	public boolean removeVertex(String vertex) {
 		
-		OwnVertex v = getVertexByName(vertex.get_name());
+		OwnVertex v = getVertexByName(vertex);
+		
 		if(v == null) return false;
 		
-		boolean res = graph.removeVertex(v) && vertices.remove(v);
-		reloadEdges();
-		
-		return res;
+		return graph.removeVertex(v);
 	}
-
+	
 	@Override
-	public boolean addEdge(OwnEdge edge, OwnVertex vertex1, OwnVertex vertex2) {
+	public boolean addEdge(int weight, String vertex1, String vertex2) {
 
-		if(!edges.contains(edge))
-		{
-			return graph.addEdge(edge, vertex1, vertex2) && edges.add(edge);
+		OwnVertex v1 = new OwnVertex(vertex1);
+		OwnVertex v2 = new OwnVertex(vertex2);
+		OwnEdge e = new OwnEdge(weight);
+		
+		if(graph.containsVertex(v1) & graph.containsVertex(v2)){
+			return graph.addEdge(e, v1,v2);
 		}
 		
 		return false;
@@ -519,42 +511,24 @@ public class GraphBuilder implements IGraphBuilder{
 		OwnEdge e = getEdgeByID(edgeID);
 		if(e == null) return false;
 		
-		boolean res = graph.removeEdge(e) && edges.remove(e);
-		reloadEdges();
-		
-		return res;
+		return graph.removeEdge(e);
 	}
 
 	@Override
-	public List<OwnEdge> getAllEdges() {
+	public Collection<OwnEdge> getAllEdges() {
+		return graph.getEdges();
+	}
+	
+	@Override
+	public List<String> getAllEdgesAsString(){
+		
+		List<String> edges = new ArrayList<>();
+		
+		for(OwnEdge e : graph.getEdges()){
+			edges.add(Long.toString(e.getID()));
+		}
 		return edges;
 	}
-	
-	
-	private void reloadEdges(){
-
-		if(edges.size() == graph.getEdgeCount()) return;
-		
-		List<OwnEdge> res = new ArrayList<OwnEdge>();
-		for(OwnEdge edge : graph.getEdges()){
-			
-			res.add(edge);
-		}
-		edges = res;
-	}
-	
-	private void reloadVertices(){
-		
-		if(vertices.size() == graph.getVertexCount()) return;
-		
-		List<OwnVertex> res = new ArrayList<OwnVertex>();
-		for(OwnVertex vertex : graph.getVertices()){
-			
-			res.add(vertex);
-		}
-		vertices = res;
-	}
-
 	
 	@Override
 	public List<String> getSaveableGraph() {
@@ -581,18 +555,18 @@ public class GraphBuilder implements IGraphBuilder{
 			
 			if(graphType.contains(GraphBuilder.WEIGHTED) && graphType.contains(GraphBuilder.ATTRIBUTED))
 			{
-				line = v1+":"+a1+" , "+v2+":"+a2+" :: "+weight;
+				line = v1+":"+a1+","+v2+":"+a2+"::"+weight;
 			}
 			else if(graphType.contains(GraphBuilder.WEIGHTED))
 			{
-				line = v1+" , "+v2+" :: "+weight;
+				line = v1+","+v2+"::"+weight;
 			}
 			else if(graphType.contains(GraphBuilder.ATTRIBUTED))
 			{
-				line = v1+":"+a1+" , "+v2+":"+a2;
+				line = v1+":"+a1+","+v2+":"+a2;
 			}else
 			{
-				line = v1+" , "+v2;
+				line = v1+","+v2;
 			}
 			
 			vertexWithEdge.add(s_v);
@@ -601,7 +575,6 @@ public class GraphBuilder implements IGraphBuilder{
 		}
 		
 		if(vertexWithEdge.size() != graph.getVertexCount()){
-			// todo add Vertex without Edges
 			for(OwnVertex v : graph.getVertices()){
 				if(!vertexWithEdge.contains(v)){
 					res.add(v.get_name());

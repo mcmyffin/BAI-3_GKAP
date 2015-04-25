@@ -1,6 +1,5 @@
 package gka.GraphicalView.Edge;
 
-import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphicalView.MainFrame;
 
 import java.awt.BorderLayout;
@@ -20,7 +19,7 @@ import javax.swing.JComboBox;
 public class DeleteEdge extends JDialog implements ActionListener{
 
 	private final JPanel contentPanel = new JPanel();
-	private JComboBox edgeBox;
+	private JComboBox<String> edgeBox;
 	private JButton okButton;
 	private JButton cancelButton;
 	
@@ -82,9 +81,9 @@ public class DeleteEdge extends JDialog implements ActionListener{
 		
 		edgeBox.removeAllItems();
 		
-		for(OwnEdge edge : parent.gmanager.getAllEdges()){
+		for(String edge : parent.gmanager.getAllEdgesAsString()){
 			
-			edgeBox.addItem(edge.getID());
+			edgeBox.addItem(edge);
 		}
 	}
 

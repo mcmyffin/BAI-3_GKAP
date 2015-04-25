@@ -1,10 +1,8 @@
 package gka.GraphVisualControler;
 
 import java.awt.Dimension;
-import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.List;
-import java.util.Random;
 
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -14,15 +12,19 @@ import edu.uci.ics.jung.visualization.VisualizationViewer.GraphMouse;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+
 import gka.AlgorithmManager.AlgoReport;
 import gka.AlgorithmManager.AlgorithmManager;
 import gka.AlgorithmManager.IAlgorithManager;
+
 import gka.Exceptions.AccessException;
 import gka.Exceptions.FileNotFoundException;
 import gka.Exceptions.GraphBuildException;
 import gka.Exceptions.WrongFileTypeException;
+
 import gka.FileManager.FileManager;
 import gka.FileManager.IFileManager;
+
 import gka.GraphBuilder.GraphBuilder;
 import gka.GraphBuilder.IGraphBuilder;
 import gka.GraphBuilder.Extension.OwnEdge;
@@ -38,9 +40,6 @@ public class GraphManager implements IGraphManager{
 	
 	private Layout<OwnVertex,OwnEdge> layout;
 	private VisualizationViewer<OwnVertex,OwnEdge> vv;
-	
-	
-	public GraphManager(){}
 	
 	
 	/********Implemented********/
@@ -60,35 +59,27 @@ public class GraphManager implements IGraphManager{
 	public boolean saveGraph(File path) {
 		
 		List<String> g = graphBuilder.getSaveableGraph();
-		
 		return fileManager.saveFile(path, g);
 	}
 	
 	@Override
-	public boolean addVertexAt(OwnVertex vertex, int x, int y) {
-		
-		boolean isAdded = graphBuilder.addVertex(vertex);
-		if(!isAdded) return false;
-		
-		layout.setLocation(vertex, new Point2D.Double(x,y));
-		return isAdded;
+	public boolean addVertex(String vertex, int attribute) {
+		return graphBuilder.addVertex(vertex,attribute);
 	}
 
 	@Override
-	public boolean addVertex(OwnVertex vertex) {
-		
-		Random rand = new Random();
-		return addVertexAt(vertex, rand.nextInt(300), rand.nextInt(300));	
+	public boolean addVertex(String vertex) {
+		return graphBuilder.addVertex(vertex);	
 	}	
 	
 	@Override
-	public boolean removeVertex(OwnVertex vertex) {
+	public boolean removeVertex(String vertex) {
 		return graphBuilder.removeVertex(vertex);
 	}
 	
 	@Override
-	public boolean addEdge(OwnEdge edge, OwnVertex v1, OwnVertex v2) {
-		return graphBuilder.addEdge(edge, v1, v2);
+	public boolean addEdge(int weight, String v1, String v2) {
+		return graphBuilder.addEdge(weight, v1, v2);
 	}
 
 	@Override
@@ -102,18 +93,13 @@ public class GraphManager implements IGraphManager{
 	}
 
 	@Override
-	public List<OwnVertex> getAllVertices() {
-		return graphBuilder.getAllVertices();
+	public List<String> getAllVerticesAsString() {
+		return graphBuilder.getAllVerticesAsString();
 	}
 
 	@Override
-	public OwnVertex getVertexByName(String name) {
-		return graphBuilder.getVertexByName(name);
-	}
-
-	@Override
-	public List<OwnEdge> getAllEdges() {
-		return graphBuilder.getAllEdges();
+	public List<String> getAllEdgesAsString() {
+		return graphBuilder.getAllEdgesAsString();
 	}
 	
 	@Override
@@ -130,25 +116,47 @@ public class GraphManager implements IGraphManager{
 		((ModalGraphMouse) gm).setMode(ModalGraphMouse.Mode.PICKING);
 	}
 	
+	// Algorithm BFS implementation
 	@Override
-	public AlgoReport breadthFirstSearch(OwnVertex start, OwnVertex goal) {
+	public AlgoReport startBreadthFirstSearch(String start, String target) {
+		OwnVertex v1 = graphBuilder.getVertexByName(start);
+		OwnVertex v2 = graphBuilder.getVertexByName(target);
 		
 		algoManager = new AlgorithmManager(adtGraph);
-		return algoManager.startBFS(start, goal);
+		return algoManager.startBFS(v1, v2);
 	}
 	
+	// Algorithm Dijkstra implementation
+	@Override
+	public AlgoReport startDijkstra(String start, String target){
+		OwnVertex v1 = graphBuilder.getVertexByName(start);
+		OwnVertex v2 = graphBuilder.getVertexByName(target);
+		
+		algoManager = new AlgorithmManager(adtGraph);
+		return algoManager.startDijkstra(v1, v2);
+	}
+	
+	// Algorithm A* implementation
+	@Override
+	public AlgoReport startASternchen(String start, String target){
+		OwnVertex v1 = graphBuilder.getVertexByName(start);
+		OwnVertex v2 = graphBuilder.getVertexByName(target);
+		
+		algoManager = new AlgorithmManager(adtGraph);
+		return algoManager.startASternchen(v1, v2);
+	}
 	
 	
 	/*********Helper Method from loadGraph(String path)**********/
 	/**
-	 * Set up the Graphical Component VisualizationViewer
+	 * Set up the Graphical Component "VisualizationViewer"
 	 * @param g
-	 * @return
+	 * @return VisualizationViewer
 	 */
-	private VisualizationViewer<OwnVertex, OwnEdge> setUpGraphiew(Graph g){
+	private VisualizationViewer<OwnVertex, OwnEdge> setUpGraphiew(Graph<OwnVertex, OwnEdge> g){
 		
 		 // Layout<V, E>, VisualizationComponent<V,E>
-		 layout = new CircleLayout(g);
+		 layout = new CircleLayout<OwnVertex,OwnEdge>(g);
 		 
 		 layout.setSize(new Dimension(600,600));
 		 

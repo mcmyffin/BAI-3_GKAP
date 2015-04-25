@@ -1,6 +1,5 @@
 package gka.GraphicalView.Vertex;
 
-import gka.GraphBuilder.Extension.OwnVertex;
 import gka.GraphicalView.MainFrame;
 
 import java.awt.BorderLayout;
@@ -84,8 +83,8 @@ public class DeleteVertex extends JDialog implements ActionListener{
 		
 		vertexBox.removeAllItems();
 		
-		for(OwnVertex v : parent.gmanager.getAllVertices()){
-			vertexBox.addItem(v.get_name());
+		for(String v : parent.gmanager.getAllVerticesAsString()){
+			vertexBox.addItem(v);
 		}
 	}
 
@@ -97,7 +96,7 @@ public class DeleteVertex extends JDialog implements ActionListener{
 		{
 			if(vertexBox.getSelectedItem() != null){
 				
-				OwnVertex v = parent.gmanager.getVertexByName(vertexBox.getSelectedItem().toString());
+				String v = vertexBox.getSelectedItem().toString();
 				parent.deleteVertex(v);
 				
 				this.dispose();

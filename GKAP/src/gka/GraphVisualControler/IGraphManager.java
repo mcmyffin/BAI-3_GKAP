@@ -52,25 +52,23 @@ public interface IGraphManager {
 	public String getGraphType();
 	
 	/**
-	 * Add Vertex At
-	 * Add a Vertex to the graph at specific position (x,y)
-	 * 
-	 * @param vertex
-	 * @param x
-	 * @param y
-	 * 
-	 * @return true if Vertex does not exist
-	 */
-	public boolean addVertexAt(OwnVertex vertex, int x ,int y);
-	
-	/**
 	 * Add Vertex
 	 * Add a Vertex to the graph
 	 * 
 	 * @param vertex
 	 * @return true if Vertex does not exist
 	 */
-	public boolean addVertex(OwnVertex vertex);
+	public boolean addVertex(String vertex);
+	
+	/**
+	 * Add Vertex
+	 * Add a Vertex to the graph
+	 * 
+	 * @param vertex
+	 * @param attribute
+	 * @return true if Vertex does not exist
+	 */
+	public boolean addVertex(String vertex, int attribute);
 	
 	/**
 	 * Add Edge
@@ -82,7 +80,7 @@ public interface IGraphManager {
 	 * 
 	 * @return true if Edge does not exist
 	 */
-	public boolean addEdge(OwnEdge edge, OwnVertex v1, OwnVertex v2);
+	public boolean addEdge(int weight, String v1, String v2);
 	
 	/**
 	 * Remove Vertex
@@ -92,7 +90,7 @@ public interface IGraphManager {
 	 * @param vertex
 	 * @return true if Vertex exists
 	 */
-	public boolean removeVertex(OwnVertex vertex);
+	public boolean removeVertex(String vertex);
 	
 	/**
 	 * Remove Edge
@@ -109,7 +107,7 @@ public interface IGraphManager {
 	 * If graph is empty, return empty List
 	 * @return List<OwnVertex>
 	 */
-	public List<OwnVertex> getAllVertices();
+	public List<String> getAllVerticesAsString();
 	
 	/**
 	 * Get All Edges
@@ -117,7 +115,7 @@ public interface IGraphManager {
 	 * If graph does not have Edges, return empty List
 	 * @return List<OwnEdge>
 	 */
-	public List<OwnEdge> getAllEdges();
+	public List<String> getAllEdgesAsString();
 	
 	/**
 	 * Get Vertex By Name
@@ -127,7 +125,7 @@ public interface IGraphManager {
 	 * @return OwnVertex if Vertex found by Name
 	 * 		   else null.
 	 */
-	public OwnVertex getVertexByName(String name);
+//	public OwnVertex getVertexByName(String name);
 
 	
 	/**
@@ -140,8 +138,8 @@ public interface IGraphManager {
 	public void setTrasformMode();
 	
 	/**
-	 * Set Pic Mode
-	 * Set the VisualizationViewer Component in Pic Mode
+	 * Set Piking Mode
+	 * Set the VisualizationViewer Component in Piking Mode
 	 * Mouse can move/select Vertex/Vertices in Component
 	 * Mouse can zoom in/out in Component
 	 */
@@ -153,10 +151,31 @@ public interface IGraphManager {
 	 * Start BFS Algorithm in Graph
 	 * 
 	 * @param start
-	 * @param goal
+	 * @param target
 	 * 
 	 * @return AlgoReport
 	 */
-	public AlgoReport breadthFirstSearch(OwnVertex start, OwnVertex goal);
+	public AlgoReport startBreadthFirstSearch(String start, String target);
 	
+	/**
+	 * Dijkstra Algorithm
+	 * Start Dijkstra Algorithm in Graph
+	 * 
+	 * @param start
+	 * @param target
+	 * 
+	 * @return AlgoReport
+	 */
+	public AlgoReport startDijkstra(String start, String target);
+	
+	/**
+	 * A* Algorithm
+	 * Start A* Algorithm in Graph
+	 * 
+	 * @param start
+	 * @param target
+	 * 
+	 * @return AlgoReport
+	 */
+	public AlgoReport startASternchen(String start, String target);
 }

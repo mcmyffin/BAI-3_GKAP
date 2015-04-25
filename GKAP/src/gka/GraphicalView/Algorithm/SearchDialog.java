@@ -1,10 +1,7 @@
 package gka.GraphicalView.Algorithm;
 
-import gka.GraphBuilder.GraphBuilder;
-import gka.GraphBuilder.Extension.OwnEdge;
-import gka.GraphBuilder.Extension.OwnVertex;
 import gka.GraphicalView.MainFrame;
-import gka.GraphicalView.Edge.CreateEdge;
+import gka.GraphicalView.WarningDialog;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -23,13 +20,17 @@ import javax.swing.JComboBox;
 public class SearchDialog extends JDialog implements ActionListener{
 
 	private final JPanel contentPanel = new JPanel();
-	private JComboBox startVertexBox;
-	private JComboBox targetVertexBox;
+	private JComboBox<String> startVertexBox;
+	private JComboBox<String> targetVertexBox;
 	private JButton okButton;
 	private JButton cancelButton;
 	private MainFrame parent;
-
+	private String algoMode;
+	
 	public static final String BEADTHFIRSTSEARCH = "BFS";
+	public static final String DIJKSTRA = "DIJKSTRA";
+	public static final String ASTERNCHEN = "A*";
+	
 
 	/**
 	 * Create the dialog.
@@ -38,6 +39,7 @@ public class SearchDialog extends JDialog implements ActionListener{
 		
 		super(parent, modal);
 		this.parent = (MainFrame) parent;
+		this.algoMode = algoMode;
 		
 		init();
 		preloadVertices();
@@ -57,7 +59,7 @@ public class SearchDialog extends JDialog implements ActionListener{
 			contentPanel.add(lblNewLabel);
 		}
 		
-		startVertexBox = new JComboBox(new DefaultComboBoxModel<String>());
+		startVertexBox = new JComboBox<String>(new DefaultComboBoxModel<String>());
 		startVertexBox.setBounds(188, 36, 165, 24);
 		contentPanel.add(startVertexBox);
 		{
@@ -66,7 +68,7 @@ public class SearchDialog extends JDialog implements ActionListener{
 			contentPanel.add(lblTargetNode);
 		}
 		{
-			targetVertexBox = new JComboBox(new DefaultComboBoxModel<String>());
+			targetVertexBox = new JComboBox<String>(new DefaultComboBoxModel<String>());
 			targetVertexBox.setBounds(188, 84, 165, 24);
 			contentPanel.add(targetVertexBox);
 		}
@@ -97,10 +99,10 @@ public class SearchDialog extends JDialog implements ActionListener{
 		startVertexBox.removeAllItems();
 		targetVertexBox.removeAllItems();
 		
-		for(OwnVertex v : parent.gmanager.getAllVertices()){
+		for(String v : parent.gmanager.getAllVerticesAsString()){
 			
-			startVertexBox.addItem(v.get_name());
-			targetVertexBox.addItem(v.get_name());
+			startVertexBox.addItem(v);
+			targetVertexBox.addItem(v);
 		}
 	}
 	
@@ -110,13 +112,29 @@ public class SearchDialog extends JDialog implements ActionListener{
 		// OK Button
 		if(e.getActionCommand().equals(okButton.getText()))
 		{
-			if(!startVertexBox.getSelectedItem().equals(targetVertexBox.getSelectedItem()))
+			if(this.algoMode.equals(SearchDialog.BEADTHFIRSTSEARCH))
 			{
-				OwnVertex v1 = parent.gmanager.getVertexByName(startVertexBox.getSelectedItem().toString());
-				OwnVertex v2 = parent.gmanager.getVertexByName(targetVertexBox.getSelectedItem().toString());
+				String v1 = startVertexBox.getSelectedItem().toString();
+				String v2 = targetVertexBox.getSelectedItem().toString();
 				
 				this.dispose();
 				parent.startBFS(v1, v2);
+			}
+			else if(this.algoMode.equals(SearchDialog.DIJKSTRA))
+			{
+				String v1 = startVertexBox.getSelectedItem().toString();
+				String v2 = targetVertexBox.getSelectedItem().toString();
+				
+				this.dispose();
+				parent.startDijkstra(v1, v2);
+			}
+			else if(this.algoMode.equals(SearchDialog.ASTERNCHEN))
+			{
+				String v1 = startVertexBox.getSelectedItem().toString();
+				String v2 = targetVertexBox.getSelectedItem().toString();
+				
+				this.dispose();
+				parent.startASternchen(v1, v2);
 			}
 		}
 		else if(e.getActionCommand().equals(cancelButton.getText()))

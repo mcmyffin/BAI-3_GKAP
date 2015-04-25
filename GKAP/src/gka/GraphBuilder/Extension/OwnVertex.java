@@ -1,6 +1,8 @@
 package gka.GraphBuilder.Extension;
 
-public class OwnVertex{
+import java.util.Comparator;
+
+public class OwnVertex implements Comparable<OwnVertex>, Comparator<OwnVertex>{
 	
 	private String 	_name;
 	private int	 	_attribute = 0;
@@ -10,7 +12,7 @@ public class OwnVertex{
 	
 	public OwnVertex(String name){
 		super();
-		this._name = name;
+		set_name(name);
 	}
 	
 	public OwnVertex(String name, int attribute){
@@ -27,8 +29,10 @@ public class OwnVertex{
 		return _attribute;
 	}
 
-	public void set_name(String _name) {
-		this._name = _name;
+	public void set_name(String name) {
+		if(name == null) name = "V"+System.currentTimeMillis();
+		
+		this._name = name;
 	}
 
 	public void set_attribute(int _attribute) {
@@ -48,6 +52,14 @@ public class OwnVertex{
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((_name == null) ? 0 : _name.hashCode());
+		return result;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if(obj == this) {
 			return true;
@@ -58,4 +70,16 @@ public class OwnVertex{
 			return get_name().equals(other.get_name());
 		}
 	}
+
+	@Override
+	public int compareTo(OwnVertex o) {
+		return Integer.compare(get_level(), o.get_level());
+	}
+
+	@Override
+	public int compare(OwnVertex o1, OwnVertex o2) {
+		return Integer.compare(o1.get_level(), o2.get_level());
+	}
+	
+	
 }

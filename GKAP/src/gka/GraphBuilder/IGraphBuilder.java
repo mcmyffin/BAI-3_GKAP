@@ -6,8 +6,8 @@ import gka.Exceptions.GraphBuildException;
 import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public interface IGraphBuilder {
 
@@ -30,7 +30,16 @@ public interface IGraphBuilder {
 	 * @param vertex
 	 * @return true if Vertex does not exist in Graph
 	 */
-	public boolean addVertex(OwnVertex vertex);
+	public boolean addVertex(String vertex);
+	
+	/**
+	 * Add Vertex with Attribute
+	 * Add Vertex to the Graph
+	 * 
+	 * @param vertex
+	 * @return true if Vertex does not exist in Graph
+	 */
+	public boolean addVertex(String vertex, int attribute);
 	
 	/**
 	 * Remove Vertex
@@ -39,7 +48,7 @@ public interface IGraphBuilder {
 	 * @param vertex
 	 * @return true if Vertex exists in Graph
 	 */
-	public boolean removeVertex(OwnVertex vertex);
+	public boolean removeVertex(String vertex);
 	
 	/**
 	 * Add Edge
@@ -50,8 +59,11 @@ public interface IGraphBuilder {
 	 * @param v2
 	 * 
 	 * @return true if both Vertices exists
+	 * 
+	 * ************************************
+	 * NOTE: If weight value equals 0, then default Edge
 	 */
-	public boolean addEdge(OwnEdge edge, OwnVertex v1, OwnVertex v2);
+	public boolean addEdge(int weight, String v1, String v2);
 	
 	/**
 	 * Remove Edge
@@ -70,7 +82,17 @@ public interface IGraphBuilder {
 	 * 
 	 * If Graph is empty, returns empty List
 	 */
-	public List<OwnVertex> getAllVertices();
+	public Collection<OwnVertex> getAllVertices();
+	
+	/**
+	 * Get All Vertices 
+	 * Get a List with all Vertices from Graph
+	 * 
+	 * @return List with Vertices
+	 * 
+	 * If Graph is empty, returns empty List
+	 */
+	public List<String> getAllVerticesAsString();
 	
 	/**
 	 * Get All Edges
@@ -80,7 +102,17 @@ public interface IGraphBuilder {
 	 * 
 	 * If Graph has no Edges, returns empty List
 	 */
-	public List<OwnEdge> getAllEdges();
+	public Collection<OwnEdge> getAllEdges();
+	
+	/**
+	 * Get All Edges
+	 * Get a List with all Edges from Graph
+	 * 
+	 * @return List with all Edges
+	 * 
+	 * If Graph has no Edges, returns empty List
+	 */
+	public List<String> getAllEdgesAsString();
 	
 	/**
 	 * Get Vertex By Name

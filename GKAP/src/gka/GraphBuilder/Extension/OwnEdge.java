@@ -1,15 +1,19 @@
 package gka.GraphBuilder.Extension;
 
-import edu.uci.ics.jung.graph.event.GraphEvent.Edge;
 
 
-public class OwnEdge{
+public class OwnEdge implements Comparable<OwnEdge>{
 
 	private long _id;
 	private int _weight;
 	
 	public OwnEdge(){
 		this._id = EdgeCounter.getInstance().next();
+		this._weight = 0;
+	}
+	
+	public OwnEdge(long id){
+		this._id =id;
 		this._weight = 0;
 	}
 	
@@ -35,7 +39,15 @@ public class OwnEdge{
 		
 		return ("E "+_id);
 	}
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (_id ^ (_id >>> 32));
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == this) {
@@ -47,6 +59,14 @@ public class OwnEdge{
 			return _id == other.getID(); 
 		}
 	}
+
+	@Override
+	public int compareTo(OwnEdge o) {
+		return Integer.compare(getWeight(), o.getWeight());
+	}
+
+	
+	
 
 	
 }
