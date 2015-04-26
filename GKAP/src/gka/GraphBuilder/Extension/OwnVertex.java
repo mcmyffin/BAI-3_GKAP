@@ -1,9 +1,10 @@
 package gka.GraphBuilder.Extension;
 
+
 public class OwnVertex implements Comparable<OwnVertex>{
 	
 	private String 	_name;
-	private int	 	_attribute = 0;
+	private int	 	_attribute = -1;
 	private int		_level = 0;
 	
 	
@@ -44,7 +45,7 @@ public class OwnVertex implements Comparable<OwnVertex>{
 	}
 	@Override
 	public String toString() {
-		return _name;
+		return (get_attribute() > -1? _name+" ["+get_attribute()+"]" : get_name());
 	}
 
 	@Override
@@ -72,6 +73,6 @@ public class OwnVertex implements Comparable<OwnVertex>{
 	@Override
 	public int compareTo(OwnVertex o) {
 		return Integer.compare(get_level(), o.get_level());
-//		return 0;
 	}
+
 }

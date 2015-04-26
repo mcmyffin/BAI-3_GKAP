@@ -36,8 +36,7 @@ public class OwnEdge implements Comparable<OwnEdge>{
 	
 	@Override
 	public String toString(){
-		
-		return ("E "+_id);
+		return ("E "+_id+" ["+getWeight()+"]");
 	}
 
 	@Override

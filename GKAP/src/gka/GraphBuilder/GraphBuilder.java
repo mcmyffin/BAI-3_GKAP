@@ -113,7 +113,7 @@ public class GraphBuilder implements IGraphBuilder{
 				graphType = GraphBuilder.DIRECTED_ATTRIBUTED;
 			
 				System.out.println("dir_attr");
-				fillGraph(list);
+				fillAttributedGraph(list);
 				
 				return graph;
 				
@@ -123,7 +123,7 @@ public class GraphBuilder implements IGraphBuilder{
 				graphType = GraphBuilder.DIRECTED_WEIGHTED_ATTRIBUTED;
 			
 				System.out.println("dir_weight_attr");
-				fillGraph(list);
+				fillWeightedAttributedGraph(list);
 				
 				return graph;
 				
