@@ -8,6 +8,7 @@ import java.util.Scanner;
 import edu.uci.ics.jung.graph.DirectedOrderedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedOrderedSparseMultigraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.Pair;
 import gka.Exceptions.GraphBuildException;
 import gka.GraphBuilder.Extension.OwnEdge;
@@ -69,7 +70,7 @@ public class GraphBuilder implements IGraphBuilder{
 				
 			case(GraphBuilder.UNDIRECTED_WEIGHTED):
 			
-				graph  = new UndirectedOrderedSparseMultigraph<OwnVertex, OwnEdge>();
+				graph  = new UndirectedSparseGraph<OwnVertex, OwnEdge>();
 				graphType = GraphBuilder.UNDIRECTED_WEIGHTED;
 			
 				System.out.println("undr_weight");
