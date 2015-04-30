@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.List;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import gka.AlgorithmManager.AlgoReport;
+import gka.AlgorithmManager.BFS_Report;
+import gka.AlgorithmManager.IAlgoReport;
 import gka.Exceptions.AccessException;
 import gka.Exceptions.FileNotFoundException;
 import gka.Exceptions.GraphBuildException;
@@ -155,7 +156,7 @@ public interface IGraphManager {
 	 * 
 	 * @return AlgoReport
 	 */
-	public AlgoReport startBreadthFirstSearch(String start, String target);
+	public IAlgoReport startBreadthFirstSearch(String start, String target);
 	
 	/**
 	 * Dijkstra Algorithm
@@ -166,7 +167,7 @@ public interface IGraphManager {
 	 * 
 	 * @return AlgoReport
 	 */
-	public AlgoReport startDijkstra(String start, String target);
+	public IAlgoReport startDijkstra(String start, String target);
 	
 	/**
 	 * A* Algorithm
@@ -177,5 +178,5 @@ public interface IGraphManager {
 	 * 
 	 * @return AlgoReport
 	 */
-	public AlgoReport startASternchen(String start, String target);
+	public IAlgoReport startASternchen(String start, String target);
 }

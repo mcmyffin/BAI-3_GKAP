@@ -6,17 +6,17 @@ import gka.GraphBuilder.Extension.OwnVertex;
 
 public class AlgorithmManager implements IAlgorithManager{
 
-	private Graph<OwnVertex, OwnEdge> _graph;
+	private Graph<OwnVertex, OwnEdge> graph;
 	
 	public AlgorithmManager(Graph<OwnVertex, OwnEdge> graph) {
-		this._graph = graph;
+		this.graph = graph;
 	}
 	
 	@Override
-	public AlgoReport startBFS(OwnVertex start_node, OwnVertex goal_node) {
+	public IAlgoReport startBFS(OwnVertex start_node, OwnVertex goal_node) {
 		
-		AlgoReport reporter = new AlgoReport("Breadth First Search");
-		BFS bfs = new BFS(_graph, start_node, goal_node, reporter);
+		BFS_Report reporter = new BFS_Report("Breadth First Search");
+		BFS bfs = new BFS(graph, start_node, goal_node, reporter);
 		
 		reporter.startTimer();
 		bfs.startbreadthSearch();
@@ -26,26 +26,28 @@ public class AlgorithmManager implements IAlgorithManager{
 	}
 
 	@Override
-	public AlgoReport startDijkstra(OwnVertex start_node, OwnVertex goal_node) {
+	public IAlgoReport startDijkstra(OwnVertex start_node, OwnVertex goal_node) {
 		
-		AlgoReport reporter = new AlgoReport("Dijkstra");
-		Dijkstra dijkstra = new Dijkstra(_graph, start_node, goal_node, reporter);
+		IAlgoReport reporter = new Dijkstra_AStar_Report("Dijkstra");
+		Dijkstra_AStar dijkstra = new Dijkstra_AStar(graph, start_node, goal_node, 
+															reporter, Dijkstra_AStar.DIJKSTRA);
 		
 		reporter.startTimer();
-		dijkstra.startDijkstra();
+		dijkstra.startAlgorithm();
 		reporter.stopTimer();
 		
 		return reporter;
 	}
 
 	@Override
-	public AlgoReport startASternchen(OwnVertex start_node, OwnVertex goal_node) {
+	public IAlgoReport startASternchen(OwnVertex start_node, OwnVertex goal_node) {
 
-		AlgoReport reporter = new AlgoReport("A*");
-		ASternchen asternchen = new ASternchen(_graph, start_node, goal_node, reporter);
+		IAlgoReport reporter = new BFS_Report("A*");
+		Dijkstra_AStar astar = new Dijkstra_AStar(graph, start_node, goal_node, 
+															reporter, Dijkstra_AStar.ASTAR);
 		
 		reporter.startTimer();
-		asternchen.startASternchen();
+		astar.startAlgorithm();
 		reporter.startTimer();
 		
 		return reporter; 

@@ -1,6 +1,7 @@
 package gka.GraphicalView.Algorithm;
 
-import gka.AlgorithmManager.AlgoReport;
+import gka.AlgorithmManager.BFS_Report;
+import gka.AlgorithmManager.IAlgoReport;
 import gka.GraphicalView.MainFrame;
 
 import java.awt.BorderLayout;
@@ -23,13 +24,13 @@ public class ResultDialog extends JDialog implements ActionListener{
 	private JTextArea resultArea;
 	
 	private MainFrame parent;
-	private AlgoReport report;
+	private IAlgoReport report;
 	
 
 	/**
 	 * Create the dialog.
 	 */
-	public ResultDialog(Frame parent, boolean modal, AlgoReport report) {
+	public ResultDialog(Frame parent, boolean modal, IAlgoReport report) {
 		
 		super(parent, modal);
 		this.parent = (MainFrame) parent;

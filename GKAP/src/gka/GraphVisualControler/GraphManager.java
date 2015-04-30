@@ -12,19 +12,16 @@ import edu.uci.ics.jung.visualization.VisualizationViewer.GraphMouse;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-
-import gka.AlgorithmManager.AlgoReport;
+import gka.AlgorithmManager.BFS_Report;
 import gka.AlgorithmManager.AlgorithmManager;
+import gka.AlgorithmManager.IAlgoReport;
 import gka.AlgorithmManager.IAlgorithManager;
-
 import gka.Exceptions.AccessException;
 import gka.Exceptions.FileNotFoundException;
 import gka.Exceptions.GraphBuildException;
 import gka.Exceptions.WrongFileTypeException;
-
 import gka.FileManager.FileManager;
 import gka.FileManager.IFileManager;
-
 import gka.GraphBuilder.GraphBuilder;
 import gka.GraphBuilder.IGraphBuilder;
 import gka.GraphBuilder.Extension.OwnEdge;
@@ -118,7 +115,7 @@ public class GraphManager implements IGraphManager{
 	
 	// Algorithm BFS implementation
 	@Override
-	public AlgoReport startBreadthFirstSearch(String start, String target) {
+	public IAlgoReport startBreadthFirstSearch(String start, String target) {
 		OwnVertex v1 = graphBuilder.getVertexByName(start);
 		OwnVertex v2 = graphBuilder.getVertexByName(target);
 		
@@ -128,7 +125,7 @@ public class GraphManager implements IGraphManager{
 	
 	// Algorithm Dijkstra implementation
 	@Override
-	public AlgoReport startDijkstra(String start, String target){
+	public IAlgoReport startDijkstra(String start, String target){
 		OwnVertex v1 = graphBuilder.getVertexByName(start);
 		OwnVertex v2 = graphBuilder.getVertexByName(target);
 		
@@ -138,7 +135,7 @@ public class GraphManager implements IGraphManager{
 	
 	// Algorithm A* implementation
 	@Override
-	public AlgoReport startASternchen(String start, String target){
+	public IAlgoReport startASternchen(String start, String target){
 		OwnVertex v1 = graphBuilder.getVertexByName(start);
 		OwnVertex v2 = graphBuilder.getVertexByName(target);
 		

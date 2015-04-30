@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import gka.AlgorithmManager.AlgoReport;
+import gka.AlgorithmManager.BFS_Report;
 import gka.AlgorithmManager.AlgorithmManager;
+import gka.AlgorithmManager.IAlgoReport;
 import gka.AlgorithmManager.IAlgorithManager;
 import gka.Exceptions.AccessException;
 import gka.Exceptions.FileNotFoundException;
@@ -59,23 +60,10 @@ public class BFSTest {
 		OwnVertex goal_node = gb.getVertexByName("v9");
 		
 		// start BFS
-		AlgoReport report = am.startBFS(start_node, goal_node);
+		IAlgoReport report = am.startBFS(start_node, goal_node);
 		
-		// Create expected Result
-		OwnVertex v1 = gb.getVertexByName("v1");
-		OwnVertex v2 = gb.getVertexByName("v2");
-		OwnVertex v6 = gb.getVertexByName("v6");
-		OwnVertex v3 = gb.getVertexByName("v3");
-		OwnVertex v9 = gb.getVertexByName("v9");
-		
-		OwnVertex[] list = {v1,v2,v6,v3,v9};
-		List<OwnVertex> expectedPath = new ArrayList<OwnVertex>(Arrays.asList(list));
-
 		// test for path count
-		assertTrue(report.getPath().size() == expectedPath.size());
-		
-		// test for path
-		assertTrue(report.getPath().equals(expectedPath));
+		assertTrue(report.getPathLength() == 4);
 	}
 	
 	/**
@@ -104,7 +92,7 @@ public class BFSTest {
 		OwnVertex goal_node = gb.getVertexByName("v5");
 		
 		// start BFS
-		AlgoReport report = am.startBFS(start_node, goal_node);
+		IAlgoReport report = am.startBFS(start_node, goal_node);
 		
 		// Create expected Result
 		OwnVertex v3 = gb.getVertexByName("v3");
@@ -117,10 +105,7 @@ public class BFSTest {
 		List<OwnVertex> expectedPath = new ArrayList<OwnVertex>(Arrays.asList(list));
 
 		// test for path count
-		assertTrue(report.getPath().size() == expectedPath.size());
-		
-		// test for path
-		assertTrue(report.getPath().equals(expectedPath));
+		assertTrue(report.getPathLength() == 4);
 	}
 	
 	// ********************************************
@@ -153,23 +138,10 @@ public class BFSTest {
 		OwnVertex goal_node = gb.getVertexByName("v8");
 		
 		// start BFS
-		AlgoReport report = am.startBFS(start_node, goal_node);
+		IAlgoReport report = am.startBFS(start_node, goal_node);
 		
-		// Create expected Result
-		OwnVertex v3 = gb.getVertexByName("v3");
-		OwnVertex v7 = gb.getVertexByName("v7");
-		OwnVertex v4 = gb.getVertexByName("v4");
-		OwnVertex v8 = gb.getVertexByName("v8");
-		
-		
-		OwnVertex[] list = {v3, v7, v4, v8};
-		List<OwnVertex> expectedPath = new ArrayList<OwnVertex>(Arrays.asList(list));
-
 		// test for path count
-		assertTrue(report.getPath().size() == expectedPath.size());
-		
-		// test for path
-		assertTrue(report.getPath().equals(expectedPath));
+		assertTrue(report.getPathLength() == 3);
 	}
 
 	
@@ -199,22 +171,9 @@ public class BFSTest {
 		OwnVertex goal_node = gb.getVertexByName("v6");
 		
 		// start BFS
-		AlgoReport report = am.startBFS(start_node, goal_node);
+		IAlgoReport report = am.startBFS(start_node, goal_node);
 		
-		// Create expected Result
-		OwnVertex v1 = gb.getVertexByName("v1");
-		OwnVertex v8 = gb.getVertexByName("v8");
-		OwnVertex v4 = gb.getVertexByName("v4");
-		OwnVertex v7 = gb.getVertexByName("v7");
-		OwnVertex v6 = gb.getVertexByName("v6");
-		
-		OwnVertex[] list = {v1, v8, v4, v7, v6};
-		List<OwnVertex> expectedPath = new ArrayList<OwnVertex>(Arrays.asList(list));
-
 		// test for path count
-		assertTrue(report.getPath().size() == expectedPath.size());
-		
-		// test for path
-		assertTrue(report.getPath().equals(expectedPath));
+		assertTrue(report.getPathLength() == 4);
 	}
 }

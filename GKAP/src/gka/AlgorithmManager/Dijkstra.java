@@ -15,10 +15,10 @@ public class Dijkstra {
 	private OwnVertex start;
 	private OwnVertex goal;
 	private Graph<OwnVertex,OwnEdge> graph;
-	private AlgoReport reporter;
+	private BFS_Report reporter;
 	private PriorityQueue<OwnVertex> priorityQueue;
 	
-	public Dijkstra(Graph<OwnVertex, OwnEdge> g, OwnVertex start, OwnVertex goal, AlgoReport reporter){
+	public Dijkstra(Graph<OwnVertex, OwnEdge> g, OwnVertex start, OwnVertex goal, BFS_Report reporter){
 		
 		this.graph = g;
 		this.start = start;

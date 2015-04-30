@@ -11,7 +11,7 @@ public interface IAlgorithManager {
 	 * @param goal_node
 	 * @return AlgoReport with result Information
 	 */
-	public AlgoReport startBFS(OwnVertex start_node, OwnVertex goal_node);
+	public IAlgoReport startBFS(OwnVertex start_node, OwnVertex goal_node);
 	
 	/**
 	 * Start Dijkstra Algorithm
@@ -19,7 +19,7 @@ public interface IAlgorithManager {
 	 * @param goal_node
 	 * @return AlgoReport with result Information
 	 */
-	public AlgoReport startDijkstra(OwnVertex start_node, OwnVertex goal_node);
+	public IAlgoReport startDijkstra(OwnVertex start_node, OwnVertex goal_node);
 	
 	/**
 	 * Start ASternchen Algorithm
@@ -27,5 +27,5 @@ public interface IAlgorithManager {
 	 * @param goal_node
 	 * @return AlgoReport with result Information
 	 */
-	public AlgoReport startASternchen(OwnVertex start_node, OwnVertex goal_node);
+	public IAlgoReport startASternchen(OwnVertex start_node, OwnVertex goal_node);
 }

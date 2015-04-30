@@ -1,7 +1,8 @@
 package gka.GraphicalView;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import gka.AlgorithmManager.AlgoReport;
+import gka.AlgorithmManager.BFS_Report;
+import gka.AlgorithmManager.IAlgoReport;
 import gka.Exceptions.AccessException;
 import gka.Exceptions.FileNotFoundException;
 import gka.Exceptions.GraphBuildException;
@@ -279,7 +280,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	
 	public void startBFS(String start, String target){
 		
-		AlgoReport report = gmanager.startBreadthFirstSearch(start, target);
+		IAlgoReport report = gmanager.startBreadthFirstSearch(start, target);
 		
 		ResultDialog resultDialog= new ResultDialog(this, true, report);
 		resultDialog.setVisible(true);
@@ -287,35 +288,18 @@ public class MainFrame extends JFrame implements ActionListener{
 
 	public void startDijkstra(String start, String target){
 		
-		try{
-			AlgoReport report = gmanager.startDijkstra(start, target);
+		IAlgoReport report = gmanager.startDijkstra(start, target);
 
-			ResultDialog resultDialog = new ResultDialog(this, true, report);
-			resultDialog.setVisible(true);
-		
-		// BECAUSE ITS NOT IMPLEMENTED		
-		}catch(NotImplementedException ex){
-		
-			WarningDialog wd = new WarningDialog(this, true, "NOT IMPLEMENTED", "NEED MORE MANPOWER TO DO THIS");
-			wd.setVisible(true);
-		}
-		
+		ResultDialog resultDialog = new ResultDialog(this, true, report);
+		resultDialog.setVisible(true);
 	}
 	
 	public void startASternchen(String start, String target){
 		
-		try{
-			AlgoReport report = gmanager.startASternchen(start, target);
-			
-			ResultDialog resultDialog = new ResultDialog(this, true, report);
-			resultDialog.setVisible(true);
+		IAlgoReport report = gmanager.startASternchen(start, target);
 		
-		// BECAUSE ITS NOT IMPLEMENTED
-		}catch(NotImplementedException ex){
-		
-			WarningDialog wd = new WarningDialog(this, true, "NOT IMPLEMENTED", "NEED MORE MANPOWER TO DO THIS");
-			wd.setVisible(true);
-		}
+		ResultDialog resultDialog = new ResultDialog(this, true, report);
+		resultDialog.setVisible(true);
 	}
 	
 	@Override

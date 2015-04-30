@@ -1,32 +1,27 @@
 package gka.AlgorithmManager;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Set;
-import java.util.Stack;
-import java.util.concurrent.PriorityBlockingQueue;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.util.Pair;
 import gka.AlgorithmManager.Extension.ComparatorHeuristic;
 import gka.AlgorithmManager.Extension.ComparatorLength;
 import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
 
-public class ASternchen {
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
 
+public class Dijkstra_AStar {
+
+	public static final String DIJKSTRA = "DIJKSTRA";
+	public static final String ASTAR 	= "ASTAR";
+	
 	private OwnVertex start;
 	private OwnVertex goal;
 	private Graph<OwnVertex,OwnEdge> graph;
-	private BFS_Report reporter;
+	private IAlgoReport reporter;
 	
 	private Queue<OwnVertex> openList;
 	private Set<OwnVertex> closedList;
@@ -34,30 +29,40 @@ public class ASternchen {
 	private Map<OwnVertex, Integer> vertexLength;
 
 	
-	public ASternchen(Graph<OwnVertex,OwnEdge> g, OwnVertex start, OwnVertex goal, BFS_Report reporter){
+	public Dijkstra_AStar(Graph<OwnVertex,OwnEdge> g, OwnVertex start, OwnVertex goal, 
+											IAlgoReport reporter, String algorithmType){
 		
-		this.graph = g;
-		this.start = start;
-		this.goal  = goal;
+		this.graph 	  = g;
+		this.start 	  = start;
+		this.goal  	  = goal;
 		this.reporter = reporter;						
 		
 		this.vertexLength = new HashMap<OwnVertex, Integer>();
-		this.openList 	= new PriorityQueue<OwnVertex>(new ComparatorLength(this.vertexLength));
-		this.path     	= new HashMap<OwnVertex, OwnVertex>();
-		this.closedList = new HashSet<OwnVertex>();
+		this.path     	  = new HashMap<OwnVertex, OwnVertex>();
+		this.closedList   = new HashSet<OwnVertex>();
+		
+		if(algorithmType.equals(DIJKSTRA))
+		{
+			this.openList 	= new PriorityQueue<OwnVertex>(new ComparatorLength(this.vertexLength));
+		}
+		else
+		{
+			this.openList 	= new PriorityQueue<OwnVertex>(new ComparatorHeuristic(this.vertexLength));
+		}
 	}
 	
-	
-	void startASternchen(){
+
+	void startAlgorithm(){
 
 		// if the precondition fails, then interrupt procedure
 		if(defaultPrecondition(graph, start, goal)) return;
 
 		// if algorithm find target Vertex then calculate Path
-		if(searchASternchen()){
+		if(findTarget()){
 			
 			// The target Vertex is a part of path
 			reporter.addPathNode(goal);
+			reporter.setPathLength(vertexLength.get(goal));
 			
 			// Set up Pointer for loop
 			OwnVertex currentV = goal;
@@ -74,6 +79,11 @@ public class ASternchen {
 				// set new Pointer for next loop repeat
 				currentV = tmpV;
 			}
+			
+			// add visited Vertices to Reporter Class
+			for(OwnVertex v : vertexLength.keySet()){
+				reporter.addVisitedNode(v);
+			}
 		}
 	}
 	
@@ -81,7 +91,7 @@ public class ASternchen {
 	 * Part 1 Searching
 	 * @return
 	 */
-	private boolean searchASternchen(){
+	private boolean findTarget(){
 
 		// add start Vertex to priority Queue
 		vertexLength.put(start, 0);
