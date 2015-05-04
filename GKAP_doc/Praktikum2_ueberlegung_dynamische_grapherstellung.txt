@@ -1,0 +1,82 @@
+#undirected #weighted
+
+// Erstelle einen Zufälligen "ungerichteten" und "gewichteten" Grafen mit einer bestimmten Anzahl von Knoten und Kanten
+String header = header.create(UNDIRECTED WEIGHTED);
+int edges    = 100
+int vertices = 20
+
+int edgesPerVertices = Double.roundUp(edges/vertices);
+edgesPerVertices = (edgesPerVertices > 1 ? edgesPerVertices : 1) + KORREKTURFAKTOR;
+
+
+void createVertex()
+{
+	OwnVertex v = new OwnVertex(VertexNameCount.getNext());	
+	if(!graph.addVertex(v)){
+		while(!graph.addVertex(v)){
+			v = new OwnVertex(VertexNameCount.getNext());	
+		}
+	}
+}
+
+void createEdge()
+{
+	int min = default(1);
+	int max = default(500);
+
+	OwnEdge e = new OwnEdge(RandomInt.range(min,max));
+
+	OwnVertex source = graph.getRandomVertex();
+	OwnVertex target = graph.getRandomVertex();
+
+	int s_outgoing = source.getOutgoingEdgesCount();
+	int t_ingoing = target.getIngoingEdgesCount();
+	
+	if (s_outgoing < edgesPerVertices &&  t_ingoing < edgesPerVertices)
+	{
+		graph.addEdge(e , source , target);
+		
+	}
+	else if(s_outgoing < edgesPerVertices)
+	{
+		for(OwnVertex v : graph.getVertices)
+		{
+			if(v.getIngoingEdgesCount < edgesPerVertices)
+			{
+				graph.addEdge(e , source , v);
+			}			
+		}
+	}
+	else if(t_ingoing < edgesPerVertices)
+	{
+		for(OwnVertex v : graph.getVertices)
+		{
+			if(v.getOutgoingEdgesCount < edgesPerVertices)
+			{
+				graph.addEdge(e , v , target);
+			}					
+		}
+	}
+	else
+	{
+		createEdge(edges);	
+	}
+
+}
+
+public boolean createUndirectedWeightedGraph(){
+
+	for(int i = 0; i <= vertices){
+
+		createVertex();	
+	}
+
+	for(int i = 0; i <= edges){
+		
+		createEdge();
+	}
+}
+
+
+
+

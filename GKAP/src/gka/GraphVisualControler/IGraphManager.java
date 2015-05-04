@@ -10,6 +10,7 @@ import gka.Exceptions.AccessException;
 import gka.Exceptions.FileNotFoundException;
 import gka.Exceptions.GraphBuildException;
 import gka.Exceptions.WrongFileTypeException;
+import gka.GraphBuilder.GraphType;
 import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
 
@@ -179,4 +180,14 @@ public interface IGraphManager {
 	 * @return AlgoReport
 	 */
 	public IAlgoReport startASternchen(String start, String target);
+	
+	/**
+	 * Generate new Graph
+	 * 
+	 * @param graphType
+	 * @return
+	 * @throws GraphBuildException
+	 */
+	public VisualizationViewer<OwnVertex, OwnEdge>  generateNewGraph(int vertices, int edges, int spread, 
+					int edgeWeightMin, int edgeWeightMax, GraphType...type) throws GraphBuildException;
 }

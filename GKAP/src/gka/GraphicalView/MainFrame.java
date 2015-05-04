@@ -8,14 +8,17 @@ import gka.Exceptions.FileNotFoundException;
 import gka.Exceptions.GraphBuildException;
 import gka.Exceptions.WrongFileTypeException;
 import gka.GraphBuilder.GraphBuilder;
+import gka.GraphBuilder.GraphType;
 import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
+import gka.GraphGenerator.GraphGenerator;
 import gka.GraphVisualControler.GraphManager;
 import gka.GraphVisualControler.IGraphManager;
 import gka.GraphicalView.Algorithm.ResultDialog;
 import gka.GraphicalView.Algorithm.SearchDialog;
 import gka.GraphicalView.Edge.CreateEdge;
 import gka.GraphicalView.Edge.DeleteEdge;
+import gka.GraphicalView.Generator.GraphCreator;
 import gka.GraphicalView.Vertex.CreateVertex;
 import gka.GraphicalView.Vertex.DeleteVertex;
 
@@ -81,11 +84,11 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuFile = new JMenu("File");
 		menuBar.add(menuFile);
 		
-		menuItem_NewFile = new JMenuItem("New File");
-		menuItem_NewFile.setActionCommand(menuItem_NewFile.getText());
-		menuItem_NewFile.addActionListener(this);
-		menuItem_NewFile.setEnabled(false);
-		menuFile.add(menuItem_NewFile);
+		menuItem_NewGraph = new JMenuItem("New Graph");
+		menuItem_NewGraph.setActionCommand(menuItem_NewGraph.getText());
+		menuItem_NewGraph.addActionListener(this);
+		menuItem_NewGraph.setEnabled(true);
+		menuFile.add(menuItem_NewGraph);
 		
 		separator_2 = new JSeparator();
 		menuFile.add(separator_2);
@@ -168,6 +171,12 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		menuHelp.setEnabled(false);
 		
+		drawMode = new JCheckBox("draw");
+		drawMode.setSelected(true);
+		drawMode.setActionCommand(drawMode.getText());
+		drawMode.addActionListener(this);
+		menuHelp.add(drawMode);
+		
 		// Menu MoveMode
 		pickMode = new JCheckBox("Pick Mode");
 		pickMode.setEnabled(false);
@@ -183,13 +192,14 @@ public class MainFrame extends JFrame implements ActionListener{
 		if(path !=  null || !path.isEmpty())
 		{
 			try {
-				VisualizationViewer<OwnVertex, OwnEdge> vv = gmanager.loadGraph(path);				
+				VisualizationViewer vv = gmanager.loadGraph(path);				
 				for(Component c: contentPane.getComponents()){
 					if(((Object) c) instanceof VisualizationViewer){
 						contentPane.remove(c);
 					}
 				}
 				
+				vv.setVisible(drawMode.isSelected());
 				contentPane.add(vv);
 				pickMode.setEnabled(true);
 				menuEdit.setEnabled(true);
@@ -204,6 +214,32 @@ public class MainFrame extends JFrame implements ActionListener{
 				WarningDialog warningDialog = new WarningDialog(this, true, "ein Problem ist aufgetreten", message);
 				warningDialog.setVisible(true);
 			}
+		}
+	}
+	
+	public void newGraph(int vertices, int edges, int spread, int edgeWeightMin, int edgeWeightMax, GraphType...type){
+		
+		try {
+			VisualizationViewer vv = gmanager.generateNewGraph(vertices, edges, spread, edgeWeightMin, edgeWeightMax, type);				
+			for(Component c: contentPane.getComponents()){
+				if(((Object) c) instanceof VisualizationViewer){
+					contentPane.remove(c);
+				}
+			}
+			
+			vv.setVisible(drawMode.isSelected());
+			contentPane.add(vv);
+			pickMode.setEnabled(true);
+			menuEdit.setEnabled(true);
+			menuAlgorithm.setEnabled(true);
+			menuHelp.setEnabled(true);
+			this.pack();
+			
+		} catch (GraphBuildException e) {
+		
+			String message = e.getMessage();
+			WarningDialog warningDialog = new WarningDialog(this, true, "ein Problem ist aufgetreten", message);
+			warningDialog.setVisible(true);
 		}
 	}
 	
@@ -307,10 +343,11 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		// Menu File
 		{
-			// MenuItem new File
-			if(e.getActionCommand().equals(menuItem_NewFile.getText()))
+			// MenuItem new Graph
+			if(e.getActionCommand().equals(menuItem_NewGraph.getText()))
 			{
-				System.out.println("new File");
+				GraphCreator graphGen = new GraphCreator(this, true);
+				graphGen.setVisible(true);
 			}
 			else if(e.getActionCommand().equals(menuItem_OpenFile.getText()))
 			{
@@ -385,6 +422,22 @@ public class MainFrame extends JFrame implements ActionListener{
 			{
 				this.repaint();
 			}
+			else if(e.getActionCommand().equals(drawMode.getText()))
+			{
+				
+				VisualizationViewer vv = null;				
+				for(Component c: contentPane.getComponents()){
+					if(((Object) c) instanceof VisualizationViewer){
+						vv = (VisualizationViewer) c;
+						break;
+					}
+				}
+				
+				if(vv != null){
+					if(drawMode.isSelected()) vv.setVisible(true);
+					else vv.setVisible(false);
+				}
+			}
 		}
 		// Menu MoveMode
 		{
@@ -413,7 +466,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenu menuEdit;
 	private JMenu menuAlgorithm;
 	private JMenu menuHelp;
-	private JMenuItem menuItem_NewFile;
+	private JMenuItem menuItem_NewGraph;
 	private JMenuItem menuItem_OpenFile;
 	private JMenuItem menuItem_SaveFile;
 	private JMenuItem menuItem_Quit;	
@@ -426,4 +479,5 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenuItem menuItem_Dijkstra;
 	private JMenuItem menuItem_ASternchen;
 	private JCheckBox pickMode;
+	private JCheckBox drawMode;
 }

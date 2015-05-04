@@ -23,9 +23,13 @@ import gka.Exceptions.WrongFileTypeException;
 import gka.FileManager.FileManager;
 import gka.FileManager.IFileManager;
 import gka.GraphBuilder.GraphBuilder;
+import gka.GraphBuilder.GraphType;
 import gka.GraphBuilder.IGraphBuilder;
 import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
+import gka.GraphGenerator.GraphGenerator;
+import gka.GraphGenerator.IGraphGenerator;
+import gka.GraphicalView.Generator.GraphCreator;
 
 public class GraphManager implements IGraphManager{
 
@@ -39,11 +43,13 @@ public class GraphManager implements IGraphManager{
 	private VisualizationViewer<OwnVertex,OwnEdge> vv;
 	
 	
+	public GraphManager() {
+		this.fileManager = new FileManager();
+	}
+	
 	/********Implemented********/
 	@Override
 	public VisualizationViewer<OwnVertex, OwnEdge> loadGraph(String path) throws FileNotFoundException, WrongFileTypeException, AccessException, GraphBuildException{
-		
-		this.fileManager = new FileManager();
 		this.graphBuilder = new GraphBuilder();
 		
 		List<String> listContent = fileManager.loadFile(new File(path));
@@ -169,6 +175,20 @@ public class GraphManager implements IGraphManager{
 		 vv.setGraphMouse(gm);
 		 
 		 return vv;
+	}
+
+	@Override
+	public VisualizationViewer<OwnVertex, OwnEdge> generateNewGraph(int vertices, int edges, int spread, 
+			int edgeWeightMin, int edgeWeightMax, GraphType...type) throws GraphBuildException {
+
+		this.graphBuilder = new GraphBuilder();
+		this.adtGraph = graphBuilder.createNewGraph(type);
+		
+		IGraphGenerator generator = new GraphGenerator();
+		generator.generateUndirectedWeightedGraph(adtGraph, vertices, edges, edgeWeightMin, 
+													edgeWeightMax, spread);
+		
+		return setUpGraphiew(adtGraph);
 	}
 
 }

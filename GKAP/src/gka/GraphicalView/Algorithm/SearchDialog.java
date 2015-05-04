@@ -47,7 +47,7 @@ public class SearchDialog extends JDialog implements ActionListener{
 	
 	private void init(){
 		
-		this.setTitle(SearchDialog.BEADTHFIRSTSEARCH);
+		this.setTitle(this.algoMode);
 		setBounds(100, 100, 376, 208);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

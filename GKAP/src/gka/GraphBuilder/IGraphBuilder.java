@@ -138,4 +138,12 @@ public interface IGraphBuilder {
 	 * @return List with Graph content
 	 */
 	public List<String> getSaveableGraph();
+	
+	/**
+	 * Create new Graph
+	 * 
+	 * @param type
+	 * @return empty Graph with specific graphTypes
+	 */
+	public Graph<OwnVertex, OwnEdge> createNewGraph(GraphType...type) throws GraphBuildException;
 }
