@@ -13,6 +13,10 @@ public interface IAlgoReport {
 	
 	public void setPathLength(int pathLength);
 	
+	public void countGraphAccess();
+	
+	public int getGraphAccessCounter();
+	
 	public void startTimer();
 	
 	public void stopTimer();

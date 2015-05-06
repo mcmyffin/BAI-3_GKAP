@@ -13,7 +13,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
-public class Dijkstra_AStar {
+public class Dijkstra_AStar{
 
 	public static final String DIJKSTRA = "DIJKSTRA";
 	public static final String ASTAR 	= "ASTAR";
@@ -54,6 +54,8 @@ public class Dijkstra_AStar {
 
 	void startAlgorithm(){
 
+		reporter.startTimer();
+		
 		// if the precondition fails, then interrupt procedure
 		if(defaultPrecondition(graph, start, goal)) return;
 
@@ -85,6 +87,7 @@ public class Dijkstra_AStar {
 				reporter.addVisitedNode(v);
 			}
 		}
+		reporter.stopTimer();
 	}
 	
 	/**
@@ -125,7 +128,7 @@ public class Dijkstra_AStar {
 	private void expandNode(OwnVertex currentNode){
 		
 		for(OwnVertex successor : graph.getSuccessors(currentNode)){
-			
+			reporter.countGraphAccess();
 			// if successor Vertex in closed list, then do nothing
 			if(closedList.contains(successor)) continue;
 			

@@ -105,4 +105,15 @@ public class BFS_Report implements IAlgoReport{
 		return result;
 	}
 
+	@Override
+	public void countGraphAccess() {
+		// do nothing
+	}
+
+	@Override
+	public int getGraphAccessCounter() {
+		// do nothing
+		return 0;
+	}
+
 }

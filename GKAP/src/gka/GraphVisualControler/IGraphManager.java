@@ -189,5 +189,5 @@ public interface IGraphManager {
 	 * @throws GraphBuildException
 	 */
 	public VisualizationViewer<OwnVertex, OwnEdge>  generateNewGraph(int vertices, int edges, int spread, 
-					int edgeWeightMin, int edgeWeightMax, GraphType...type) throws GraphBuildException;
+					int edgeWeightMin, int edgeWeightMax, GraphType...graphTypes) throws GraphBuildException;
 }

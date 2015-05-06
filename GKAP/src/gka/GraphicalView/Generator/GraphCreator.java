@@ -3,6 +3,7 @@ package gka.GraphicalView.Generator;
 import gka.GraphBuilder.GraphBuilder;
 import gka.GraphBuilder.GraphType;
 import gka.GraphicalView.MainFrame;
+import gka.GraphicalView.WarningDialog;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -61,7 +62,7 @@ public class GraphCreator extends JDialog implements ActionListener{
 	
 	private void init(){
 		
-		setBounds(100, 100, 489, 256);
+		setBounds(100, 100, 550, 256);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -77,18 +78,19 @@ public class GraphCreator extends JDialog implements ActionListener{
 		}
 		{
 			verticesSpinner = new JSpinner();
-			verticesSpinner.setBounds(145, 71, 120, 20);
+			verticesSpinner.setBounds(145, 71, 181, 20);
 			contentPanel.add(verticesSpinner);
 		}
 		{
 			edgesSpinner = new JSpinner();
-			edgesSpinner.setBounds(145, 103, 120, 20);
+			edgesSpinner.setBounds(145, 103, 181, 20);
 			contentPanel.add(edgesSpinner);
 		}
 		{
 			graphTypeComboBox = new JComboBox<String>();
 			graphTypeComboBox.addItem(GraphBuilder.UNDIRECTED_WEIGHTED_ATTRIBUTED);
-			graphTypeComboBox.setBounds(145, 35, 120, 24);
+			graphTypeComboBox.addItem(GraphBuilder.UNDIRECTED_WEIGHTED);
+			graphTypeComboBox.setBounds(145, 35, 181, 24);
 			contentPanel.add(graphTypeComboBox);
 		}
 		{
@@ -104,7 +106,7 @@ public class GraphCreator extends JDialog implements ActionListener{
 		
 		JPanel EdgePropertiesPanel = new JPanel();
 		EdgePropertiesPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		EdgePropertiesPanel.setBounds(277, 35, 198, 120);
+		EdgePropertiesPanel.setBounds(338, 35, 198, 120);
 		contentPanel.add(EdgePropertiesPanel);
 		EdgePropertiesPanel.setLayout(null);
 		{
@@ -138,8 +140,9 @@ public class GraphCreator extends JDialog implements ActionListener{
 		}
 		{
 			spreadSpinner = new JSpinner();
+			spreadSpinner.setEnabled(false);
 			spreadSpinner.setModel(new SpinnerNumberModel(1, 1, 20, 1));
-			spreadSpinner.setBounds(145, 135, 120, 20);
+			spreadSpinner.setBounds(145, 135, 181, 20);
 			contentPanel.add(spreadSpinner);
 		}
 		{
@@ -168,14 +171,25 @@ public class GraphCreator extends JDialog implements ActionListener{
 		// CREATE BUTTON
 		if(e.getActionCommand().equals(createButton.getText())){
 			
+			String graphType = graphTypeComboBox.getSelectedItem().toString();
 			int vertices = Integer.parseInt(verticesSpinner.getValue().toString());
 			int edges = Integer.parseInt(edgesSpinner.getValue().toString());
 			int spread = Integer.parseInt(spreadSpinner.getValue().toString());
 			int edgeWeightMin = Integer.parseInt(minEdgeWeightSpinner.getValue().toString());
 			int edgeWeightMax = Integer.parseInt(maxEdgeWeightSpinner.getValue().toString());
-			
+			boolean withHeiristic = false;
 			this.dispose();
-			parent.newGraph(vertices, edges, spread, edgeWeightMin, edgeWeightMax, GraphType.WEIGHTED, GraphType.ATTRIBUTED);
+			
+			if(graphType.equals(GraphBuilder.UNDIRECTED_WEIGHTED)){
+				parent.newGraph(vertices, edges, spread, edgeWeightMin, edgeWeightMax, GraphType.WEIGHTED);
+			}else if(graphType.equals(GraphBuilder.UNDIRECTED_WEIGHTED_ATTRIBUTED)){
+				parent.newGraph(vertices, edges, spread, edgeWeightMin, edgeWeightMax, GraphType.WEIGHTED, GraphType.ATTRIBUTED);
+			}else{
+				WarningDialog warn = new WarningDialog(parent, true, "NOT IMPLEMENTED", "SORRY NOT IMPLEMENTED");
+				warn.setVisible(true);
+			}
+			
+			
 			
 		}
 		// CANCEL BUTTON

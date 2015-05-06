@@ -38,7 +38,7 @@ public class BFS {
 	
 	
 	void startbreadthSearch(){
-		
+		reporter.startTimer();
 		// if the precondition fails, then interrupt procedure
 		if(defaultPrecondition(_graph, _start, _goal)) return;
 
@@ -66,6 +66,7 @@ public class BFS {
 				}
 			}
 		}
+		reporter.stopTimer();
 	}
 	
 	// Helper method from startbreadthSearch()

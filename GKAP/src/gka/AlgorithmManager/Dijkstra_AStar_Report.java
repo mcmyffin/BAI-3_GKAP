@@ -11,6 +11,7 @@ public class Dijkstra_AStar_Report implements IAlgoReport{
 
 	private String algName;
 	private int pathLength = 0;
+	private int numberOfGraphAccess = 0;
 	
 	private long   startInMillSec = 0L;
 	private double totalTimeInSec = 0.0;
@@ -96,7 +97,7 @@ public class Dijkstra_AStar_Report implements IAlgoReport{
 
 		String line1  = "Algorithm: "+algName;
 		String line12 = "Time: "+totalTimeInSec+" Sec";
-		String line2  = "Target found: "+(!path.isEmpty());
+		String line2  = "Number of Graph-Access: "+this.numberOfGraphAccess;
 		String line3  = "PathLength: "+getPathLength();
 		
 		String line4  = "Path Vertices: "+path.size();
@@ -106,6 +107,16 @@ public class Dijkstra_AStar_Report implements IAlgoReport{
 		
 		String result = line1+"\n"+line12+"\n"+line2+"\n"+line3+"\n"+line4+"\n"+line5+"\n\n"+line6+"\n\n"+line7;
 		return result;
+	}
+
+	@Override
+	public void countGraphAccess() {
+		this.numberOfGraphAccess++;
+	}
+
+	@Override
+	public int getGraphAccessCounter() {
+		return this.numberOfGraphAccess;
 	}
 	
 	

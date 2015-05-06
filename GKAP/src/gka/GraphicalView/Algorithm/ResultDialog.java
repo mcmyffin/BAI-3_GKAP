@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextArea;
 import javax.swing.BoxLayout;
+import javax.swing.JScrollPane;
 
 public class ResultDialog extends JDialog implements ActionListener{
 
@@ -25,6 +26,7 @@ public class ResultDialog extends JDialog implements ActionListener{
 	
 	private MainFrame parent;
 	private IAlgoReport report;
+	private JScrollPane scrollPane;
 	
 
 	/**
@@ -47,12 +49,16 @@ public class ResultDialog extends JDialog implements ActionListener{
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.X_AXIS));
-		
-		resultArea = new JTextArea();
-		resultArea.setLineWrap(true);
-		resultArea.setEditable(false);
-		resultArea.setLayout(new BorderLayout());
-		contentPanel.add(resultArea);
+		{
+			scrollPane = new JScrollPane();
+			contentPanel.add(scrollPane);
+			
+			resultArea = new JTextArea();
+			scrollPane.setViewportView(resultArea);
+			resultArea.setLineWrap(true);
+			resultArea.setEditable(false);
+			resultArea.setLayout(new BorderLayout());
+		}
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));

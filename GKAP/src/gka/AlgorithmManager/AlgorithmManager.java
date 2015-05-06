@@ -15,12 +15,10 @@ public class AlgorithmManager implements IAlgorithManager{
 	@Override
 	public IAlgoReport startBFS(OwnVertex start_node, OwnVertex goal_node) {
 		
-		BFS_Report reporter = new BFS_Report("Breadth First Search");
+		IAlgoReport reporter = new BFS_Report("Breadth First Search");
 		BFS bfs = new BFS(graph, start_node, goal_node, reporter);
 		
-		reporter.startTimer();
 		bfs.startbreadthSearch();
-		reporter.stopTimer();
 		
 		return reporter;
 	}
@@ -31,24 +29,18 @@ public class AlgorithmManager implements IAlgorithManager{
 		IAlgoReport reporter = new Dijkstra_AStar_Report("Dijkstra");
 		Dijkstra_AStar dijkstra = new Dijkstra_AStar(graph, start_node, goal_node, 
 															reporter, Dijkstra_AStar.DIJKSTRA);
-		
-		reporter.startTimer();
 		dijkstra.startAlgorithm();
-		reporter.stopTimer();
 		
 		return reporter;
 	}
 
 	@Override
-	public IAlgoReport startASternchen(OwnVertex start_node, OwnVertex goal_node) {
+	public IAlgoReport startAStar(OwnVertex start_node, OwnVertex goal_node) {
 
-		IAlgoReport reporter = new BFS_Report("A*");
+		IAlgoReport reporter = new Dijkstra_AStar_Report("A*");
 		Dijkstra_AStar astar = new Dijkstra_AStar(graph, start_node, goal_node, 
 															reporter, Dijkstra_AStar.ASTAR);
-		
-		reporter.startTimer();
 		astar.startAlgorithm();
-		reporter.startTimer();
 		
 		return reporter; 
 	}

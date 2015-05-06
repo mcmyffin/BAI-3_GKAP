@@ -24,12 +24,17 @@ public interface IGraphGenerator {
 	
 	
 	/**
-	 * Generate Graph heuristic
-	 * @require filled undirected attributed weighted Graph
+	 * Generate undirected weighted attributed Graph
+	 * generate a Heuristic 
 	 * 
-	 * @param filledGraph
-	 * @param target
-	 * @return true if generate procedure success
+	 * @require Empty undirected weighted attributed Graph
+	 * @param emptyGraph
+	 * @param vertices
+	 * @param edges
+	 * @param minEdgeLength
+	 * @param maxEdgeLenth
+	 * @param spread
 	 */
-	public void generateGraphHeuristic(Graph<OwnVertex,OwnEdge> filledGraph, OwnVertex target);
+	public void generateUndirectedWeightedAttributedGraph(Graph<OwnVertex,OwnEdge> emptyGraph,
+			int vertices, int edges, int minEdgeLength, int maxEdgeLenth, int spread);
 }

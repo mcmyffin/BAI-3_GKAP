@@ -2,7 +2,7 @@ package gka.AlgorithmManager;
 
 import gka.GraphBuilder.Extension.OwnVertex;
 
-public interface IAlgorithManager {
+public interface IAlgorithManager{
 
 	/**
 	 * Start Breadth First Search Algorithm
@@ -27,5 +27,5 @@ public interface IAlgorithManager {
 	 * @param goal_node
 	 * @return AlgoReport with result Information
 	 */
-	public IAlgoReport startASternchen(OwnVertex start_node, OwnVertex goal_node);
+	public IAlgoReport startAStar(OwnVertex start_node, OwnVertex goal_node);
 }

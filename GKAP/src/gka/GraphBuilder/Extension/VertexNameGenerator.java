@@ -69,7 +69,7 @@ class Counter{
 		char s4 = chars.get(3).get(c4);
 		char s5 = chars.get(4).get(c5);
 		c1++;
-		return (""+s1+s2+s3+s4+s5);
+		return (""+s1+s2+s3+s4+s5).replaceAll("\\s+", "");
 	}
 	
 	private void checkCounter(){

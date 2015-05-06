@@ -126,6 +126,7 @@ public class GraphManager implements IGraphManager{
 		OwnVertex v2 = graphBuilder.getVertexByName(target);
 		
 		algoManager = new AlgorithmManager(adtGraph);
+		
 		return algoManager.startBFS(v1, v2);
 	}
 	
@@ -146,7 +147,7 @@ public class GraphManager implements IGraphManager{
 		OwnVertex v2 = graphBuilder.getVertexByName(target);
 		
 		algoManager = new AlgorithmManager(adtGraph);
-		return algoManager.startASternchen(v1, v2);
+		return algoManager.startAStar(v1, v2);
 	}
 	
 	
@@ -185,8 +186,18 @@ public class GraphManager implements IGraphManager{
 		this.adtGraph = graphBuilder.createNewGraph(type);
 		
 		IGraphGenerator generator = new GraphGenerator();
-		generator.generateUndirectedWeightedGraph(adtGraph, vertices, edges, edgeWeightMin, 
-													edgeWeightMax, spread);
+		String header = GraphType.createHeader(type);
+		
+		if(header.contains(GraphType.ATTRIBUTED.getValue()) && header.contains(GraphType.WEIGHTED.getValue())){
+			
+			generator.generateUndirectedWeightedAttributedGraph(adtGraph, vertices, edges, edgeWeightMin,edgeWeightMax, spread);
+			
+		}else if(header.contains(GraphType.WEIGHTED.getValue())){
+			generator.generateUndirectedWeightedGraph(adtGraph, vertices, edges, edgeWeightMin, edgeWeightMax, spread);
+			
+		}else{
+			throw new GraphBuildException();
+		}
 		
 		return setUpGraphiew(adtGraph);
 	}

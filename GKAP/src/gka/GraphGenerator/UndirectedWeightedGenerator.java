@@ -19,14 +19,9 @@ public class UndirectedWeightedGenerator extends Thread{
 		this.graph = graph;
 	}
 
-	public void generate(int vertices, int edges, int minEdgeLength, int maxEdgeLenth, int verteilungsFaktor){
+	public void generate(int vertices, int edges, int minEdgeLength, int maxEdgeLenth, int spread){
 		
 		if(vertices <= 0) return;
-		
-		int edgesPerVertex = Math.round(edges/vertices);
-		edgesPerVertex = ((edgesPerVertex >= 1 ? edgesPerVertex : 1)) * verteilungsFaktor;
-		
-		System.out.println("EdgePerVertex: "+edgesPerVertex);
 
 		// create Vertices
 		for(int i = 0; i < vertices; i++){
@@ -35,63 +30,27 @@ public class UndirectedWeightedGenerator extends Thread{
 		
 		// create Edges
 		for(int i = 0; i < edges; i++){
-			createEdge(minEdgeLength, maxEdgeLenth, edgesPerVertex);
+			createEdge(minEdgeLength, maxEdgeLenth);
 		}
 		
 	}	
 
-	void createEdge(int min, int max, int edgesPerVertex){
+	void createEdge(int min, int max){
 		
 		Random rand = new Random();
 		
 		OwnEdge e = new OwnEdge((rand.nextInt(max - min))+min);
 		OwnVertex source = getRandomVertex(graph);
 		OwnVertex target = getRandomVertex(graph);
-
-		int s_outgoing = graph.getSuccessorCount(source);
-		int t_ingoing  = graph.getPredecessorCount(target);
 		
 		graph.addEdge(e, source, target);
-		
-//		if (s_outgoing < edgesPerVertex &&  t_ingoing < edgesPerVertex)
-//		{
-//			graph.addEdge(e , source , target);
-//			
-//		}
-//		else if(s_outgoing < edgesPerVertex)
-//		{
-//			for(OwnVertex v : graph.getVertices())
-//			{
-//				if(graph.getSuccessorCount(v) < edgesPerVertex)
-//				{
-//					e = new OwnEdge(((rand.nextInt(max - min))+min));
-//					graph.addEdge(e , source , v);
-//				}			
-//			}
-//		}
-//		else if(t_ingoing < edgesPerVertex)
-//		{
-//			for(OwnVertex v : graph.getVertices())
-//			{
-//				if(graph.getPredecessorCount(v) < edgesPerVertex)
-//				{
-//					e = new OwnEdge(((rand.nextInt(max - min))+min));
-//					graph.addEdge(e , v , target);
-//				}					
-//			}
-//		}
-//		else
-//		{
-//			createEdge(min,max,edgesPerVertex);	
-//		}
-
 	}
 
 	private OwnVertex getRandomVertex(Graph<OwnVertex,OwnEdge> g){
 		
 		Random r = new Random();
 		
-		int j = r.nextInt(g.getVertexCount()-1);
+		int j = r.nextInt(g.getVertexCount());
 		
 		for(OwnVertex v: g.getVertices()){
 			

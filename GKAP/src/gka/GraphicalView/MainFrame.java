@@ -318,7 +318,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		IAlgoReport report = gmanager.startBreadthFirstSearch(start, target);
 		
-		ResultDialog resultDialog= new ResultDialog(this, true, report);
+		ResultDialog resultDialog= new ResultDialog(this, false, report);
 		resultDialog.setVisible(true);
 	}
 
@@ -326,7 +326,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		IAlgoReport report = gmanager.startDijkstra(start, target);
 
-		ResultDialog resultDialog = new ResultDialog(this, true, report);
+		ResultDialog resultDialog = new ResultDialog(this, false, report);
 		resultDialog.setVisible(true);
 	}
 	
@@ -334,7 +334,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		IAlgoReport report = gmanager.startASternchen(start, target);
 		
-		ResultDialog resultDialog = new ResultDialog(this, true, report);
+		ResultDialog resultDialog = new ResultDialog(this, false, report);
 		resultDialog.setVisible(true);
 	}
 	

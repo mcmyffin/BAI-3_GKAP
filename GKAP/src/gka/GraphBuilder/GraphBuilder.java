@@ -2,6 +2,7 @@ package gka.GraphBuilder;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -164,12 +165,20 @@ public class GraphBuilder implements IGraphBuilder{
 	@Override
 	public List<String> getAllVerticesAsString(){
 		
-		List<String> vertices = new ArrayList<>();
+		List<String> verticesAsString = new ArrayList<>();
+		List<OwnVertex> vertices = new ArrayList<OwnVertex>();
+		
 		for(OwnVertex v : graph.getVertices()){
-			
-			vertices.add(v.get_name());
+			vertices.add(v);
 		}
-		return vertices;
+		
+		vertices.sort(new AttributeComparator());
+		
+		for(OwnVertex v : vertices){
+			verticesAsString.add(v.get_name());
+		}
+		
+		return verticesAsString;
 	}
 
 	@Override
@@ -336,4 +345,13 @@ public class GraphBuilder implements IGraphBuilder{
 		throw new GraphBuildException();
 	}
 
+}
+
+class AttributeComparator implements Comparator<OwnVertex>{
+
+	@Override
+	public int compare(OwnVertex o1, OwnVertex o2) {
+		return Integer.compare(o1.get_attribute(), o2.get_attribute());
+	}
+	
 }
