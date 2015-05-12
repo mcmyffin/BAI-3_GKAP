@@ -1,8 +1,6 @@
-package gka.GraphicalView.Vertex;
+package gka.GraphicalView;
 
 import gka.GraphBuilder.GraphBuilder;
-import gka.GraphicalView.MainFrame;
-import gka.GraphicalView.Edge.CreateEdge;
 
 import java.awt.BorderLayout;
 
@@ -197,15 +195,24 @@ public class CreateVertex extends JDialog implements ActionListener{
 				// WEIGHTED EDGE?
 				if(graphType.contains(GraphBuilder.WEIGHTED))
 				{
-					String attr = (attributField.getText().length() > 0? attributField.getText() : "0");
-					int attr1 = Integer.parseInt(attr);
+					String attr = (attributField.getText().length() > 0? attributField.getText() : "-1");
+					int attr1 = 0;
 					
-					;
+					// if attribute not a number
+					try{
+						attr1 = Integer.parseInt(attr);
+					}catch(NumberFormatException ex){
+						this.dispose();
+						
+						WarningDialog warn = new WarningDialog(parent, true, "Number Format wrong", "Attribute ist not a number !");
+						warn.setVisible(true);
+						return;
+					}
 					
 					String v1 = vertexNameField.getText();
 					String v2 = connectToBox.getSelectedItem().toString();
 					
-					parent.addVertex(v1);
+					parent.addVertex(v1,attr1);
 					this.dispose();
 					
 					CreateEdge edgeDialog = new CreateEdge(parent, true, true, v1, v2);
@@ -215,8 +222,19 @@ public class CreateVertex extends JDialog implements ActionListener{
 				// ELSE
 				else
 				{					
-					String attr = (attributField.getText().length() > 0? attributField.getText() : "0");
-					int attr1 = Integer.parseInt(attr);
+					String attr = (attributField.getText().length() > 0? attributField.getText() : "-1");
+					int attr1 = 0;
+					
+					// if attribute not a number
+					try{
+						attr1 = Integer.parseInt(attr);
+					}catch(NumberFormatException ex){
+						this.dispose();
+						
+						WarningDialog warn = new WarningDialog(parent, true, "Number Format wrong", "Attribute ist not a number !");
+						warn.setVisible(true);
+						return;
+					}
 					
 					String v1 = vertexNameField.getText();
 					String v2 = connectToBox.getSelectedItem().toString();
@@ -230,9 +248,19 @@ public class CreateVertex extends JDialog implements ActionListener{
 			// ELSE ONLY VERTEX
 			else
 			{
-				System.out.println("only vertex");
-				String attr = (attributField.getText().length() > 0? attributField.getText() : "0");
-				int attr1 = Integer.parseInt(attr);
+				String attr = (attributField.getText().length() > 0? attributField.getText() : "-1");
+				int attr1 = 0;
+				
+				// if attribute not a number
+				try{
+					attr1 = Integer.parseInt(attr);
+				}catch(NumberFormatException ex){
+					this.dispose();
+					
+					WarningDialog warn = new WarningDialog(parent, true, "Number Format wrong", "Attribute ist not a number !");
+					warn.setVisible(true);
+					return;
+				}
 				
 				parent.addVertex(vertexNameField.getText(), attr1);	
 				

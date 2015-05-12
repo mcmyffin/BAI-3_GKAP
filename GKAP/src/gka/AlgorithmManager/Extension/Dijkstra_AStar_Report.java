@@ -1,63 +1,54 @@
-package gka.AlgorithmManager;
+package gka.AlgorithmManager.Extension;
+
+import gka.GraphBuilder.Extension.OwnVertex;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import gka.GraphBuilder.Extension.OwnVertex;
+public class Dijkstra_AStar_Report implements IAlgoReport{
 
-public class BFS_Report implements IAlgoReport{
-	
 	private String algName;
 	private int pathLength = 0;
+	private int numberOfGraphAccess = 0;
 	
-	private long startInMillSec = 0L;
+	private long   startInMillSec = 0L;
 	private double totalTimeInSec = 0.0;
 	
 	private Set<OwnVertex>  visitedVertices;
 	private List<OwnVertex>  path;
 	
-	
-	public BFS_Report(String algName){
+	public Dijkstra_AStar_Report(String name) {
 		
-		this.algName = algName;
-		visitedVertices = new HashSet<OwnVertex>();
-		path = new ArrayList<OwnVertex>();
+		this.algName = name;
+		this.visitedVertices = new HashSet();
+		this.path = new ArrayList<OwnVertex>();
 	}
 	
 	@Override
-	public void addPathNode(OwnVertex v){
-		this.path.add(v);
+	public void addPathNode(OwnVertex v) {
+		path.add(v);
 	}
-	
+
 	@Override
-	public void addVisitedNode(OwnVertex v){
-		this.visitedVertices.add(v);
+	public void addVisitedNode(OwnVertex v) {
+		visitedVertices.add(v);
 	}
-	
+
 	@Override
-	public void startTimer(){
+	public void startTimer() {
 		this.startInMillSec = System.currentTimeMillis();
 	}
-	
+
 	@Override
-	public void stopTimer(){
-		this.totalTimeInSec = ((System.currentTimeMillis() - startInMillSec) / 1000.0);
+	public void stopTimer() {
+		this.totalTimeInSec = (System.currentTimeMillis() - startInMillSec)/1000.0 ;
 	}
-	
+
 	@Override
-	public double getTotalTimeInSec(){
-		return totalTimeInSec;
-	}
-	
-	@Override
-	public String getAlgName(){
-		return this.algName;
-	}
-	
-	@Override
-	public List<String> getPathNodes(){
+	public List<String> getPathNodes() {
+		
 		List<String> result = new ArrayList<String>();
 		
 		for(int i = path.size()-1; i >= 0 ; i--){
@@ -65,22 +56,19 @@ public class BFS_Report implements IAlgoReport{
 		}
 		return result;
 	}
-	
+
 	@Override
-	public List<String> getVisitedNodes(){
+	public List<String> getVisitedNodes() {
+		
 		List<String> result = new ArrayList<String>();
 		
 		for(OwnVertex v : visitedVertices){
 			result.add(v.toString());
 		}
+		
 		return result;
 	}
-	
-	@Override
-	public void setPathLength(int pathLength) {
-		this.pathLength = pathLength;
-	}
-	
+
 	@Override
 	public int getPathLength() {
 		if(this.pathLength == 0){
@@ -90,11 +78,27 @@ public class BFS_Report implements IAlgoReport{
 	}
 
 	@Override
-	public String toString(){
+	public double getTotalTimeInSec() {
+		return totalTimeInSec;
+	}
+
+	@Override
+	public String getAlgName() {
+		return algName;
+	}
+
+	@Override
+	public void setPathLength(int pathLength) {
+		this.pathLength = pathLength;
+	}
+
+	@Override
+	public String toString() {
+
 		String line1  = "Algorithm: "+algName;
 		String line12 = "Time: "+totalTimeInSec+" Sec";
-		String line2  = "Target found: "+(!path.isEmpty());
-		String line3  = "Path length: "+getPathLength();
+		String line2  = "Number of Graph-Access: "+this.numberOfGraphAccess;
+		String line3  = "PathLength: "+getPathLength();
 		
 		String line4  = "Path Vertices: "+path.size();
 		String line5  = "Visited Vertices: "+visitedVertices.size();
@@ -107,13 +111,14 @@ public class BFS_Report implements IAlgoReport{
 
 	@Override
 	public void countGraphAccess() {
-		// do nothing
+		this.numberOfGraphAccess++;
 	}
 
 	@Override
 	public int getGraphAccessCounter() {
-		// do nothing
-		return 0;
+		return this.numberOfGraphAccess;
 	}
+	
+	
 
 }

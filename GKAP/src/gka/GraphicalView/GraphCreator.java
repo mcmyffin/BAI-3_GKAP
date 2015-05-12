@@ -1,9 +1,7 @@
-package gka.GraphicalView.Generator;
+package gka.GraphicalView;
 
 import gka.GraphBuilder.GraphBuilder;
 import gka.GraphBuilder.GraphType;
-import gka.GraphicalView.MainFrame;
-import gka.GraphicalView.WarningDialog;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -163,6 +161,8 @@ public class GraphCreator extends JDialog implements ActionListener{
 				buttonPane.add(cancelButton);
 			}
 		}
+		
+		this.setLocationRelativeTo(null);
 	}
 
 	@Override

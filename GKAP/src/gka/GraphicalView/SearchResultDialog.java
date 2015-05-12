@@ -1,8 +1,7 @@
-package gka.GraphicalView.Algorithm;
+package gka.GraphicalView;
 
-import gka.AlgorithmManager.BFS_Report;
-import gka.AlgorithmManager.IAlgoReport;
-import gka.GraphicalView.MainFrame;
+import gka.AlgorithmManager.Extension.BFS_Report;
+import gka.AlgorithmManager.Extension.IAlgoReport;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -18,7 +17,7 @@ import javax.swing.JTextArea;
 import javax.swing.BoxLayout;
 import javax.swing.JScrollPane;
 
-public class ResultDialog extends JDialog implements ActionListener{
+public class SearchResultDialog extends JDialog implements ActionListener{
 
 	private final JPanel contentPanel = new JPanel();
 	private JButton okButton;
@@ -32,7 +31,7 @@ public class ResultDialog extends JDialog implements ActionListener{
 	/**
 	 * Create the dialog.
 	 */
-	public ResultDialog(Frame parent, boolean modal, IAlgoReport report) {
+	public SearchResultDialog(Frame parent, boolean modal, IAlgoReport report) {
 		
 		super(parent, modal);
 		this.parent = (MainFrame) parent;

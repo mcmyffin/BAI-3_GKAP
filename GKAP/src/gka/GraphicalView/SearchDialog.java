@@ -1,7 +1,4 @@
-package gka.GraphicalView.Algorithm;
-
-import gka.GraphicalView.MainFrame;
-import gka.GraphicalView.WarningDialog;
+package gka.GraphicalView;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -27,6 +24,7 @@ public class SearchDialog extends JDialog implements ActionListener{
 	private MainFrame parent;
 	private String algoMode;
 	
+	// Search Algorithm types
 	public static final String BEADTHFIRSTSEARCH = "BFS";
 	public static final String DIJKSTRA = "DIJKSTRA";
 	public static final String ASTERNCHEN = "A*";
@@ -112,6 +110,9 @@ public class SearchDialog extends JDialog implements ActionListener{
 		// OK Button
 		if(e.getActionCommand().equals(okButton.getText()))
 		{
+			// precondition
+			if(startVertexBox.getItemCount() == 0 && targetVertexBox.getItemCount() == 0) return;
+			
 			if(this.algoMode.equals(SearchDialog.BEADTHFIRSTSEARCH))
 			{
 				String v1 = startVertexBox.getSelectedItem().toString();
@@ -134,7 +135,7 @@ public class SearchDialog extends JDialog implements ActionListener{
 				String v2 = targetVertexBox.getSelectedItem().toString();
 				
 				this.dispose();
-				parent.startASternchen(v1, v2);
+				parent.startAStar(v1, v2);
 			}
 		}
 		else if(e.getActionCommand().equals(cancelButton.getText()))

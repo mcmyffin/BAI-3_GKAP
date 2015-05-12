@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.io.File;
 import java.util.List;
 
+import javafx.util.Pair;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
@@ -12,10 +13,10 @@ import edu.uci.ics.jung.visualization.VisualizationViewer.GraphMouse;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import gka.AlgorithmManager.BFS_Report;
 import gka.AlgorithmManager.AlgorithmManager;
-import gka.AlgorithmManager.IAlgoReport;
 import gka.AlgorithmManager.IAlgorithManager;
+import gka.AlgorithmManager.Extension.BFS_Report;
+import gka.AlgorithmManager.Extension.IAlgoReport;
 import gka.Exceptions.AccessException;
 import gka.Exceptions.FileNotFoundException;
 import gka.Exceptions.GraphBuildException;
@@ -29,7 +30,7 @@ import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
 import gka.GraphGenerator.GraphGenerator;
 import gka.GraphGenerator.IGraphGenerator;
-import gka.GraphicalView.Generator.GraphCreator;
+import gka.GraphicalView.GraphCreator;
 
 public class GraphManager implements IGraphManager{
 
@@ -38,9 +39,6 @@ public class GraphManager implements IGraphManager{
 	private IGraphBuilder graphBuilder;
 	private Graph<OwnVertex,OwnEdge> adtGraph;
 	private IAlgorithManager algoManager;
-	
-	private Layout<OwnVertex,OwnEdge> layout;
-	private VisualizationViewer<OwnVertex,OwnEdge> vv;
 	
 	
 	public GraphManager() {
@@ -106,20 +104,20 @@ public class GraphManager implements IGraphManager{
 	}
 	
 	@Override
-	public void setTrasformMode() {
+	public void setTrasformMode(VisualizationViewer viewer) {
 	
-		GraphMouse gm = vv.getGraphMouse();
+		GraphMouse gm = viewer.getGraphMouse();
 		((ModalGraphMouse) gm).setMode(ModalGraphMouse.Mode.TRANSFORMING);
 	}
 
 	@Override
-	public void setPicMode() {
+	public void setPicMode(VisualizationViewer viewer) {
 		
-		GraphMouse gm = vv.getGraphMouse();
+		GraphMouse gm = viewer.getGraphMouse();
 		((ModalGraphMouse) gm).setMode(ModalGraphMouse.Mode.PICKING);
 	}
 	
-	// Algorithm BFS implementation
+	// Algorithm BFS
 	@Override
 	public IAlgoReport startBreadthFirstSearch(String start, String target) {
 		OwnVertex v1 = graphBuilder.getVertexByName(start);
@@ -130,7 +128,7 @@ public class GraphManager implements IGraphManager{
 		return algoManager.startBFS(v1, v2);
 	}
 	
-	// Algorithm Dijkstra implementation
+	// Algorithm Dijkstra
 	@Override
 	public IAlgoReport startDijkstra(String start, String target){
 		OwnVertex v1 = graphBuilder.getVertexByName(start);
@@ -140,9 +138,9 @@ public class GraphManager implements IGraphManager{
 		return algoManager.startDijkstra(v1, v2);
 	}
 	
-	// Algorithm A* implementation
+	// Algorithm A*
 	@Override
-	public IAlgoReport startASternchen(String start, String target){
+	public IAlgoReport startAStar(String start, String target){
 		OwnVertex v1 = graphBuilder.getVertexByName(start);
 		OwnVertex v2 = graphBuilder.getVertexByName(target);
 		
@@ -150,7 +148,32 @@ public class GraphManager implements IGraphManager{
 		return algoManager.startAStar(v1, v2);
 	}
 	
-	
+	// Algorithm Kruskal 
+	@Override
+	public Pair<IAlgoReport,VisualizationViewer> startKruskal() {
+		
+		algoManager = new AlgorithmManager(adtGraph);
+		Pair<IAlgoReport,Graph> reportPair = algoManager.startKruksal();
+		
+		VisualizationViewer visualComponent = this.setUpGraphiew(reportPair.getValue());
+		
+		return new Pair<IAlgoReport, VisualizationViewer>(reportPair.getKey(), visualComponent);
+		
+	}
+
+	// Algorithm Prim
+	@Override
+	public Pair<IAlgoReport,VisualizationViewer> startPrim(String start, boolean withFibHeap) {
+		
+		OwnVertex start_node = graphBuilder.getVertexByName(start);
+		algoManager = new AlgorithmManager(adtGraph);
+		Pair<IAlgoReport,Graph> reportPair = algoManager.startPrim(start_node, withFibHeap);
+
+		VisualizationViewer visualComponent = this.setUpGraphiew(reportPair.getValue());
+		
+		return new Pair<IAlgoReport, VisualizationViewer>(reportPair.getKey(), visualComponent);
+	}
+
 	/*********Helper Method from loadGraph(String path)**********/
 	/**
 	 * Set up the Graphical Component "VisualizationViewer"
@@ -160,11 +183,11 @@ public class GraphManager implements IGraphManager{
 	private VisualizationViewer<OwnVertex, OwnEdge> setUpGraphiew(Graph<OwnVertex, OwnEdge> g){
 		
 		 // Layout<V, E>, VisualizationComponent<V,E>
-		 layout = new CircleLayout<OwnVertex,OwnEdge>(g);
+		 Layout<OwnVertex, OwnEdge> layout = new CircleLayout<OwnVertex,OwnEdge>(g);
 		 
 		 layout.setSize(new Dimension(600,600));
 		 
-		 vv = new VisualizationViewer<OwnVertex,OwnEdge>(layout);
+		 VisualizationViewer<OwnVertex, OwnEdge> vv = new VisualizationViewer<OwnVertex,OwnEdge>(layout);
 		 
 		 // Show vertex and edge labels
 		 vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
@@ -201,5 +224,4 @@ public class GraphManager implements IGraphManager{
 		
 		return setUpGraphiew(adtGraph);
 	}
-
 }

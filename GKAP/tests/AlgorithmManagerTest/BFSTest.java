@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import gka.AlgorithmManager.BFS_Report;
 import gka.AlgorithmManager.AlgorithmManager;
-import gka.AlgorithmManager.IAlgoReport;
 import gka.AlgorithmManager.IAlgorithManager;
+import gka.AlgorithmManager.Extension.BFS_Report;
+import gka.AlgorithmManager.Extension.IAlgoReport;
 import gka.Exceptions.AccessException;
 import gka.Exceptions.FileNotFoundException;
 import gka.Exceptions.GraphBuildException;

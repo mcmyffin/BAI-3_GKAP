@@ -1,4 +1,4 @@
-package gka.GraphicalView.Generator;
+package gka.GraphicalView;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

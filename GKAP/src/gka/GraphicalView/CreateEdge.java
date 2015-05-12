@@ -1,6 +1,4 @@
-package gka.GraphicalView.Edge;
-
-import gka.GraphicalView.MainFrame;
+package gka.GraphicalView;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -82,14 +80,14 @@ public class CreateEdge extends JDialog implements ActionListener{
 			contentPanel.add(lblTvertex);
 		}
 		{
-			s_vBox = new JComboBox(new DefaultComboBoxModel<String>());
+			s_vBox = new JComboBox<String>(new DefaultComboBoxModel<String>());
 			s_vBox.setBounds(127, 20, 121, 24);
 			s_vBox.setActionCommand("s_v");
 			s_vBox.addActionListener(this);
 			contentPanel.add(s_vBox);
 		}
 		{
-			t_vBox = new JComboBox(new DefaultComboBoxModel<String>());
+			t_vBox = new JComboBox<String>(new DefaultComboBoxModel<String>());
 			t_vBox.setBounds(127, 63, 121, 24);
 			t_vBox.setActionCommand("t_v");
 			t_vBox.addActionListener(this);
@@ -108,7 +106,7 @@ public class CreateEdge extends JDialog implements ActionListener{
 		
 		weightSpinner = new JSpinner();
 		weightSpinner.setEnabled(false);
-		weightSpinner.setModel(new SpinnerNumberModel(0, 0, 999, 1));
+		weightSpinner.setModel(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
 		weightSpinner.setBounds(137, 101, 111, 20);
 		contentPanel.add(weightSpinner);
 		{
@@ -175,7 +173,19 @@ public class CreateEdge extends JDialog implements ActionListener{
 		{
 			if(s_vBox.getSelectedItem() != null && s_vBox.getSelectedItem().toString().length() > 0){
 
-				int weight = Integer.parseInt(weightSpinner.getValue().toString());
+				int weight = 0;
+				
+				// if attribute not a number
+				try{
+					weight= Integer.parseInt(weightSpinner.getValue().toString());
+				}catch(NumberFormatException ex){
+					this.dispose();
+					
+					WarningDialog warn = new WarningDialog(parent, true, "Number Format wrong", "weight ist not a number !");
+					warn.setVisible(true);
+					return;
+				}
+				
 				
 				String v1 = s_vBox.getSelectedItem().toString();
 				String v2 = t_vBox.getSelectedItem().toString();

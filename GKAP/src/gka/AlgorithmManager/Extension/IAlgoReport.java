@@ -1,4 +1,4 @@
-package gka.AlgorithmManager;
+package gka.AlgorithmManager.Extension;
 
 import java.util.List;
 

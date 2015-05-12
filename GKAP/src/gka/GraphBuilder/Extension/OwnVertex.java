@@ -1,14 +1,10 @@
 package gka.GraphBuilder.Extension;
 
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.UndirectedOrderedSparseMultigraph;
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
-
 
 public class OwnVertex implements Comparable<OwnVertex>{
 	
 	private String 	_name;
-	private int	 	_attribute = 0;
+	private int	 	_attribute = -1;
 	private int		_level = 0;
 	
 	
