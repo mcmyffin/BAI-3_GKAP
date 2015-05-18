@@ -238,11 +238,6 @@ public class MainFrame extends JFrame implements ActionListener{
 		try {
 			VisualizationViewer vv = gmanager.generateNewGraph(vertices, edges, spread, edgeWeightMin, edgeWeightMax, type);				
 			
-//			for(Component c: contentPane.getComponents()){
-//				if(((Object) c) instanceof VisualizationViewer){
-//					contentPane.remove(c);
-//				}
-//			}
 			if(viewComponent != null) contentPane.remove(viewComponent);
 			viewComponent = vv;
 			
