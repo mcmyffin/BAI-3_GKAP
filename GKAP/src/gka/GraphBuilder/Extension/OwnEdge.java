@@ -19,7 +19,7 @@ public class OwnEdge implements Comparable<OwnEdge>{
 	
 	public OwnEdge(int weight){
 		this();
-		this._weight = weight;
+		setWeight(weight);
 	}
 	
 	public int getWeight(){

@@ -189,8 +189,8 @@ public class GraphBuilder implements IGraphBuilder{
 	
 	@Override
 	public boolean addVertex(String vertex, int attribute){
-		
-		return this.graph.addVertex(new OwnVertex(vertex, attribute));
+		OwnVertex v = new OwnVertex(vertex, attribute);
+		return this.graph.addVertex(v);
 	}
 	
 	@Override
@@ -221,11 +221,11 @@ public class GraphBuilder implements IGraphBuilder{
 	@Override
 	public boolean addEdge(int weight, String vertex1, String vertex2) {
 
-		OwnVertex v1 = new OwnVertex(vertex1);
-		OwnVertex v2 = new OwnVertex(vertex2);
+		OwnVertex v1 = getVertexByName(vertex1);
+		OwnVertex v2 = getVertexByName(vertex2);
 		OwnEdge e = new OwnEdge(weight);
 		
-		if(graph.containsVertex(v1) & graph.containsVertex(v2)){
+		if(v1 != null & v2 != null){
 			return graph.addEdge(e, v1,v2);
 		}
 		
@@ -308,7 +308,7 @@ public class GraphBuilder implements IGraphBuilder{
 					String line = v.get_name();
 					if(graphType.contains(GraphBuilder.ATTRIBUTED))
 					{
-						line = v+":"+v.get_attribute();
+						line = v.get_name()+":"+v.get_attribute();
 					}
 					res.add(line);
 				}

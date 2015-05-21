@@ -3,6 +3,7 @@ package gka.AlgorithmManager;
 import edu.uci.ics.jung.graph.Graph;
 import gka.AlgorithmManager.Extension.ComparatorHeuristic;
 import gka.AlgorithmManager.Extension.ComparatorLength;
+import gka.AlgorithmManager.Extension.IAlgoReport;
 import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
 

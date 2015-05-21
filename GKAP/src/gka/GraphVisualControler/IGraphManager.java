@@ -3,9 +3,10 @@ package gka.GraphVisualControler;
 import java.io.File;
 import java.util.List;
 
+import javafx.util.Pair;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import gka.AlgorithmManager.BFS_Report;
-import gka.AlgorithmManager.IAlgoReport;
+import gka.AlgorithmManager.Extension.BFS_Report;
+import gka.AlgorithmManager.Extension.IAlgoReport;
 import gka.Exceptions.AccessException;
 import gka.Exceptions.FileNotFoundException;
 import gka.Exceptions.GraphBuildException;
@@ -137,7 +138,7 @@ public interface IGraphManager {
 	 * Mouse can zoom in/out in Component
 	 * @require loaded Graph
 	 */
-	public void setTrasformMode();
+	public void setTrasformMode(VisualizationViewer viewer);
 	
 	/**
 	 * Set Piking Mode
@@ -145,7 +146,7 @@ public interface IGraphManager {
 	 * Mouse can move/select Vertex/Vertices in Component
 	 * Mouse can zoom in/out in Component
 	 */
-	public void setPicMode();
+	public void setPicMode(VisualizationViewer viewer);
 	
 	
 	/**
@@ -179,7 +180,25 @@ public interface IGraphManager {
 	 * 
 	 * @return AlgoReport
 	 */
-	public IAlgoReport startASternchen(String start, String target);
+	public IAlgoReport startAStar(String start, String target);
+	
+	/**
+	 * Kruskal Algorithm
+	 * Start Kruskal Algorithm in Graph
+	 * 
+	 * @return AlgoReport
+	 */
+	public Pair<IAlgoReport,VisualizationViewer> startKruskal();
+	
+	/**
+	 * Prim Algorithm
+	 * Start Prim Algorithm in Graph
+	 * 
+	 * @param start
+	 * @param withFibHeap
+	 * @return Pair<AlgoReport,VisualizationView>
+	 */
+	public Pair<IAlgoReport,VisualizationViewer> startPrim(String start, boolean withFibHeap);
 	
 	/**
 	 * Generate new Graph

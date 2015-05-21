@@ -2,7 +2,6 @@ package gka.AlgorithmManager;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +10,7 @@ import java.util.Stack;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
+import gka.AlgorithmManager.Extension.IAlgoReport;
 import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
 
@@ -48,6 +48,7 @@ public class BFS {
 			// Second part of BFS
 			// These procedure find out, which shortest path to choose 
 			OwnVertex lastDepthVertex = path.pop();
+			
 			reporter.addPathNode(lastDepthVertex);
 			reporter.addVisitedNode(lastDepthVertex);
 			

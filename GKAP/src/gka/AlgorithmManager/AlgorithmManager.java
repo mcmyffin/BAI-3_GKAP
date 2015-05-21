@@ -1,6 +1,11 @@
 package gka.AlgorithmManager;
 
+import javafx.util.Pair;
 import edu.uci.ics.jung.graph.Graph;
+import gka.AlgorithmManager.Extension.BFS_Report;
+import gka.AlgorithmManager.Extension.Dijkstra_AStar_Report;
+import gka.AlgorithmManager.Extension.IAlgoReport;
+import gka.AlgorithmManager.Extension.Kruskal_Prim_Report;
 import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
 
@@ -43,6 +48,31 @@ public class AlgorithmManager implements IAlgorithManager{
 		astar.startAlgorithm();
 		
 		return reporter; 
+	}
+
+	
+	@Override
+	public Pair<IAlgoReport,Graph> startKruksal() {
+		
+		Kruskal_Prim_Report reporter = new Kruskal_Prim_Report("Kruskal");
+		Kruskal algorithm = new Kruskal(graph,reporter);
+		
+		algorithm.startKruskal();
+		
+		
+		return new Pair<IAlgoReport, Graph>((IAlgoReport) reporter,reporter.getMinimalSpanningTree());
+	}
+
+	
+	@Override
+	public Pair<IAlgoReport,Graph> startPrim(OwnVertex start_node, boolean withFibHeap) {
+		
+		Kruskal_Prim_Report reporter = new Kruskal_Prim_Report("Prim");
+		Prim algorithm = new Prim(graph, start_node, withFibHeap,reporter);
+		
+		algorithm.startPrim();
+		
+		return null;
 	}
 
 }

@@ -1,8 +1,10 @@
 package gka.GraphicalView;
 
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import gka.AlgorithmManager.BFS_Report;
-import gka.AlgorithmManager.IAlgoReport;
+import gka.AlgorithmManager.Extension.BFS_Report;
+import gka.AlgorithmManager.Extension.IAlgoReport;
+import gka.AlgorithmManager.Extension.Kruskal_Prim_Report;
 import gka.Exceptions.AccessException;
 import gka.Exceptions.FileNotFoundException;
 import gka.Exceptions.GraphBuildException;
@@ -14,16 +16,11 @@ import gka.GraphBuilder.Extension.OwnVertex;
 import gka.GraphGenerator.GraphGenerator;
 import gka.GraphVisualControler.GraphManager;
 import gka.GraphVisualControler.IGraphManager;
-import gka.GraphicalView.Algorithm.ResultDialog;
-import gka.GraphicalView.Algorithm.SearchDialog;
-import gka.GraphicalView.Edge.CreateEdge;
-import gka.GraphicalView.Edge.DeleteEdge;
-import gka.GraphicalView.Generator.GraphCreator;
-import gka.GraphicalView.Vertex.CreateVertex;
-import gka.GraphicalView.Vertex.DeleteVertex;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+
+import javafx.util.Pair;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -40,6 +37,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
+import cern.jet.random.VonMises;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class MainFrame extends JFrame implements ActionListener{
@@ -153,12 +151,28 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuItem_Dijkstra = new JMenuItem("Dijkstra");
 		menuItem_Dijkstra.setActionCommand(menuItem_Dijkstra.getText());
 		menuItem_Dijkstra.addActionListener(this);
+		
+		separator_3 = new JSeparator();
+		menuAlgorithm.add(separator_3);
 		menuAlgorithm.add(menuItem_Dijkstra);
 		
-		menuItem_ASternchen = new JMenuItem("A*");
-		menuItem_ASternchen.setActionCommand(menuItem_ASternchen.getText());
-		menuItem_ASternchen.addActionListener(this);
-		menuAlgorithm.add(menuItem_ASternchen);
+		menuItem_AStar = new JMenuItem("A*");
+		menuItem_AStar.setActionCommand(menuItem_AStar.getText());
+		menuItem_AStar.addActionListener(this);
+		menuAlgorithm.add(menuItem_AStar);
+		
+		separator_4 = new JSeparator();
+		menuAlgorithm.add(separator_4);
+		
+		menuItem_Kruskal = new JMenuItem("Kruskal");
+		menuItem_Kruskal.setActionCommand(menuItem_Kruskal.getText());
+		menuItem_Kruskal.addActionListener(this);
+		menuAlgorithm.add(menuItem_Kruskal);
+		
+		menuItem_Prim = new JMenuItem("Prim");
+		menuItem_Prim.setActionCommand(menuItem_Prim.getText());
+		menuItem_Prim.addActionListener(this);
+		menuAlgorithm.add(menuItem_Prim);
 		
 		// Menu Help settings
 		menuHelp = new JMenu("Help");
@@ -193,14 +207,16 @@ public class MainFrame extends JFrame implements ActionListener{
 		{
 			try {
 				VisualizationViewer vv = gmanager.loadGraph(path);				
-				for(Component c: contentPane.getComponents()){
-					if(((Object) c) instanceof VisualizationViewer){
-						contentPane.remove(c);
-					}
-				}
+//				for(Component c: contentPane.getComponents()){
+//					if(((Object) c) instanceof VisualizationViewer){
+//						contentPane.remove(c);
+//					}
+//				}
+				if(viewComponent != null) contentPane.remove(viewComponent);
+				viewComponent = vv;
 				
-				vv.setVisible(drawMode.isSelected());
-				contentPane.add(vv);
+				viewComponent.setVisible(drawMode.isSelected());
+				contentPane.add(viewComponent);
 				pickMode.setEnabled(true);
 				menuEdit.setEnabled(true);
 				menuAlgorithm.setEnabled(true);
@@ -221,14 +237,13 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		try {
 			VisualizationViewer vv = gmanager.generateNewGraph(vertices, edges, spread, edgeWeightMin, edgeWeightMax, type);				
-			for(Component c: contentPane.getComponents()){
-				if(((Object) c) instanceof VisualizationViewer){
-					contentPane.remove(c);
-				}
-			}
 			
-			vv.setVisible(drawMode.isSelected());
-			contentPane.add(vv);
+			if(viewComponent != null) contentPane.remove(viewComponent);
+			viewComponent = vv;
+			
+			
+			viewComponent.setVisible(drawMode.isSelected());
+			contentPane.add(viewComponent);
 			pickMode.setEnabled(true);
 			menuEdit.setEnabled(true);
 			menuAlgorithm.setEnabled(true);
@@ -254,15 +269,6 @@ public class MainFrame extends JFrame implements ActionListener{
 			WarningDialog wd = new WarningDialog(this, true, "Save Graph", "Graph can not save !");
 			wd.setVisible(true);
 		}
-	}
-	
-	public void addVertex(String v1){
-		
-		if(!gmanager.addVertex(v1)){
-			WarningDialog wd = new WarningDialog(this, true, "Add Vertex", "'"+v1+"' already exists");
-			wd.setVisible(true);
-		}
-		else this.repaint();
 	}
 	
 	public void addVertex(String v1, int attribute){
@@ -318,7 +324,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		IAlgoReport report = gmanager.startBreadthFirstSearch(start, target);
 		
-		ResultDialog resultDialog= new ResultDialog(this, false, report);
+		SearchResultDialog resultDialog= new SearchResultDialog(this, false, report);
 		resultDialog.setVisible(true);
 	}
 
@@ -326,16 +332,31 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		IAlgoReport report = gmanager.startDijkstra(start, target);
 
-		ResultDialog resultDialog = new ResultDialog(this, false, report);
+		SearchResultDialog resultDialog = new SearchResultDialog(this, false, report);
 		resultDialog.setVisible(true);
 	}
 	
-	public void startASternchen(String start, String target){
+	public void startAStar(String start, String target){
 		
-		IAlgoReport report = gmanager.startASternchen(start, target);
+		IAlgoReport report = gmanager.startAStar(start, target);
 		
-		ResultDialog resultDialog = new ResultDialog(this, false, report);
+		SearchResultDialog resultDialog = new SearchResultDialog(this, false, report);
 		resultDialog.setVisible(true);
+	}
+	
+	public void startKruskal(){
+		
+		Pair<IAlgoReport,VisualizationViewer> report = gmanager.startKruskal();
+		
+		SearchResultDialog searchResultDialog = new SearchResultDialog(this, false, report.getKey());
+		searchResultDialog.setVisible(true);
+		
+		DrawResultDialog drawResultDialog = new DrawResultDialog(this, false, report.getValue());
+		drawResultDialog.setVisible(true);
+	}
+	
+	public void startPrim(String start, boolean withFibHeap){
+		// TODO
 	}
 	
 	@Override
@@ -410,10 +431,20 @@ public class MainFrame extends JFrame implements ActionListener{
 				SearchDialog sad = new SearchDialog(this, true, SearchDialog.DIJKSTRA);
 				sad.setVisible(true);
 			}
-			if(e.getActionCommand().equals(menuItem_ASternchen.getText()))
+			else if(e.getActionCommand().equals(menuItem_AStar.getText()))
 			{
 				SearchDialog sad = new SearchDialog(this, true, SearchDialog.ASTERNCHEN);
 				sad.setVisible(true);
+			}
+			else if(e.getActionCommand().equals(menuItem_Kruskal.getText()))
+			{
+				startKruskal();
+			}
+			else if(e.getActionCommand().equals(menuItem_Prim.getText()))
+			{
+				// todo
+				WarningDialog warn = new WarningDialog(this, true, "NOT IMPLEMENTED", "need more manpower !!!");
+				warn.setVisible(true);
 			}
 		}
 		// Menu Help
@@ -444,8 +475,11 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 			if(e.getActionCommand().equals(pickMode.getText())){
 				
-				if(pickMode.isSelected()) gmanager.setPicMode();
-				else gmanager.setTrasformMode();
+				if(pickMode.isSelected()){
+					gmanager.setPicMode(viewComponent);
+				}else{
+					gmanager.setTrasformMode(viewComponent);
+				}
 			}
 		}
 	}
@@ -459,6 +493,8 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JSeparator separator;
 	private JSeparator separator_1;
 	private JSeparator separator_2;
+	private JSeparator separator_3;
+	private JSeparator separator_4;
 
 	// Menu components
 	private JMenuBar menuBar;
@@ -475,9 +511,14 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenuItem menuItem_RemoveVertex;
 	private JMenuItem menuItem_RemoveEdge;	
 	private JMenuItem menuItem_Reload;
-	private JMenuItem menuItem_BFS;
-	private JMenuItem menuItem_Dijkstra;
-	private JMenuItem menuItem_ASternchen;
 	private JCheckBox pickMode;
 	private JCheckBox drawMode;
+	private JMenuItem menuItem_BFS;
+	
+	private JMenuItem menuItem_Dijkstra;
+	private JMenuItem menuItem_AStar;
+	
+	private JMenuItem menuItem_Kruskal;
+	private JMenuItem menuItem_Prim;
+	private VisualizationViewer viewComponent;
 }
