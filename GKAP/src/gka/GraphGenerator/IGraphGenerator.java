@@ -20,7 +20,7 @@ public interface IGraphGenerator {
 	 * @return true if generate procedure success
 	 */
 	public void generateUndirectedWeightedGraph(Graph<OwnVertex,OwnEdge> emptyGraph,
-						int vertices, int edges, int minEdgeLength, int maxEdgeLenth, int spread);
+						int vertices, int edges, boolean coherently);
 	
 	
 	/**
@@ -36,5 +36,5 @@ public interface IGraphGenerator {
 	 * @param spread
 	 */
 	public void generateUndirectedWeightedAttributedGraph(Graph<OwnVertex,OwnEdge> emptyGraph,
-			int vertices, int edges, int minEdgeLength, int maxEdgeLenth, int spread);
+			int vertices, int edges, boolean coherently);
 }

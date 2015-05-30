@@ -207,6 +207,6 @@ public interface IGraphManager {
 	 * @return
 	 * @throws GraphBuildException
 	 */
-	public VisualizationViewer<OwnVertex, OwnEdge>  generateNewGraph(int vertices, int edges, int spread, 
-					int edgeWeightMin, int edgeWeightMax, GraphType...graphTypes) throws GraphBuildException;
+	public VisualizationViewer<OwnVertex, OwnEdge>  generateNewGraph(int vertices, int edges, 
+								boolean coherently, GraphType...graphTypes) throws GraphBuildException;
 }

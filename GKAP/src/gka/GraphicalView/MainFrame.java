@@ -19,6 +19,7 @@ import gka.GraphVisualControler.IGraphManager;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FileDialog;
 
 import javafx.util.Pair;
 
@@ -31,6 +32,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FilenameFilter;
 
 import javax.swing.JCheckBox;
 import javax.swing.JMenu;
@@ -202,7 +204,20 @@ public class MainFrame extends JFrame implements ActionListener{
 		setLocationRelativeTo(null);
 	}
 	
-	public void open(String path){
+	public void open(){
+		
+		FileDialog fd = new FileDialog(this,"Load Graph", FileDialog.LOAD);
+		fd.setFilenameFilter(new FilenameFilter() {
+			
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".graph");
+			}
+		});
+		
+		fd.setVisible(true);
+		String path = fd.getDirectory()+fd.getFile();
+		
 		if(path !=  null || !path.isEmpty())
 		{
 			try {
@@ -233,10 +248,10 @@ public class MainFrame extends JFrame implements ActionListener{
 		}
 	}
 	
-	public void newGraph(int vertices, int edges, int spread, int edgeWeightMin, int edgeWeightMax, GraphType...type){
+	public void newGraph(int vertices, int edges, boolean coherently, GraphType...type){
 		
 		try {
-			VisualizationViewer vv = gmanager.generateNewGraph(vertices, edges, spread, edgeWeightMin, edgeWeightMax, type);				
+			VisualizationViewer vv = gmanager.generateNewGraph(vertices, edges, coherently, type);				
 			
 			if(viewComponent != null) contentPane.remove(viewComponent);
 			viewComponent = vv;
@@ -258,8 +273,26 @@ public class MainFrame extends JFrame implements ActionListener{
 		}
 	}
 	
-	public void save(File path){
-		if(gmanager.saveGraph(path)){
+	public void save(){
+		
+		FileDialog fd = new FileDialog(this,"Load Graph",FileDialog.SAVE);
+		fd.setFilenameFilter(new FilenameFilter() {
+			
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".graph");
+			}
+		});
+		
+		fd.setVisible(true);
+		
+		String path = fd.getDirectory();
+		String file = fd.getFile();
+		
+		if(path == null || file == null) return;
+		
+		File aFile = new File(path+file);
+		if(gmanager.saveGraph(aFile)){
 		
 			WarningDialog wd = new WarningDialog(this, true, "Save Graph", "Graph saved");
 			wd.setVisible(true);
@@ -373,15 +406,21 @@ public class MainFrame extends JFrame implements ActionListener{
 			else if(e.getActionCommand().equals(menuItem_OpenFile.getText()))
 			{
 				// Open File
-				FileChooser fileChooser = new FileChooser(this, true, FileChooser.LOAD_MODE);
-				fileChooser.setVisible(true);
+//				FileChooser fileChooser = new FileChooser(this, true, FileChooser.LOAD_MODE);
+//				fileChooser.setVisible(true);
+				
+				
+				this.open();
 
 			}
 			else if(e.getActionCommand().equals(menuItem_SaveFile.getText()))
 			{
 				// Save File
-				FileChooser fileChooser = new FileChooser(this, true, FileChooser.SAVE_MODE);
-				fileChooser.setVisible(true);
+//				FileChooser fileChooser = new FileChooser(this, true, FileChooser.SAVE_MODE);
+//				fileChooser.setVisible(true);
+				
+				this.save();
+				
 			}
 			else if(e.getActionCommand().equals(menuItem_Quit.getText()))
 			{

@@ -90,12 +90,12 @@ public class FileChooser extends JDialog implements ActionListener {
 
 			if(mode.equals(FileChooser.LOAD_MODE))
 			{
-				parent.open(fileChooser.getSelectedFile().getPath());
+//				parent.open(fileChooser.getSelectedFile().getPath());
 				dispose();				
 			}
 			else if(mode.equals(FileChooser.SAVE_MODE))
 			{
-				parent.save(fileChooser.getSelectedFile());
+//				parent.save(fileChooser.getSelectedFile());
 				dispose();
 			}
             

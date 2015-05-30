@@ -202,8 +202,8 @@ public class GraphManager implements IGraphManager{
 	}
 
 	@Override
-	public VisualizationViewer<OwnVertex, OwnEdge> generateNewGraph(int vertices, int edges, int spread, 
-			int edgeWeightMin, int edgeWeightMax, GraphType...type) throws GraphBuildException {
+	public VisualizationViewer<OwnVertex, OwnEdge> generateNewGraph(int vertices, int edges, boolean coherantly,
+																GraphType...type) throws GraphBuildException {
 
 		this.graphBuilder = new GraphBuilder();
 		this.adtGraph = graphBuilder.createNewGraph(type);
@@ -213,10 +213,10 @@ public class GraphManager implements IGraphManager{
 		
 		if(header.contains(GraphType.ATTRIBUTED.getValue()) && header.contains(GraphType.WEIGHTED.getValue())){
 			
-			generator.generateUndirectedWeightedAttributedGraph(adtGraph, vertices, edges, edgeWeightMin,edgeWeightMax, spread);
+			generator.generateUndirectedWeightedAttributedGraph(adtGraph, vertices, edges, coherantly);
 			
 		}else if(header.contains(GraphType.WEIGHTED.getValue())){
-			generator.generateUndirectedWeightedGraph(adtGraph, vertices, edges, edgeWeightMin, edgeWeightMax, spread);
+			generator.generateUndirectedWeightedGraph(adtGraph, vertices, edges, coherantly);
 			
 		}else{
 			throw new GraphBuildException();
