@@ -65,14 +65,14 @@ public class AlgorithmManager implements IAlgorithManager{
 
 	
 	@Override
-	public Pair<IAlgoReport,Graph> startPrim(OwnVertex start_node, boolean withFibHeap) {
+	public Pair<IAlgoReport,Graph> startPrim(boolean withFibHeap) {
 		
 		Kruskal_Prim_Report reporter = new Kruskal_Prim_Report("Prim");
-		Prim algorithm = new Prim(graph, start_node, withFibHeap,reporter);
+		Prim algorithm = new Prim(graph, withFibHeap,reporter);
 		
 		algorithm.startPrim();
 		
-		return null;
+		return new Pair<IAlgoReport,Graph>((IAlgoReport) reporter,reporter.getMinimalSpanningTree());
 	}
 
 }

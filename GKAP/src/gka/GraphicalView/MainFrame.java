@@ -384,12 +384,19 @@ public class MainFrame extends JFrame implements ActionListener{
 		SearchResultDialog searchResultDialog = new SearchResultDialog(this, false, report.getKey());
 		searchResultDialog.setVisible(true);
 		
-		DrawResultDialog drawResultDialog = new DrawResultDialog(this, false, report.getValue());
-		drawResultDialog.setVisible(true);
+//		DrawResultDialog drawResultDialog = new DrawResultDialog(this, false, report.getValue());
+//		drawResultDialog.setVisible(true);
 	}
 	
-	public void startPrim(String start, boolean withFibHeap){
-		// TODO
+	public void startPrim(boolean withFibHeap){
+
+		Pair<IAlgoReport,VisualizationViewer> report = gmanager.startPrim(withFibHeap);
+		
+		SearchResultDialog searchResultDialog = new SearchResultDialog(this, false, report.getKey());
+		searchResultDialog.setVisible(true);
+		
+//		DrawResultDialog drawResultDialog = new DrawResultDialog(this, false, report.getValue());
+//		drawResultDialog.setVisible(true);
 	}
 	
 	@Override
@@ -482,8 +489,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			else if(e.getActionCommand().equals(menuItem_Prim.getText()))
 			{
 				// todo
-				WarningDialog warn = new WarningDialog(this, true, "NOT IMPLEMENTED", "need more manpower !!!");
-				warn.setVisible(true);
+				startPrim(false);
 			}
 		}
 		// Menu Help

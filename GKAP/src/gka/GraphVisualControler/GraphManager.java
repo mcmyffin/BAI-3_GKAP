@@ -163,11 +163,10 @@ public class GraphManager implements IGraphManager{
 
 	// Algorithm Prim
 	@Override
-	public Pair<IAlgoReport,VisualizationViewer> startPrim(String start, boolean withFibHeap) {
+	public Pair<IAlgoReport,VisualizationViewer> startPrim(boolean withFibHeap) {
 		
-		OwnVertex start_node = graphBuilder.getVertexByName(start);
 		algoManager = new AlgorithmManager(adtGraph);
-		Pair<IAlgoReport,Graph> reportPair = algoManager.startPrim(start_node, withFibHeap);
+		Pair<IAlgoReport,Graph> reportPair = algoManager.startPrim(withFibHeap);
 
 		VisualizationViewer visualComponent = this.setUpGraphiew(reportPair.getValue());
 		

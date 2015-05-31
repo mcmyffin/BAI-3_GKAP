@@ -198,7 +198,7 @@ public interface IGraphManager {
 	 * @param withFibHeap
 	 * @return Pair<AlgoReport,VisualizationView>
 	 */
-	public Pair<IAlgoReport,VisualizationViewer> startPrim(String start, boolean withFibHeap);
+	public Pair<IAlgoReport,VisualizationViewer> startPrim(boolean withFibHeap);
 	
 	/**
 	 * Generate new Graph

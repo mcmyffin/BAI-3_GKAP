@@ -59,7 +59,8 @@ public class Kruskal {
 			
 			// if both Vertices contains resultGraph then check for cycle
 			if(resultGraph.containsVertex(v1) && resultGraph.containsVertex(v2)){
-				
+				reporter.countGraphAccess();
+				reporter.countGraphAccess();
 				if(checkForCycle(v1,v2,resultGraph)) continue;
 			}
 			
@@ -68,6 +69,8 @@ public class Kruskal {
 			
 			resultGraph.addEdge(minimalEdge, v1, v2);
 		}
+		// stop Timer
+		reporter.stopTimer();
 		
 		// count pathLength
 		int totalPathLength = 0;
@@ -80,8 +83,7 @@ public class Kruskal {
 		// document minimalSpannTree
 		reporter.addMinimalSpanningTree(resultGraph);
 
-		// stop Timer
-		reporter.stopTimer();
+		
 	}
 	
 	/**** private helper Methods ****/
@@ -110,6 +112,8 @@ public class Kruskal {
 			visited.add(currentVertex);
 			
 			for(OwnVertex successor : g.getSuccessors(currentVertex)){
+				
+				reporter.countGraphAccess();
 				
 				if(visited.contains(successor)) continue;
 				

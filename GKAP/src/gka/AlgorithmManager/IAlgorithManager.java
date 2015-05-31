@@ -51,5 +51,5 @@ public interface IAlgorithManager{
 	 * @param start_node
 	 * @return AlgoReport with result Information
 	 */
-	public Pair<IAlgoReport,Graph> startPrim(OwnVertex start_node, boolean withFibHeap);
+	public Pair<IAlgoReport,Graph> startPrim(boolean withFibHeap);
 }
