@@ -52,7 +52,7 @@ public class AlgorithmManager implements IAlgorithManager{
 
 	
 	@Override
-	public Pair<IAlgoReport,Graph> startKruksal() {
+	public Pair<IAlgoReport,Graph<OwnVertex, OwnEdge>> startKruksal() {
 		
 		Kruskal_Prim_Report reporter = new Kruskal_Prim_Report("Kruskal");
 		Kruskal algorithm = new Kruskal(graph,reporter);
@@ -60,19 +60,19 @@ public class AlgorithmManager implements IAlgorithManager{
 		algorithm.startKruskal();
 		
 		
-		return new Pair<IAlgoReport, Graph>((IAlgoReport) reporter,reporter.getMinimalSpanningTree());
+		return new Pair<IAlgoReport, Graph<OwnVertex, OwnEdge>>((IAlgoReport) reporter,reporter.getMinimalSpanningTree());
 	}
 
 	
 	@Override
-	public Pair<IAlgoReport,Graph> startPrim(boolean withFibHeap) {
+	public Pair<IAlgoReport,Graph<OwnVertex, OwnEdge>> startPrim(boolean withFibHeap) {
 		
 		Kruskal_Prim_Report reporter = new Kruskal_Prim_Report("Prim");
 		Prim algorithm = new Prim(graph, withFibHeap,reporter);
 		
 		algorithm.startPrim();
 		
-		return new Pair<IAlgoReport,Graph>((IAlgoReport) reporter,reporter.getMinimalSpanningTree());
+		return new Pair<IAlgoReport,Graph<OwnVertex, OwnEdge>>((IAlgoReport) reporter,reporter.getMinimalSpanningTree());
 	}
 
 }

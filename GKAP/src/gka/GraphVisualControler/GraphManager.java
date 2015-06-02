@@ -153,7 +153,7 @@ public class GraphManager implements IGraphManager{
 	public Pair<IAlgoReport,VisualizationViewer> startKruskal() {
 		
 		algoManager = new AlgorithmManager(adtGraph);
-		Pair<IAlgoReport,Graph> reportPair = algoManager.startKruksal();
+		Pair<IAlgoReport,Graph<OwnVertex, OwnEdge>> reportPair = algoManager.startKruksal();
 		
 		VisualizationViewer visualComponent = this.setUpGraphiew(reportPair.getValue());
 		
@@ -166,7 +166,7 @@ public class GraphManager implements IGraphManager{
 	public Pair<IAlgoReport,VisualizationViewer> startPrim(boolean withFibHeap) {
 		
 		algoManager = new AlgorithmManager(adtGraph);
-		Pair<IAlgoReport,Graph> reportPair = algoManager.startPrim(withFibHeap);
+		Pair<IAlgoReport,Graph<OwnVertex, OwnEdge>> reportPair = algoManager.startPrim(withFibHeap);
 
 		VisualizationViewer visualComponent = this.setUpGraphiew(reportPair.getValue());
 		

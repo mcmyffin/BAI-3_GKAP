@@ -169,12 +169,20 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuItem_Kruskal = new JMenuItem("Kruskal");
 		menuItem_Kruskal.setActionCommand(menuItem_Kruskal.getText());
 		menuItem_Kruskal.addActionListener(this);
+		
+		menuItem_drawResult = new JCheckBox("Draw Result");
+		menuAlgorithm.add(menuItem_drawResult);
 		menuAlgorithm.add(menuItem_Kruskal);
 		
 		menuItem_Prim = new JMenuItem("Prim");
 		menuItem_Prim.setActionCommand(menuItem_Prim.getText());
 		menuItem_Prim.addActionListener(this);
 		menuAlgorithm.add(menuItem_Prim);
+		
+		menuItem_Prim_fib = new JMenuItem("Prim with Fibheap");
+		menuItem_Prim_fib.setActionCommand(menuItem_Prim_fib.getText());
+		menuItem_Prim_fib.addActionListener(this);
+		menuAlgorithm.add(menuItem_Prim_fib);
 		
 		// Menu Help settings
 		menuHelp = new JMenu("Help");
@@ -377,26 +385,31 @@ public class MainFrame extends JFrame implements ActionListener{
 		resultDialog.setVisible(true);
 	}
 	
-	public void startKruskal(){
+	public void startKruskal(boolean drawResult){
 		
 		Pair<IAlgoReport,VisualizationViewer> report = gmanager.startKruskal();
 		
 		SearchResultDialog searchResultDialog = new SearchResultDialog(this, false, report.getKey());
 		searchResultDialog.setVisible(true);
 		
-//		DrawResultDialog drawResultDialog = new DrawResultDialog(this, false, report.getValue());
-//		drawResultDialog.setVisible(true);
+		if(drawResult){
+			DrawResultDialog drawResultDialog = new DrawResultDialog(this, false, report.getValue());
+			drawResultDialog.setVisible(true);
+		}
 	}
 	
-	public void startPrim(boolean withFibHeap){
+	public void startPrim(boolean withFibHeap,boolean drawResult){
 
 		Pair<IAlgoReport,VisualizationViewer> report = gmanager.startPrim(withFibHeap);
 		
 		SearchResultDialog searchResultDialog = new SearchResultDialog(this, false, report.getKey());
 		searchResultDialog.setVisible(true);
 		
-//		DrawResultDialog drawResultDialog = new DrawResultDialog(this, false, report.getValue());
-//		drawResultDialog.setVisible(true);
+		if(drawResult){
+			DrawResultDialog drawResultDialog = new DrawResultDialog(this, false, report.getValue());
+			drawResultDialog.setVisible(true);
+		}
+		
 	}
 	
 	@Override
@@ -484,12 +497,16 @@ public class MainFrame extends JFrame implements ActionListener{
 			}
 			else if(e.getActionCommand().equals(menuItem_Kruskal.getText()))
 			{
-				startKruskal();
+				startKruskal(menuItem_drawResult.isSelected());
 			}
 			else if(e.getActionCommand().equals(menuItem_Prim.getText()))
 			{
 				// todo
-				startPrim(false);
+				startPrim(false,menuItem_drawResult.isSelected());
+			
+			}else if(e.getActionCommand().equals(menuItem_Prim_fib.getText()))
+			{
+				startPrim(true, menuItem_drawResult.isSelected());
 			}
 		}
 		// Menu Help
@@ -565,5 +582,8 @@ public class MainFrame extends JFrame implements ActionListener{
 	
 	private JMenuItem menuItem_Kruskal;
 	private JMenuItem menuItem_Prim;
+	private JMenuItem menuItem_Prim_fib;
 	private VisualizationViewer viewComponent;
+	private JCheckBox menuItem_drawResult;
+	
 }

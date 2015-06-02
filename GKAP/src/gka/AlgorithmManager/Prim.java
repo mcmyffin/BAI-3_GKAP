@@ -1,17 +1,16 @@
 package gka.AlgorithmManager;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Set;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedOrderedSparseMultigraph;
+import es.usc.citius.lab.hipster.collections.adapter.PriorityEvaluator;
+import es.usc.citius.lab.hipster.collections.adapter.PriorityFibonacciQueue;
 import gka.AlgorithmManager.Extension.ComparatorLength;
 import gka.AlgorithmManager.Extension.Kruskal_Prim_Report;
 import gka.GraphBuilder.Extension.OwnEdge;
@@ -26,25 +25,29 @@ public class Prim {
 	private Queue<OwnVertex> priorityQueue;
 	private Map<OwnVertex,OwnVertex> pred;
 	private Map<OwnVertex,Integer> dist;
-	//private FibonacciHeap<OwnVertex> heap;
-	
-	
 	
 	public Prim(Graph<OwnVertex,OwnEdge> graph, boolean withFibHeap, Kruskal_Prim_Report reporter){
 		
 		this.graph = graph;
 		this.reporter = reporter;
 		
-		
 		this.resultGraph = new UndirectedOrderedSparseMultigraph<OwnVertex, OwnEdge>();
 		this.dist = new LinkedHashMap<OwnVertex,Integer>();
 		this.pred = new LinkedHashMap<OwnVertex,OwnVertex>();
-		this.priorityQueue = new PriorityQueue<OwnVertex>(new ComparatorLength(dist));
+		
 		
 		if(withFibHeap){
-			// TODO Fibonacci Heap
+			this.priorityQueue = new PriorityFibonacciQueue<OwnVertex>(new PriorityEvaluator<OwnVertex>() {
+
+				@Override
+				public double getPriority(OwnVertex arg0) {
+					return dist.get(arg0);
+				}
+				
+			});
+			
 		}else{
-			// TODO default Priority Queue
+			this.priorityQueue = new PriorityQueue<OwnVertex>(new ComparatorLength(dist));
 		}
 	}
 	
@@ -80,10 +83,11 @@ public class Prim {
 					
 					OwnVertex predicessior = pred.get(next);
 					resultGraph.addEdge(edge,predicessior,next);
+					
 				}
 				
 				// look at all neighbors of next
-				for(OwnVertex neighbor : graph.getNeighbors(next)){
+				for(OwnVertex neighbor : graph.getSuccessors(next)){
 					
 					reporter.countGraphAccess();
 					
@@ -102,7 +106,12 @@ public class Prim {
 						dist.put(neighbor, weight);
 						pred.put(neighbor, next);
 					}
+					
 					if(!priorityQueue.contains(neighbor)) priorityQueue.offer(neighbor);
+					else{
+						priorityQueue.remove(neighbor);
+						priorityQueue.offer(neighbor);
+					}
 				}
 			}
 		}
@@ -128,6 +137,7 @@ public class Prim {
 	// Get Random Vertex
 	private OwnVertex getRandomVertex(){
 		
+		
 		OwnVertex vertex = null;
 		
 		Random rand = new Random();
@@ -137,9 +147,11 @@ public class Prim {
 		
 		for(OwnVertex v : graph.getVertices()){
 			
-			if(i < randomIntexPos){
+			if(i == randomIntexPos){
 				vertex = v;
 				break;
+			}else{
+				vertex = v;
 			}
 			i++;
 		}
@@ -179,4 +191,6 @@ public class Prim {
 		}
 		return smallestEdge;
 	}
+	
+
 }
