@@ -16,6 +16,7 @@ import gka.GraphBuilder.Extension.OwnVertex;
 import gka.GraphGenerator.GraphGenerator;
 import gka.GraphGenerator.IGraphGenerator;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -25,8 +26,8 @@ public class Kruskal_Prim_Test {
 	private static IGraphBuilder graphBuilder;
 	private static IGraphGenerator generator;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
+	@Before
+	public void setUpBefore() throws Exception {
 		graphBuilder = new GraphBuilder();
 		generator = new GraphGenerator();
 	}
@@ -91,5 +92,19 @@ public class Kruskal_Prim_Test {
 			
 			assertEquals(primReport.getPathLength(),kruskalReport.getPathLength());
 		}
+	}
+	
+	
+	@Test
+	public void testRuntimePrim() throws GraphBuildException{
+		
+		Graph<OwnVertex,OwnEdge> graph = graphBuilder.createNewGraph(GraphType.WEIGHTED);
+		generator.generateUndirectedWeightedGraph(graph, 20000, 40000, true);
+		
+		algorithmManager = new AlgorithmManager(graph);
+		
+		IAlgoReport primReport 	  = algorithmManager.startPrim(false).getKey();
+		
+		System.out.println(primReport.toString());
 	}
 }

@@ -2,10 +2,12 @@ package gka.AlgorithmManager;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedOrderedSparseMultigraph;
@@ -25,8 +27,9 @@ public class Prim {
 	private Queue<OwnVertex> priorityQueue;
 	private Map<OwnVertex,OwnVertex> pred;
 	private Map<OwnVertex,Integer> dist;
+	private Set<OwnVertex> selectedVertices;
 	
-	public Prim(Graph<OwnVertex,OwnEdge> graph, boolean withFibHeap, Kruskal_Prim_Report reporter){
+	public Prim(Graph<OwnVertex,OwnEdge> graph, Kruskal_Prim_Report reporter){
 		
 		this.graph = graph;
 		this.reporter = reporter;
@@ -34,21 +37,10 @@ public class Prim {
 		this.resultGraph = new UndirectedOrderedSparseMultigraph<OwnVertex, OwnEdge>();
 		this.dist = new LinkedHashMap<OwnVertex,Integer>();
 		this.pred = new LinkedHashMap<OwnVertex,OwnVertex>();
+		this.selectedVertices = new LinkedHashSet<OwnVertex>();
 		
+		this.priorityQueue = new PriorityQueue<OwnVertex>(new ComparatorLength(dist));
 		
-		if(withFibHeap){
-			this.priorityQueue = new PriorityFibonacciQueue<OwnVertex>(new PriorityEvaluator<OwnVertex>() {
-
-				@Override
-				public double getPriority(OwnVertex arg0) {
-					return dist.get(arg0);
-				}
-				
-			});
-			
-		}else{
-			this.priorityQueue = new PriorityQueue<OwnVertex>(new ComparatorLength(dist));
-		}
 	}
 	
 	void startPrim(){
@@ -72,28 +64,15 @@ public class Prim {
 				// get minimal Vertex
 				OwnVertex next = priorityQueue.poll();
 				
-				// add this Vertex to resultGraph
-				resultGraph.addVertex(next);
-				
-				// if the predecessor not himself, connect predecessor with next
-				if(!pred.get(next).equals(next)){
-					
-					int weight = dist.get(next);
-					OwnEdge edge = new OwnEdge(weight);
-					
-					OwnVertex predicessior = pred.get(next);
-					resultGraph.addEdge(edge,predicessior,next);
-					
-				}
+				selectedVertices.add(next);
 				
 				// look at all neighbors of next
 				for(OwnVertex neighbor : graph.getSuccessors(next)){
 					
 					reporter.countGraphAccess();
-					
-					// If the neighbor has been treated , then ignore him
-					if(resultGraph.containsVertex(neighbor)) continue;
-					
+				
+					if(selectedVertices.contains(neighbor)) continue;
+
 					// get an Edge between both
 					reporter.countGraphAccess();
 					OwnEdge edge = getEdgeBetween(next, neighbor);
@@ -109,13 +88,15 @@ public class Prim {
 					
 					if(!priorityQueue.contains(neighbor)) priorityQueue.offer(neighbor);
 					else{
-						priorityQueue.remove(neighbor);
+						priorityQueue.remove(neighbor);// get an Edge between both
+
 						priorityQueue.offer(neighbor);
 					}
 				}
 			}
 		}
 
+		buildMinimalSpanningTree();
 		
 		// stop Timer
 		reporter.stopTimer();
@@ -192,5 +173,23 @@ public class Prim {
 		return smallestEdge;
 	}
 	
+	private void buildMinimalSpanningTree(){
+
+		for(OwnVertex v : selectedVertices){
+			
+			resultGraph.addVertex(v);
+
+			if(pred.get(v).equals(v)) continue;
+			
+			OwnVertex predecessor = pred.get(v);
+			int distance = dist.get(v);
+			
+			resultGraph.addVertex(predecessor);
+			OwnEdge e = new OwnEdge(distance);
+			
+			resultGraph.addEdge(e, predecessor, v);
+		}
+		
+	}
 
 }
