@@ -210,6 +210,9 @@ public interface IGraphManager {
 	public VisualizationViewer<OwnVertex, OwnEdge>  generateNewGraph(int vertices, int edges, 
 								boolean coherently, GraphType...graphTypes) throws GraphBuildException;
 	
+	public VisualizationViewer<OwnVertex, OwnEdge> generateNewCoherentlyEvenGraph(int vertices, int edges) 
+								throws GraphBuildException;
+	
 	/**
 	 * Hierholzer Algorithm
 	 * Start Hierholzer Algorithm

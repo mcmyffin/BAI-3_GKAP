@@ -27,8 +27,7 @@ public class GraphGenerator implements IGraphGenerator{
 	
 	
 	@Override
-	public void generateUndirectedEulerkreis(Graph<OwnVertex,OwnEdge> emptyGraph,
-			int vertices, int edges, boolean coherently) {
+	public void generateUndirectedCoherentlyEvenGraph(Graph<OwnVertex,OwnEdge> emptyGraph, int vertices, int edges) {
 		//TODO
 		UndirectedEulerkreisGenerator gen = new UndirectedEulerkreisGenerator(emptyGraph);
 		//gen.generate(vertices, edges, coherently);

@@ -341,6 +341,12 @@ public class GraphBuilder implements IGraphBuilder{
 				graph  = new UndirectedOrderedSparseMultigraph<OwnVertex, OwnEdge>();
 				this.graphType = UNDIRECTED_WEIGHTED_ATTRIBUTED;
 				return graph;
+				
+			case(GraphBuilder.UNDIRECTED):
+				
+				graph = new UndirectedOrderedSparseMultigraph<OwnVertex, OwnEdge>();
+				this.graphType = UNDIRECTED;
+				return graph;
 		}
 		throw new GraphBuildException();
 	}

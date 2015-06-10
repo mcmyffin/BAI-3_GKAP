@@ -294,6 +294,31 @@ public class MainFrame extends JFrame implements ActionListener{
 		}
 	}
 	
+	public void newCoherentlyEvenGraph(int vertices, int edges){
+		
+		try{
+			
+			VisualizationViewer vv = gmanager.generateNewCoherentlyEvenGraph(vertices, edges);
+			
+			if(viewComponent != null) contentPane.remove(viewComponent);
+			viewComponent = vv;
+			
+			viewComponent.setVisible(drawMode.isSelected());
+			contentPane.add(viewComponent);
+			pickMode.setEnabled(true);
+			menuEdit.setEnabled(true);
+			menuAlgorithm.setEnabled(true);
+			menuHelp.setEnabled(true);
+			this.pack();
+			
+		} catch (GraphBuildException e) {
+		
+			String message = e.getMessage();
+			WarningDialog warningDialog = new WarningDialog(this, true, "ein Problem ist aufgetreten", message);
+			warningDialog.setVisible(true);
+		}
+	}
+	
 	public void save(){
 		
 		FileDialog fd = new FileDialog(this,"Load Graph",FileDialog.SAVE);

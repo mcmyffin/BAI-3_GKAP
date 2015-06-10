@@ -51,7 +51,6 @@ public interface IGraphGenerator {
  * @param verteilungsFaktor
  * @return true if generate procedure success
  */
-public void generateUndirectedEulerkreis(Graph<OwnVertex,OwnEdge> emptyGraph,
-					int vertices, int edges, boolean coherently);
+public void generateUndirectedCoherentlyEvenGraph(Graph<OwnVertex,OwnEdge> emptyGraph, int vertices, int edges);
 
 }

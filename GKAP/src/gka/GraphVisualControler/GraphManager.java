@@ -247,4 +247,21 @@ public class GraphManager implements IGraphManager{
 		
 		return setUpGraphiew(adtGraph);
 	}
+
+	
+	@Override
+	public VisualizationViewer<OwnVertex, OwnEdge> generateNewCoherentlyEvenGraph(int vertices, int edges) throws GraphBuildException {
+		
+		this.graphBuilder = new GraphBuilder();
+		this.adtGraph = graphBuilder.createNewGraph();
+		
+		IGraphGenerator generator = new GraphGenerator();
+		String header = GraphType.createHeader();
+		
+		generator.generateUndirectedCoherentlyEvenGraph(adtGraph, vertices, vertices);
+		
+		return setUpGraphiew(adtGraph);
+	}
+	
+	
 }

@@ -45,6 +45,7 @@ public class GraphCreator extends JDialog implements ActionListener{
 	
 	private final String UNDIRECTED_WEIGHTED_ATTRIBUTED = "UNDIRECTED_WEIGHTED_ATTRIBUTED";
 	private final String UNDIRECTED_WEIGHTED_COHERENTLY = "UNDIRECTED_WEIGHTED_COHERENTLY";
+	private final String UNDIRECTED_COHERENTLY_EVEN_DEGREE = "UNDIRECTED_COHERENTLY_EVEN_DEGREE";
 	private final String UNDIRECTED_WEIGHTED = "UNDIRECTED_WEIGHTED";
 	
 	
@@ -90,6 +91,7 @@ public class GraphCreator extends JDialog implements ActionListener{
 			graphTypeComboBox.addItem(UNDIRECTED_WEIGHTED_ATTRIBUTED);
 			graphTypeComboBox.addItem(UNDIRECTED_WEIGHTED_COHERENTLY);
 			graphTypeComboBox.addItem(UNDIRECTED_WEIGHTED);
+			graphTypeComboBox.addItem(UNDIRECTED_COHERENTLY_EVEN_DEGREE);
 			graphTypeComboBox.setBounds(145, 35, 370, 24);
 			contentPanel.add(graphTypeComboBox);
 		}
@@ -156,6 +158,10 @@ public class GraphCreator extends JDialog implements ActionListener{
 			else if(graphType.equals(UNDIRECTED_WEIGHTED_COHERENTLY))
 			{
 				parent.newGraph(vertices, edges, true, GraphType.WEIGHTED);
+			}
+			else if(graphType.equals(UNDIRECTED_COHERENTLY_EVEN_DEGREE))
+			{
+				parent.newCoherentlyEvenGraph(vertices, edges);
 			}
 			else
 			{
