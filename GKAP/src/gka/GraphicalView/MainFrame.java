@@ -184,6 +184,19 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuItem_Prim_fib.addActionListener(this);
 		menuAlgorithm.add(menuItem_Prim_fib);
 		
+		separator_5 = new JSeparator();
+		menuAlgorithm.add(separator_5);
+		
+		menuItem_Hierzolzer = new JMenuItem("Hierholzer");
+		menuItem_Hierzolzer.setActionCommand(menuItem_Hierzolzer.getText());
+		menuItem_Hierzolzer.addActionListener(this);
+		menuAlgorithm.add(menuItem_Hierzolzer);
+		
+		menuItem_Fleury = new JMenuItem("Fleury");
+		menuItem_Fleury.setActionCommand(menuItem_Fleury.getText());
+		menuItem_Fleury.addActionListener(this);
+		menuAlgorithm.add(menuItem_Fleury);
+		
 		// Menu Help settings
 		menuHelp = new JMenu("Help");
 		menuBar.add(menuHelp);
@@ -412,6 +425,38 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 	}
 	
+	public void startHierholzer(String start){
+		
+		IAlgoReport report; 
+		SearchResultDialog sr;
+		
+		try{
+			report = gmanager.startHierholzer(start);
+			sr = new SearchResultDialog(this, false, report);
+			sr.setVisible(true);
+			
+		}catch(NullPointerException ex){
+			WarningDialog warning = new WarningDialog(this, true, "NOT IMPLEMENTED", ex.getMessage());
+			warning.setVisible(true);
+		}
+	}
+	
+	public void startFleury(String start){
+		
+		IAlgoReport report;
+		SearchResultDialog sr;
+		
+		try{
+			report = gmanager.startFleury(start);
+			sr = new SearchResultDialog(this, false, report);
+			sr.setVisible(true);
+			
+		}catch(NullPointerException ex){
+			WarningDialog warning = new WarningDialog(this, true, "NOT IMPLEMENTED", ex.getMessage());
+			warning.setVisible(true);
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -501,12 +546,28 @@ public class MainFrame extends JFrame implements ActionListener{
 			}
 			else if(e.getActionCommand().equals(menuItem_Prim.getText()))
 			{
-				// todo
 				startPrim(false,menuItem_drawResult.isSelected());
 			
-			}else if(e.getActionCommand().equals(menuItem_Prim_fib.getText()))
+			}
+			else if(e.getActionCommand().equals(menuItem_Prim_fib.getText()))
 			{
 				startPrim(true, menuItem_drawResult.isSelected());
+			}
+			else if(e.getActionCommand().equals(menuItem_Hierzolzer.getText()))
+			{
+			
+				// TODO
+				SearchDialog sd = new SearchDialog(this, true, SearchDialog.HIERHOLZER);
+				sd.setVisible(true);
+				
+			}
+			else if(e.getActionCommand().equals(menuItem_Fleury.getText()))
+			{
+				
+				// TODO
+				SearchDialog sd = new SearchDialog(this, true, SearchDialog.FLEURY);
+				sd.setVisible(true);
+				
 			}
 		}
 		// Menu Help
@@ -557,6 +618,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JSeparator separator_2;
 	private JSeparator separator_3;
 	private JSeparator separator_4;
+	private JSeparator separator_5;
 
 	// Menu components
 	private JMenuBar menuBar;
@@ -575,6 +637,8 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenuItem menuItem_Reload;
 	private JCheckBox pickMode;
 	private JCheckBox drawMode;
+	private VisualizationViewer viewComponent;
+	
 	private JMenuItem menuItem_BFS;
 	
 	private JMenuItem menuItem_Dijkstra;
@@ -583,7 +647,9 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenuItem menuItem_Kruskal;
 	private JMenuItem menuItem_Prim;
 	private JMenuItem menuItem_Prim_fib;
-	private VisualizationViewer viewComponent;
-	private JCheckBox menuItem_drawResult;
+	private JCheckBox menuItem_drawResult;	
+	
+	private JMenuItem menuItem_Hierzolzer;
+	private JMenuItem menuItem_Fleury;
 	
 }

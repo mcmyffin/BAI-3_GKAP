@@ -29,7 +29,7 @@ public class Prim {
 	private Map<OwnVertex,Integer> dist;
 	private Set<OwnVertex> selectedVertices;
 	
-	public Prim(Graph<OwnVertex,OwnEdge> graph, Kruskal_Prim_Report reporter){
+	Prim(Graph<OwnVertex,OwnEdge> graph, Kruskal_Prim_Report reporter){
 		
 		this.graph = graph;
 		this.reporter = reporter;

@@ -26,7 +26,7 @@ public class Kruskal {
 	
 	private Graph<OwnVertex,OwnEdge> resultGraph;
 	
-	public Kruskal(Graph<OwnVertex,OwnEdge> graph, Kruskal_Prim_Report reporter){
+	Kruskal(Graph<OwnVertex,OwnEdge> graph, Kruskal_Prim_Report reporter){
 		
 		this.graph = graph;
 		this.reporter = reporter;

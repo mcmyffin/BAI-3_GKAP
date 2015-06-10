@@ -173,6 +173,30 @@ public class GraphManager implements IGraphManager{
 		return new Pair<IAlgoReport, VisualizationViewer>(reportPair.getKey(), visualComponent);
 	}
 
+	
+	// Algorithm Hierholzer
+	@Override
+	public IAlgoReport startHierholzer(String start) {
+		
+		algoManager 		 = new AlgorithmManager(adtGraph);
+		OwnVertex start_node = graphBuilder.getVertexByName(start);
+		
+		IAlgoReport report = algoManager.startHierholzer(start_node);
+		return report;
+	}
+
+	// Algorithm Fleury
+	@Override
+	public IAlgoReport startFleury(String start) {
+
+		algoManager 		 = new AlgorithmManager(adtGraph);
+		OwnVertex start_node = graphBuilder.getVertexByName(start);
+		
+		IAlgoReport report = algoManager.startFleury(start_node);
+		return report;
+	}
+	
+	
 	/*********Helper Method from loadGraph(String path)**********/
 	/**
 	 * Set up the Graphical Component "VisualizationViewer"

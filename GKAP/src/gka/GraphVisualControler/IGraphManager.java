@@ -209,4 +209,22 @@ public interface IGraphManager {
 	 */
 	public VisualizationViewer<OwnVertex, OwnEdge>  generateNewGraph(int vertices, int edges, 
 								boolean coherently, GraphType...graphTypes) throws GraphBuildException;
+	
+	/**
+	 * Hierholzer Algorithm
+	 * Start Hierholzer Algorithm
+	 * 
+	 * @param start
+	 * @return
+	 */
+	public IAlgoReport startHierholzer(String start);
+	
+	/**
+	 * Fleury Algorithm
+	 * Start Fleury Algorithm
+	 * 
+	 * @param start
+	 * @return
+	 */
+	public IAlgoReport startFleury(String start);
 }

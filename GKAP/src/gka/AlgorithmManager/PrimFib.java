@@ -30,7 +30,7 @@ public class PrimFib {
 	
 	private Set<OwnVertex> selectedVertices;
 	
-	public PrimFib(Graph<OwnVertex,OwnEdge> graph, Kruskal_Prim_Report reporter){
+	PrimFib(Graph<OwnVertex,OwnEdge> graph, Kruskal_Prim_Report reporter){
 		
 		this.graph = graph;
 		this.reporter = reporter;

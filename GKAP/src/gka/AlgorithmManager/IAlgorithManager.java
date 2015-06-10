@@ -53,4 +53,20 @@ public interface IAlgorithManager{
 	 * @return AlgoReport with result Information
 	 */
 	public Pair<IAlgoReport,Graph<OwnVertex, OwnEdge>> startPrim(boolean withFibHeap);
+	
+	/**
+	 * Start Hierholzer Algorithm
+	 * 
+	 * @param start_node
+	 * @return
+	 */
+	public IAlgoReport startHierholzer(OwnVertex start_node);
+	
+	/**
+	 * Start Fleury Algortihm
+	 * 
+	 * @param start_node
+	 * @return
+	 */
+	public IAlgoReport startFleury(OwnVertex start_node);
 }
