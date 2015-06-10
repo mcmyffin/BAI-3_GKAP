@@ -24,5 +24,14 @@ public class GraphGenerator implements IGraphGenerator{
 		UndirectedWeightedAttributedGenerator gen = new UndirectedWeightedAttributedGenerator(emptyGraph);
 		gen.generate(vertices, edges, coherently);
 	}
+	
+	
+	@Override
+	public void generateUndirectedEulerkreis(Graph<OwnVertex,OwnEdge> emptyGraph,
+			int vertices, int edges, boolean coherently) {
+		//TODO
+		UndirectedEulerkreisGenerator gen = new UndirectedEulerkreisGenerator(emptyGraph);
+		//gen.generate(vertices, edges, coherently);
+	}
 
 }

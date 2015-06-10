@@ -37,4 +37,21 @@ public interface IGraphGenerator {
 	 */
 	public void generateUndirectedWeightedAttributedGraph(Graph<OwnVertex,OwnEdge> emptyGraph,
 			int vertices, int edges, boolean coherently);
+
+
+/**
+ * Generate undirected Elerkreis Graph
+ * @require Empty undirected Elerkreis Graph
+ * 
+ * @param emptyGraph
+ * @param vertices
+ * @param edges
+ * @param minEdgeLength
+ * @param maxEdgeLenth
+ * @param verteilungsFaktor
+ * @return true if generate procedure success
+ */
+public void generateUndirectedEulerkreis(Graph<OwnVertex,OwnEdge> emptyGraph,
+					int vertices, int edges, boolean coherently);
+
 }
