@@ -258,7 +258,7 @@ public class GraphManager implements IGraphManager{
 		IGraphGenerator generator = new GraphGenerator();
 		String header = GraphType.createHeader();
 		
-		generator.generateUndirectedCoherentlyEvenGraph(adtGraph, vertices, vertices);
+		generator.generateUndirectedCoherentlyEvenGraph(adtGraph, vertices, edges);
 		
 		return setUpGraphiew(adtGraph);
 	}

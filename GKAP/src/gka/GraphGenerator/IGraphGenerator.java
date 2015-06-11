@@ -39,18 +39,15 @@ public interface IGraphGenerator {
 			int vertices, int edges, boolean coherently);
 
 
-/**
- * Generate undirected Elerkreis Graph
- * @require Empty undirected Elerkreis Graph
- * 
- * @param emptyGraph
- * @param vertices
- * @param edges
- * @param minEdgeLength
- * @param maxEdgeLenth
- * @param verteilungsFaktor
- * @return true if generate procedure success
- */
-public void generateUndirectedCoherentlyEvenGraph(Graph<OwnVertex,OwnEdge> emptyGraph, int vertices, int edges);
+	/**
+	 * Generate undirected Coherently Even Graph
+	 * @require Empty undirected Coherently Even Graph
+	 * 
+	 * @param emptyGraph
+	 * @param vertices
+	 * @param edges
+	 * @return true if generate procedure success
+	 */
+	public void generateUndirectedCoherentlyEvenGraph(Graph<OwnVertex,OwnEdge> emptyGraph, int vertices, int edges);
 
 }

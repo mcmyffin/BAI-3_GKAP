@@ -1,4 +1,4 @@
-package gka.GraphGenerator;
+ package gka.GraphGenerator;
 
 import edu.uci.ics.jung.graph.Graph;
 import gka.GraphBuilder.Extension.OwnEdge;
@@ -27,10 +27,11 @@ public class GraphGenerator implements IGraphGenerator{
 	
 	
 	@Override
-	public void generateUndirectedCoherentlyEvenGraph(Graph<OwnVertex,OwnEdge> emptyGraph, int vertices, int edges) {
-		//TODO
-		UndirectedEulerkreisGenerator gen = new UndirectedEulerkreisGenerator(emptyGraph);
-		//gen.generate(vertices, edges, coherently);
+	public void generateUndirectedCoherentlyEvenGraph(Graph<OwnVertex,OwnEdge> emptyGraph,
+			int vertices, int edges) {
+		
+		UndirectedCoherentlyEvenGenerator gen = new UndirectedCoherentlyEvenGenerator(emptyGraph);
+		gen.generate(vertices, edges);
 	}
 
 }
