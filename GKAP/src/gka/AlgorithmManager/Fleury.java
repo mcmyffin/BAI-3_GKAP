@@ -13,7 +13,7 @@ import gka.AlgorithmManager.Extension.Fleury_Hierholzer_Report;
 import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
 
-public class Fleury {
+public class Fleury{
 	
 	private Graph<OwnVertex,OwnEdge> graph;
 	private Fleury_Hierholzer_Report reporter;

@@ -43,6 +43,7 @@ public class Hierholzer {
 	void startHierholzer(){
 		
 		// TODO Preconditon
+//		if(!defaultPrecondition()) return;
 		
 		reporter.startTimer();
 		while(visitedEdges.size() < graph.getEdgeCount()){
@@ -140,6 +141,12 @@ public class Hierholzer {
 		return eulerKreis;
 	}
 	
+	private boolean defaultPrecondition(){
+		
+		boolean c1 = (graph.getEdgeCount() <= graph.getVertexCount()-1);
+		
+		return c1;
+	}
 	
 	
 	/**

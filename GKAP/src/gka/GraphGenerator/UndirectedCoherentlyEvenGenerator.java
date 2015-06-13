@@ -1,8 +1,11 @@
 package gka.GraphGenerator;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import edu.uci.ics.jung.graph.Graph;
 import gka.GraphBuilder.Extension.OwnEdge;
@@ -11,102 +14,170 @@ import gka.GraphBuilder.Extension.VertexNameGenerator;
 
 public class UndirectedCoherentlyEvenGenerator {
 
-	private Graph<OwnVertex, OwnEdge> _graph;
-	private List<OwnVertex> _verticesList;
+	private Graph<OwnVertex, OwnEdge> graph;
+	private List<OwnVertex> verticesList;
+	private List<List<OwnVertex>> disjointCircles;
+	
+	private Random rand;
 
 	public UndirectedCoherentlyEvenGenerator(Graph<OwnVertex, OwnEdge> graph) {
-		_graph = graph;
-		_verticesList = new ArrayList<OwnVertex>();
-		// TODO Auto-generated constructor stub
-
+		this.graph = graph;
+		this.verticesList = new ArrayList<OwnVertex>();
+		this.disjointCircles = new LinkedList();
+		
+		this.rand = new Random();
 	}
 
 	public void generate(int vertices, int edges) {
-		System.out.println(vertices);
-		System.out.println(edges);
-
-		if(vertices <= 0) return;
-
-		// create Vertices	
-		createVertices(vertices);	
 		
-		// create Edges
-		createCoherentlyEdges(edges);
+		// preconditions vertices and edges
+		if(!defaultPrecondition(vertices,edges)) return;
+		// create vertices
+		List<OwnVertex> verts = createVertices(vertices);
+		
+		// create disjunkte kreise
+		createCircles(verts);
+		
+		// connect disjunkte kreise
+		connectCircles();
+		
+		// korrektur auf ungeraden Knotengrad
+		correctGraph();
+		
 	}	
 
-
-	private OwnVertex getRandomVertex(Graph<OwnVertex,OwnEdge> g){
+	private List<OwnVertex> createVertices(int vertices){
 		
-		Random r = new Random();
+		List<OwnVertex> createdVertices = new LinkedList();
 		
-		int j = r.nextInt(g.getVertexCount());
-		
-		for(OwnVertex v: g.getVertices()){
-			
-			if(j <= 0){
-				return v;
-			}
-			j--;
-		}
-		return null;
-	}
-	
-	
-	private void createVertices(int vertices)
-	{
 		for(int i = 0; i < vertices; i++){
+		
+			String vertexName = VertexNameGenerator.getInstance().getNext();
+			OwnVertex v = new OwnVertex(vertexName);
+			createdVertices.add(v);
+		}
+		
+		return createdVertices;
+	}
+	
+	private void createCircles(List<OwnVertex> createdVertices){
+		
+		final int minimalCircleSize = 3;
+		
+		int tmpMaxSize = createdVertices.size()/4;
+		final int maximalCircleSize = (tmpMaxSize < 3 ? 4 : tmpMaxSize);
+		
+		
+		while(!createdVertices.isEmpty() && createdVertices.size() >= minimalCircleSize){
+
+			List<OwnVertex> disjointCircle = new LinkedList();
+			int numberOfCircles = rand.nextInt((maximalCircleSize-minimalCircleSize))+minimalCircleSize;
 			
-			OwnVertex v = new OwnVertex(VertexNameGenerator.getInstance().getNext());	
-			if(!_graph.addVertex(v)){
-				while(!_graph.addVertex(v)){
-					v = new OwnVertex(VertexNameGenerator.getInstance().getNext());	
-				}
+			for(int i = 0; i <= numberOfCircles && !createdVertices.isEmpty(); i++){
+				
+				disjointCircle.add(createdVertices.remove(0));
+			}
+			disjointCircles.add(disjointCircle);
+		}
+		
+		disjointCircles.get(0).addAll(createdVertices);
+	}
+	
+	
+	private void connectCircles(){
+		
+		for(List<OwnVertex> circle : disjointCircles){
+			
+			OwnVertex start  = circle.get(0);
+			OwnVertex before = start;
+			for(int i = 1; i < circle.size(); i++){
+				
+				OwnVertex v = circle.get(i);
+				
+				// connect together
+				connectVerts(before, v);
+				before = v;
+			}
+			connectVerts(before, start);
+		}
+		
+		
+		final int minConnections = disjointCircles.size();
+		final int maxConnections = (graph.getVertexCount()+1)*10;
+		
+		for(int i = 0; i < (rand.nextInt(maxConnections-minConnections)+minConnections); i++){
+			
+			int index1 = i % disjointCircles.size();
+			int index2 = (i+1) % disjointCircles.size();
+			
+			connectTwoCircles(index1, index2);
+		}
+	}
+	
+	private void correctGraph(){
+		
+		List<OwnVertex> vertsToConnect = getVeticesWitUngeradenKnotengrad();
+		
+		for(int i = 0; !vertsToConnect.isEmpty(); i++){
+			
+			int index1 = i % vertsToConnect.size();
+			OwnVertex v1 = vertsToConnect.remove(index1);
+			
+			int index2 = (i+1) % vertsToConnect.size();
+			OwnVertex v2 = vertsToConnect.remove(index2);
+			
+			connectVerts(v1, v2);
+		}
+	}
+	
+	
+	private List<OwnVertex> getVeticesWitUngeradenKnotengrad(){
+		
+		List<OwnVertex> vertices = new ArrayList();
+		
+		for(OwnVertex v : graph.getVertices()){
+			
+			if((graph.getOutEdges(v).size() % 2) != 0){
+				vertices.add(v);
 			}
 		}
+		
+		return vertices;
 	}
 	
-	private void createAEdge(OwnVertex source, OwnVertex target){
-		
-		int max = 1000;
-		Random rand = new Random();
-		
-		OwnEdge e = new OwnEdge(rand.nextInt(max));
-		
-		if(source == null || target == null)
-		{	
-			do{
-			source = getRandomVertex(_graph);
-			target = getRandomVertex(_graph);	
-			} while(source.equals(target) && (_graph.getVertexCount() > 1));
-		}
-				
-		_graph.addEdge(e, source, target);
-		
-	}
-
 	
-	private void createCoherentlyEdges(int edges)
-	{
-		if(edges < _graph.getVertexCount()) edges +=  (_graph.getVertexCount()+1)*2;
+	private void connectTwoCircles(int circle1, int circle2){
 		
-		OwnVertex lastVertex = getRandomVertex(_graph);
+		OwnVertex v1 = getRandomVertexFromList(disjointCircles.get(circle1));
+		OwnVertex v2 = getRandomVertexFromList(disjointCircles.get(circle2));
 		
-		// connect minimum
-		for(OwnVertex v : _graph.getVertices()){
-			
-			if(v.equals(lastVertex)) continue;
-			
-			createAEdge(lastVertex, v);
-			
-			lastVertex = v;
-			
-		}
-		
-		int edgesToAdd = (edges - _graph.getEdgeCount());
-		
-		for(int i = 0; i < edgesToAdd; i++){
-			createAEdge(null, null);
-		}
+		OwnEdge e = new OwnEdge();
+		graph.addEdge(e, v1, v2);
 	}
-
+	
+	
+	
+	private OwnVertex getRandomVertexFromList(List<OwnVertex> vertexList){
+		
+		int index = rand.nextInt(vertexList.size());
+		OwnVertex v = vertexList.get(index);
+		
+		return v;
+	}
+	
+	private void connectVerts(OwnVertex v1, OwnVertex v2){
+		
+		OwnEdge e = new OwnEdge();
+		graph.addVertex(v1);
+		graph.addVertex(v2);
+		graph.addEdge(e, v1,v2);
+	}
+	
+	
+	private boolean defaultPrecondition(int vertices, int edges){
+		
+		if(vertices == 0) return false;
+		if(vertices < 3) return false; 
+		else return true;
+	}
 }
