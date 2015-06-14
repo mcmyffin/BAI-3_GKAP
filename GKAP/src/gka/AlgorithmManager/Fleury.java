@@ -44,13 +44,16 @@ public class Fleury{
 			
 			reporter.addPathNode(v);
 			
+			// Outgoing Edge-Set
 			Collection<OwnEdge> outgouingEdges = new LinkedHashSet(graph.getOutEdges(v));
+			// Existing Edge-Set = {Outgoing Edge-Set} \ {Deleted Edge-Set}
 			outgouingEdges.removeAll(delEdges);
 			
 			OwnEdge e = null;
 			if(outgouingEdges.size() > 1){
 				for(OwnEdge aEdge : outgouingEdges){
 					
+					// If this edge is not a bridge edge , then found valid edge
 					if(advancedBFS(v, start_node, aEdge)){
 						e = aEdge;
 						break;
@@ -65,10 +68,14 @@ public class Fleury{
 
 			if(e == null) break;
 			else reporter.countPath();
-			
+
+			// Note the Edge as deleted
 			delEdges.add(e);
-			OwnVertex vertexOnTheOppesite = graph.getOpposite(v, e);
-			queue.offer(vertexOnTheOppesite);
+			
+			// Get The Vertex on the opposite 
+			// and add to the queue
+			OwnVertex vertexOnTheOpposite = graph.getOpposite(v, e);
+			queue.offer(vertexOnTheOpposite);
 
 		}
 		reporter.stopTimer();
@@ -77,7 +84,6 @@ public class Fleury{
 	private boolean advancedBFS(OwnVertex startnode, OwnVertex target, OwnEdge edgeToIgnore){
 		
 		if(startnode.equals(target)) return true;
-		
 		
 		Queue<OwnVertex> queue = new ArrayDeque<OwnVertex>();
 		Set<OwnVertex> visited = new HashSet<OwnVertex>();
@@ -91,17 +97,17 @@ public class Fleury{
 			
 			for(OwnVertex successor : graph.getSuccessors(currentVertex)){
 				
-				// advanced step
-				Collection<OwnEdge> edgesBetween = graph.findEdgeSet(currentVertex, successor);
-				
-				if(edgesBetween.contains(edgeToIgnore) || delEdges.containsAll(edgesBetween)){
-					continue;
-				}
-				
 				if(visited.contains(successor)) continue;
 				
-				if(successor.equals(target)) return true;
 				
+				// advanced step
+				Collection<OwnEdge> edgesBetween = new HashSet(graph.findEdgeSet(currentVertex, successor));
+				edgesBetween.removeAll(delEdges);
+				
+				if(edgesBetween.isEmpty()) continue;
+				if(edgesBetween.contains(edgeToIgnore) && edgesBetween.size() == 1) continue;
+				
+				if(successor.equals(target)) return true;
 				
 				if(!queue.contains(successor)) queue.offer(successor);
 			}

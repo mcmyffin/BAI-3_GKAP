@@ -1,16 +1,11 @@
 package gka.AlgorithmManager.Extension;
 
-import edu.uci.ics.jung.graph.Graph;
-import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Fleury_Hierholzer_Report implements IAlgoReport{
-
 
 	private String algName;
 	private int pathLength = 0;
@@ -29,15 +24,11 @@ public class Fleury_Hierholzer_Report implements IAlgoReport{
 		pathLength++;
 	}
 	
-	public void addVertexToEulerPfad(OwnVertex v){
-		this.path.add(v);
+	public void addEulerianPath(List<OwnVertex> eulerianPath){
+		this.path = eulerianPath;
 	}
 	
-	public void addEulerPfad(List<OwnVertex> eulerpfad){
-		this.path = eulerpfad;
-	}
-	
-	public List<OwnVertex> getEulerKreis(){
+	public List<OwnVertex> getEulerianCircuit(){
 		return this.path;
 	}
 	
@@ -90,10 +81,10 @@ public class Fleury_Hierholzer_Report implements IAlgoReport{
 
 		String line1  = "Algorithm: "+algName;
 		String line2  = "Time: "+getTotalTimeInSec()+" Sec";
-		String line3  = "Number of Edge in EulerTour "+getPathLength();
-		String line4  = "Eulerkreis "+getEulerKreis();
+		String line3  = "Number of Edge in Eulerian circuit "+getPathLength();
+		String line4  = "Eulerian circuit "+getEulerianCircuit();
 		
-		String result = line1+"\n"+line2+"\n"+line3+"\n"+line4+"\n";
+		String result = line1+"\n"+line2+"\n"+line3+"\n\n\n"+line4+"\n";
 		return result;
 	}
 

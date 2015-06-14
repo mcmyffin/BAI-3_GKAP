@@ -24,7 +24,7 @@ public class Hierholzer {
 	
 	private Set<OwnEdge> visitedEdges;
 	private Set<OwnVertex> visitedVertices;
-	private List<List<OwnVertex>> disjunkteEulerKreise;
+	private List<List<OwnVertex>> disjointCircles;
 	private Queue<OwnVertex> workingQueue;
 	
 	Hierholzer(Graph<OwnVertex,OwnEdge> graph, OwnVertex start, Fleury_Hierholzer_Report reporter){
@@ -35,59 +35,72 @@ public class Hierholzer {
 		
 		this.visitedEdges = new HashSet();
 		this.visitedVertices = new HashSet();
-		this.disjunkteEulerKreise = new LinkedList<List<OwnVertex>>();
+		this.disjointCircles = new LinkedList<List<OwnVertex>>();
 		this.workingQueue = new ArrayDeque();
 	}
 	
 	
 	void startHierholzer(){
 		
-		// TODO Preconditon
-//		if(!defaultPrecondition()) return;
-		
 		reporter.startTimer();
+		
+		if(!precondition()) return;
+		
 		while(visitedEdges.size() < graph.getEdgeCount()){
 
-			// initialisiere queue mit startVertex
-			OwnVertex tmpstartNode = chooseNextVertex(); // TODO;			
+			// initialize temporary-startnode and add to queue
+			OwnVertex tmpstartNode = chooseNextVertex(); 			
 			workingQueue.offer(tmpstartNode);
 			
-			List<OwnVertex> einDisjunkterKreis = new LinkedList<OwnVertex>();
+			List<OwnVertex> oneCircle = new LinkedList<OwnVertex>();
 			while(!workingQueue.isEmpty()){
 				
-				OwnVertex v = workingQueue.poll();
-				einDisjunkterKreis.add(v);
-				visitedVertices.add(v);
+				// get next Vertex from Queue
+				OwnVertex vertex = workingQueue.poll();
 				
-				Collection<OwnEdge> outgouingEdges = new LinkedHashSet(graph.getOutEdges(v));
+				// add Vertex to Circle
+				oneCircle.add(vertex);
+				visitedVertices.add(vertex);
+				
+				// Outgoing Edge-Set
+				Collection<OwnEdge> outgouingEdges = new LinkedHashSet(graph.getOutEdges(vertex));
+				// Unvisited Edge-Set = {Outgoing Edge-Set} \ {Deleted Edge-Set}
 				outgouingEdges.removeAll(visitedEdges);
 				
-				OwnEdge e = null;
-				for(OwnEdge aEdge : outgouingEdges){
-					e = aEdge;
+				
+				OwnEdge nextEdge = null;
+				// Select Edge from Unvisited Edge-Set
+				for(OwnEdge anEdge : outgouingEdges){
+					nextEdge = anEdge;
 					break;
 				}
 				
-				visitedEdges.add(e);
+				// Note the Edge as visited
+				visitedEdges.add(nextEdge);
 				reporter.countPath();
-				OwnVertex vertexOnTheOppesite = graph.getOpposite(v, e);
+
+				// Get the Vertex on the opposite 
+				OwnVertex vertexOnTheOpposite = graph.getOpposite(vertex, nextEdge);
 				
-				
-				if(tmpstartNode.equals(vertexOnTheOppesite)){
-					einDisjunkterKreis.add(vertexOnTheOppesite);
-					disjunkteEulerKreise.add(einDisjunkterKreis);
-				}else{
-					workingQueue.offer(vertexOnTheOppesite);
+				// if circle close
+				if(tmpstartNode.equals(vertexOnTheOpposite))
+				{
+					// add Vertex no the opposite to circle and save circle
+					oneCircle.add(vertexOnTheOpposite);
+					disjointCircles.add(oneCircle);
+				}
+				else{
+					// add next Vertex to queue
+					workingQueue.offer(vertexOnTheOpposite);
 				}
 			}
-			
-			
 		}
 		
-		List<OwnVertex> eulerkreis = new ArrayList();
-		buildEulerKreis(eulerkreis,0);
+		// build EulerianPath Recursive
+		List<OwnVertex> eulerianPath = new ArrayList();
+		buildEulerianCircuit(eulerianPath,0);
 
-		reporter.addEulerPfad(eulerkreis);
+		reporter.addEulerianPath(eulerianPath);
 		reporter.stopTimer();
 	}
 	
@@ -97,61 +110,59 @@ public class Hierholzer {
 		if(visitedEdges.isEmpty()) return startNode;
 		
 		for(OwnVertex vertex : visitedVertices){
-			// WARNING LANGE LAUFZEIT!!!
-			Set<OwnEdge> outgouingEdges = new LinkedHashSet(graph.getOutEdges(vertex));
+			
+			Set<OwnEdge> outgouingEdges = new HashSet(graph.getOutEdges(vertex));
 			outgouingEdges.removeAll(visitedEdges);
 			
-			if(!outgouingEdges.isEmpty()){
-				return vertex;
-			}
+			if(!outgouingEdges.isEmpty()) return vertex;
+			
 		}
 		return null;
 	}
 	
-	private List<OwnVertex> buildEulerKreis(List<OwnVertex> eulerKreis, int i){
+	private List<OwnVertex> buildEulerianCircuit(List<OwnVertex> eulerianPath, int i){
 		
-		if(i >= disjunkteEulerKreise.size()){
-			return eulerKreis;
-		}
+		// if index i >= totalCircles
+		if(i >= disjointCircles.size()) return eulerianPath;
 		
-		if(i+1 >= disjunkteEulerKreise.size()){
-			List<OwnVertex> einDisjunkterKreis = disjunkteEulerKreise.get(i);
-			for(OwnVertex v: einDisjunkterKreis){
-				eulerKreis.add(v);
+		// if last Circle
+		if(i+1 >= disjointCircles.size())
+		{
+			List<OwnVertex> oneCircle = disjointCircles.get(i);
+			for(OwnVertex vertex: oneCircle)
+			{
+				eulerianPath.add(vertex);
 			}
-			return eulerKreis;
+			return eulerianPath;
 		}
 		
-		OwnVertex naechsterSchnitt = disjunkteEulerKreise.get(i+1).get(0);
-		List<OwnVertex>     einDisjunkterKreisListe = disjunkteEulerKreise.get(i);
-		Iterator<OwnVertex> einDisjunkterKreisIterator= einDisjunkterKreisListe.iterator();
-		eulerKreis.add(einDisjunkterKreisIterator.next());
+		OwnVertex nextCircleCut = disjointCircles.get(i+1).get(0);
 		
-		while(einDisjunkterKreisIterator.hasNext()){
+		List<OwnVertex>     oneCircle = disjointCircles.get(i);
+		Iterator<OwnVertex> oneCircleIterator = oneCircle.iterator();
+		eulerianPath.add(oneCircleIterator.next());
+		
+		while(oneCircleIterator.hasNext())
+		{
+			// get Next Vertex
+			OwnVertex vertex = oneCircleIterator.next();
 			
-			OwnVertex v = einDisjunkterKreisIterator.next();
-			
-			if(v.equals(naechsterSchnitt)){
-				buildEulerKreis(eulerKreis, i+1);
-			}else{
-				eulerKreis.add(v);
+			// if Circle cutting with next Circle
+			if(vertex.equals(nextCircleCut))
+			{
+				buildEulerianCircuit(eulerianPath, i+1);
+			}
+			else
+			{
+				eulerianPath.add(vertex);
 			}
 		}
 		
-		return eulerKreis;
+		return eulerianPath;
 	}
 	
-	private boolean defaultPrecondition(){
-		
-		boolean c1 = (graph.getEdgeCount() <= graph.getVertexCount()-1);
-		
+	private boolean precondition(){
+		boolean c1 = (graph.getEdgeCount() > graph.getVertexCount()-1);
 		return c1;
 	}
-	
-	
-	/**
-	 * 
-	 * {Knotengrad von v1} \ {Visited edges}
-	 * 
-	 */
 }
