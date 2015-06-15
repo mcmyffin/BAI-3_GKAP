@@ -198,7 +198,7 @@ public interface IGraphManager {
 	 * @param withFibHeap
 	 * @return Pair<AlgoReport,VisualizationView>
 	 */
-	public Pair<IAlgoReport,VisualizationViewer> startPrim(String start, boolean withFibHeap);
+	public Pair<IAlgoReport,VisualizationViewer> startPrim(boolean withFibHeap);
 	
 	/**
 	 * Generate new Graph
@@ -207,6 +207,27 @@ public interface IGraphManager {
 	 * @return
 	 * @throws GraphBuildException
 	 */
-	public VisualizationViewer<OwnVertex, OwnEdge>  generateNewGraph(int vertices, int edges, int spread, 
-					int edgeWeightMin, int edgeWeightMax, GraphType...graphTypes) throws GraphBuildException;
+	public VisualizationViewer<OwnVertex, OwnEdge>  generateNewGraph(int vertices, int edges, 
+								boolean coherently, GraphType...graphTypes) throws GraphBuildException;
+	
+	public VisualizationViewer<OwnVertex, OwnEdge> generateNewCoherentlyEvenGraph(int vertices, int edges) 
+								throws GraphBuildException;
+	
+	/**
+	 * Hierholzer Algorithm
+	 * Start Hierholzer Algorithm
+	 * 
+	 * @param start
+	 * @return
+	 */
+	public IAlgoReport startHierholzer(String start);
+	
+	/**
+	 * Fleury Algorithm
+	 * Start Fleury Algorithm
+	 * 
+	 * @param start
+	 * @return
+	 */
+	public IAlgoReport startFleury(String start);
 }

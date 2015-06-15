@@ -28,6 +28,8 @@ public class SearchDialog extends JDialog implements ActionListener{
 	public static final String BEADTHFIRSTSEARCH = "BFS";
 	public static final String DIJKSTRA = "DIJKSTRA";
 	public static final String ASTERNCHEN = "A*";
+	public static final String HIERHOLZER = "HIERHOLZER";
+	public static final String FLEURY = "FLEURY";
 	
 
 	/**
@@ -94,6 +96,8 @@ public class SearchDialog extends JDialog implements ActionListener{
 
 	private void preloadVertices(){
 		
+		if(algoMode.equals(HIERHOLZER) || algoMode.equals(FLEURY)) targetVertexBox.setEnabled(false);;
+		
 		startVertexBox.removeAllItems();
 		targetVertexBox.removeAllItems();
 		
@@ -110,11 +114,12 @@ public class SearchDialog extends JDialog implements ActionListener{
 		// OK Button
 		if(e.getActionCommand().equals(okButton.getText()))
 		{
-			// precondition
-			if(startVertexBox.getItemCount() == 0 && targetVertexBox.getItemCount() == 0) return;
 			
 			if(this.algoMode.equals(SearchDialog.BEADTHFIRSTSEARCH))
 			{
+				// precondition
+				if(startVertexBox.getItemCount() == 0 && targetVertexBox.getItemCount() == 0) return;
+				
 				String v1 = startVertexBox.getSelectedItem().toString();
 				String v2 = targetVertexBox.getSelectedItem().toString();
 				
@@ -123,6 +128,9 @@ public class SearchDialog extends JDialog implements ActionListener{
 			}
 			else if(this.algoMode.equals(SearchDialog.DIJKSTRA))
 			{
+				// precondition
+				if(startVertexBox.getItemCount() == 0 && targetVertexBox.getItemCount() == 0) return;
+				
 				String v1 = startVertexBox.getSelectedItem().toString();
 				String v2 = targetVertexBox.getSelectedItem().toString();
 				
@@ -131,11 +139,32 @@ public class SearchDialog extends JDialog implements ActionListener{
 			}
 			else if(this.algoMode.equals(SearchDialog.ASTERNCHEN))
 			{
+				// precondition
+				if(startVertexBox.getItemCount() == 0 && targetVertexBox.getItemCount() == 0) return;
+				
 				String v1 = startVertexBox.getSelectedItem().toString();
 				String v2 = targetVertexBox.getSelectedItem().toString();
 				
 				this.dispose();
 				parent.startAStar(v1, v2);
+			}
+			else if(this.algoMode.equals(HIERHOLZER))
+			{
+				if(startVertexBox.getItemCount() == 0) return;
+				
+				String start = startVertexBox.getSelectedItem().toString();
+				
+				this.dispose();
+				parent.startHierholzer(start);
+			}
+			else if(this.algoMode.equals(FLEURY))
+			{
+				if(startVertexBox.getItemCount() == 0) return;
+				
+				String start = startVertexBox.getSelectedItem().toString();
+				
+				this.dispose();
+				parent.startFleury(start);
 			}
 		}
 		else if(e.getActionCommand().equals(cancelButton.getText()))

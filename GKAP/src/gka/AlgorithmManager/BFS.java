@@ -25,7 +25,7 @@ public class BFS {
 	Stack<OwnVertex> path;
 	Map<OwnVertex,Integer> vertexLength;
 	
-	public BFS(Graph<OwnVertex, OwnEdge> graph, OwnVertex start_node, OwnVertex goal_node, IAlgoReport reporter){
+	BFS(Graph<OwnVertex, OwnEdge> graph, OwnVertex start_node, OwnVertex goal_node, IAlgoReport reporter){
 		
 		this.reporter 	= reporter;
 		this._start 	= start_node;

@@ -4,6 +4,7 @@ import javafx.util.Pair;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import gka.AlgorithmManager.Extension.IAlgoReport;
+import gka.GraphBuilder.Extension.OwnEdge;
 import gka.GraphBuilder.Extension.OwnVertex;
 
 public interface IAlgorithManager{
@@ -42,7 +43,7 @@ public interface IAlgorithManager{
 	 * 
 	 * @return AlgoReport with result Information
 	 */
-	public Pair<IAlgoReport,Graph> startKruksal();
+	public Pair<IAlgoReport, Graph<OwnVertex, OwnEdge>> startKruksal();
 	
 	
 	/**
@@ -51,5 +52,21 @@ public interface IAlgorithManager{
 	 * @param start_node
 	 * @return AlgoReport with result Information
 	 */
-	public Pair<IAlgoReport,Graph> startPrim(OwnVertex start_node, boolean withFibHeap);
+	public Pair<IAlgoReport,Graph<OwnVertex, OwnEdge>> startPrim(boolean withFibHeap);
+	
+	/**
+	 * Start Hierholzer Algorithm
+	 * 
+	 * @param start_node
+	 * @return
+	 */
+	public IAlgoReport startHierholzer(OwnVertex start_node);
+	
+	/**
+	 * Start Fleury Algortihm
+	 * 
+	 * @param start_node
+	 * @return
+	 */
+	public IAlgoReport startFleury(OwnVertex start_node);
 }

@@ -30,7 +30,7 @@ public class Dijkstra_AStar{
 	private Map<OwnVertex, Integer> _vertexLength;
 
 	
-	public Dijkstra_AStar(Graph<OwnVertex,OwnEdge> g, OwnVertex start, OwnVertex goal, 
+	Dijkstra_AStar(Graph<OwnVertex,OwnEdge> g, OwnVertex start, OwnVertex goal, 
 											IAlgoReport reporter, String algorithmType){
 		
 		this._graph 	  = g;

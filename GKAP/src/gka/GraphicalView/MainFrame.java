@@ -19,6 +19,7 @@ import gka.GraphVisualControler.IGraphManager;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FileDialog;
 
 import javafx.util.Pair;
 
@@ -31,6 +32,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FilenameFilter;
 
 import javax.swing.JCheckBox;
 import javax.swing.JMenu;
@@ -167,12 +169,33 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuItem_Kruskal = new JMenuItem("Kruskal");
 		menuItem_Kruskal.setActionCommand(menuItem_Kruskal.getText());
 		menuItem_Kruskal.addActionListener(this);
+		
+		menuItem_drawResult = new JCheckBox("Draw Result");
+		menuAlgorithm.add(menuItem_drawResult);
 		menuAlgorithm.add(menuItem_Kruskal);
 		
 		menuItem_Prim = new JMenuItem("Prim");
 		menuItem_Prim.setActionCommand(menuItem_Prim.getText());
 		menuItem_Prim.addActionListener(this);
 		menuAlgorithm.add(menuItem_Prim);
+		
+		menuItem_Prim_fib = new JMenuItem("Prim with Fibheap");
+		menuItem_Prim_fib.setActionCommand(menuItem_Prim_fib.getText());
+		menuItem_Prim_fib.addActionListener(this);
+		menuAlgorithm.add(menuItem_Prim_fib);
+		
+		separator_5 = new JSeparator();
+		menuAlgorithm.add(separator_5);
+		
+		menuItem_Hierzolzer = new JMenuItem("Hierholzer");
+		menuItem_Hierzolzer.setActionCommand(menuItem_Hierzolzer.getText());
+		menuItem_Hierzolzer.addActionListener(this);
+		menuAlgorithm.add(menuItem_Hierzolzer);
+		
+		menuItem_Fleury = new JMenuItem("Fleury");
+		menuItem_Fleury.setActionCommand(menuItem_Fleury.getText());
+		menuItem_Fleury.addActionListener(this);
+		menuAlgorithm.add(menuItem_Fleury);
 		
 		// Menu Help settings
 		menuHelp = new JMenu("Help");
@@ -202,7 +225,20 @@ public class MainFrame extends JFrame implements ActionListener{
 		setLocationRelativeTo(null);
 	}
 	
-	public void open(String path){
+	public void open(){
+		
+		FileDialog fd = new FileDialog(this,"Load Graph", FileDialog.LOAD);
+		fd.setFilenameFilter(new FilenameFilter() {
+			
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".graph");
+			}
+		});
+		
+		fd.setVisible(true);
+		String path = fd.getDirectory()+fd.getFile();
+		
 		if(path !=  null || !path.isEmpty())
 		{
 			try {
@@ -233,10 +269,10 @@ public class MainFrame extends JFrame implements ActionListener{
 		}
 	}
 	
-	public void newGraph(int vertices, int edges, int spread, int edgeWeightMin, int edgeWeightMax, GraphType...type){
+	public void newGraph(int vertices, int edges, boolean coherently, GraphType...type){
 		
 		try {
-			VisualizationViewer vv = gmanager.generateNewGraph(vertices, edges, spread, edgeWeightMin, edgeWeightMax, type);				
+			VisualizationViewer vv = gmanager.generateNewGraph(vertices, edges, coherently, type);				
 			
 			if(viewComponent != null) contentPane.remove(viewComponent);
 			viewComponent = vv;
@@ -258,8 +294,51 @@ public class MainFrame extends JFrame implements ActionListener{
 		}
 	}
 	
-	public void save(File path){
-		if(gmanager.saveGraph(path)){
+	public void newCoherentlyEvenGraph(int vertices, int edges){
+		
+		try{
+			
+			VisualizationViewer vv = gmanager.generateNewCoherentlyEvenGraph(vertices, edges);
+			
+			if(viewComponent != null) contentPane.remove(viewComponent);
+			viewComponent = vv;
+			
+			viewComponent.setVisible(drawMode.isSelected());
+			contentPane.add(viewComponent);
+			pickMode.setEnabled(true);
+			menuEdit.setEnabled(true);
+			menuAlgorithm.setEnabled(true);
+			menuHelp.setEnabled(true);
+			this.pack();
+			
+		} catch (GraphBuildException e) {
+		
+			String message = e.getMessage();
+			WarningDialog warningDialog = new WarningDialog(this, true, "ein Problem ist aufgetreten", message);
+			warningDialog.setVisible(true);
+		}
+	}
+	
+	public void save(){
+		
+		FileDialog fd = new FileDialog(this,"Load Graph",FileDialog.SAVE);
+		fd.setFilenameFilter(new FilenameFilter() {
+			
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".graph");
+			}
+		});
+		
+		fd.setVisible(true);
+		
+		String path = fd.getDirectory();
+		String file = fd.getFile();
+		
+		if(path == null || file == null) return;
+		
+		File aFile = new File(path+file);
+		if(gmanager.saveGraph(aFile)){
 		
 			WarningDialog wd = new WarningDialog(this, true, "Save Graph", "Graph saved");
 			wd.setVisible(true);
@@ -344,19 +423,63 @@ public class MainFrame extends JFrame implements ActionListener{
 		resultDialog.setVisible(true);
 	}
 	
-	public void startKruskal(){
+	public void startKruskal(boolean drawResult){
 		
 		Pair<IAlgoReport,VisualizationViewer> report = gmanager.startKruskal();
 		
 		SearchResultDialog searchResultDialog = new SearchResultDialog(this, false, report.getKey());
 		searchResultDialog.setVisible(true);
 		
-		DrawResultDialog drawResultDialog = new DrawResultDialog(this, false, report.getValue());
-		drawResultDialog.setVisible(true);
+		if(drawResult){
+			DrawResultDialog drawResultDialog = new DrawResultDialog(this, false, report.getValue());
+			drawResultDialog.setVisible(true);
+		}
 	}
 	
-	public void startPrim(String start, boolean withFibHeap){
-		// TODO
+	public void startPrim(boolean withFibHeap,boolean drawResult){
+
+		Pair<IAlgoReport,VisualizationViewer> report = gmanager.startPrim(withFibHeap);
+		
+		SearchResultDialog searchResultDialog = new SearchResultDialog(this, false, report.getKey());
+		searchResultDialog.setVisible(true);
+		
+		if(drawResult){
+			DrawResultDialog drawResultDialog = new DrawResultDialog(this, false, report.getValue());
+			drawResultDialog.setVisible(true);
+		}
+		
+	}
+	
+	public void startHierholzer(String start){
+		
+		IAlgoReport report; 
+		SearchResultDialog sr;
+		
+		try{
+			report = gmanager.startHierholzer(start);
+			sr = new SearchResultDialog(this, false, report);
+			sr.setVisible(true);
+			
+		}catch(NullPointerException ex){
+			WarningDialog warning = new WarningDialog(this, true, "NOT IMPLEMENTED", ex.getMessage());
+			warning.setVisible(true);
+		}
+	}
+	
+	public void startFleury(String start){
+		
+		IAlgoReport report;
+		SearchResultDialog sr;
+		
+		try{
+			report = gmanager.startFleury(start);
+			sr = new SearchResultDialog(this, false, report);
+			sr.setVisible(true);
+			
+		}catch(NullPointerException ex){
+			WarningDialog warning = new WarningDialog(this, true, "NOT IMPLEMENTED", ex.getMessage());
+			warning.setVisible(true);
+		}
 	}
 	
 	@Override
@@ -373,15 +496,21 @@ public class MainFrame extends JFrame implements ActionListener{
 			else if(e.getActionCommand().equals(menuItem_OpenFile.getText()))
 			{
 				// Open File
-				FileChooser fileChooser = new FileChooser(this, true, FileChooser.LOAD_MODE);
-				fileChooser.setVisible(true);
+//				FileChooser fileChooser = new FileChooser(this, true, FileChooser.LOAD_MODE);
+//				fileChooser.setVisible(true);
+				
+				
+				this.open();
 
 			}
 			else if(e.getActionCommand().equals(menuItem_SaveFile.getText()))
 			{
 				// Save File
-				FileChooser fileChooser = new FileChooser(this, true, FileChooser.SAVE_MODE);
-				fileChooser.setVisible(true);
+//				FileChooser fileChooser = new FileChooser(this, true, FileChooser.SAVE_MODE);
+//				fileChooser.setVisible(true);
+				
+				this.save();
+				
 			}
 			else if(e.getActionCommand().equals(menuItem_Quit.getText()))
 			{
@@ -438,13 +567,32 @@ public class MainFrame extends JFrame implements ActionListener{
 			}
 			else if(e.getActionCommand().equals(menuItem_Kruskal.getText()))
 			{
-				startKruskal();
+				startKruskal(menuItem_drawResult.isSelected());
 			}
 			else if(e.getActionCommand().equals(menuItem_Prim.getText()))
 			{
-				// todo
-				WarningDialog warn = new WarningDialog(this, true, "NOT IMPLEMENTED", "need more manpower !!!");
-				warn.setVisible(true);
+				startPrim(false,menuItem_drawResult.isSelected());
+			
+			}
+			else if(e.getActionCommand().equals(menuItem_Prim_fib.getText()))
+			{
+				startPrim(true, menuItem_drawResult.isSelected());
+			}
+			else if(e.getActionCommand().equals(menuItem_Hierzolzer.getText()))
+			{
+			
+				// TODO
+				SearchDialog sd = new SearchDialog(this, true, SearchDialog.HIERHOLZER);
+				sd.setVisible(true);
+				
+			}
+			else if(e.getActionCommand().equals(menuItem_Fleury.getText()))
+			{
+				
+				// TODO
+				SearchDialog sd = new SearchDialog(this, true, SearchDialog.FLEURY);
+				sd.setVisible(true);
+				
 			}
 		}
 		// Menu Help
@@ -495,6 +643,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JSeparator separator_2;
 	private JSeparator separator_3;
 	private JSeparator separator_4;
+	private JSeparator separator_5;
 
 	// Menu components
 	private JMenuBar menuBar;
@@ -513,6 +662,8 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenuItem menuItem_Reload;
 	private JCheckBox pickMode;
 	private JCheckBox drawMode;
+	private VisualizationViewer viewComponent;
+	
 	private JMenuItem menuItem_BFS;
 	
 	private JMenuItem menuItem_Dijkstra;
@@ -520,5 +671,10 @@ public class MainFrame extends JFrame implements ActionListener{
 	
 	private JMenuItem menuItem_Kruskal;
 	private JMenuItem menuItem_Prim;
-	private VisualizationViewer viewComponent;
+	private JMenuItem menuItem_Prim_fib;
+	private JCheckBox menuItem_drawResult;	
+	
+	private JMenuItem menuItem_Hierzolzer;
+	private JMenuItem menuItem_Fleury;
+	
 }

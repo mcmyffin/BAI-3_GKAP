@@ -31,6 +31,7 @@ public class FileSaver {
 			
 			for(String line : aList){
 				
+				if(line == null) continue;
 				bw.write(line);
 				bw.newLine();
 			}

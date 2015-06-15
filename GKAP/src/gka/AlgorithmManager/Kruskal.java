@@ -1,7 +1,10 @@
 package gka.AlgorithmManager;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -23,7 +26,7 @@ public class Kruskal {
 	
 	private Graph<OwnVertex,OwnEdge> resultGraph;
 	
-	public Kruskal(Graph<OwnVertex,OwnEdge> graph, Kruskal_Prim_Report reporter){
+	Kruskal(Graph<OwnVertex,OwnEdge> graph, Kruskal_Prim_Report reporter){
 		
 		this.graph = graph;
 		this.reporter = reporter;
@@ -43,7 +46,7 @@ public class Kruskal {
 		// start Timer
 		reporter.startTimer();
 		
-		while(resultGraph.getVertexCount() != graph.getVertexCount()){
+		while(resultGraph.getEdgeCount() < graph.getVertexCount()-1 && !edges.isEmpty()){
 			
 			// get edge with minimal Length
 			OwnEdge minimalEdge = edges.poll();
@@ -56,10 +59,9 @@ public class Kruskal {
 			
 			// if both Vertices contains resultGraph then check for cycle
 			if(resultGraph.containsVertex(v1) && resultGraph.containsVertex(v2)){
-				int vertexCount = resultGraph.getVertexCount();
-				int edgeCount = resultGraph.getEdgeCount();
-				
-				if((edgeCount+1) >= vertexCount) continue;
+				reporter.countGraphAccess();
+				reporter.countGraphAccess();
+				if(checkForCycle(v1,v2,resultGraph)) continue;
 			}
 			
 			resultGraph.addVertex(v1);
@@ -67,6 +69,8 @@ public class Kruskal {
 			
 			resultGraph.addEdge(minimalEdge, v1, v2);
 		}
+		// stop Timer
+		reporter.stopTimer();
 		
 		// count pathLength
 		int totalPathLength = 0;
@@ -79,8 +83,7 @@ public class Kruskal {
 		// document minimalSpannTree
 		reporter.addMinimalSpanningTree(resultGraph);
 
-		// stop Timer
-		reporter.stopTimer();
+		
 	}
 	
 	/**** private helper Methods ****/
@@ -94,6 +97,33 @@ public class Kruskal {
 			edgeQueue.offer(e);
 		}
 		return edgeQueue;
+	}
+	
+	private boolean checkForCycle(OwnVertex v1,OwnVertex v2, Graph<OwnVertex,OwnEdge> g){
+		
+		Queue<OwnVertex> queue = new ArrayDeque<OwnVertex>();
+		Set<OwnVertex> visited = new HashSet<OwnVertex>();
+		
+		queue.offer(v1);
+		
+		while(!queue.isEmpty()){
+
+			OwnVertex currentVertex = queue.poll();
+			visited.add(currentVertex);
+			
+			for(OwnVertex successor : g.getSuccessors(currentVertex)){
+				
+				reporter.countGraphAccess();
+				
+				if(visited.contains(successor)) continue;
+				
+				if(successor.equals(v2)) return true;
+				
+				if(!queue.contains(successor)) queue.offer(successor);
+			}
+		}
+		
+		return false;
 	}
 
 }

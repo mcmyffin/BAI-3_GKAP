@@ -26,7 +26,7 @@ public class UndirectedWeightedAttributedGenerator {
 		this.vertexValueMap = new HashMap<OwnVertex, Integer>();
 	}
 	
-	public void generate(int vertices, int edges, int minEdgeLength, int maxEdgeLenth, int spread){
+	public void generate(int vertices, int edges, boolean coherently){
 		
 		// precondition
 		if(vertices <= 0) return;

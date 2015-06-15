@@ -4,6 +4,7 @@ import javafx.util.Pair;
 import edu.uci.ics.jung.graph.Graph;
 import gka.AlgorithmManager.Extension.BFS_Report;
 import gka.AlgorithmManager.Extension.Dijkstra_AStar_Report;
+import gka.AlgorithmManager.Extension.Fleury_Hierholzer_Report;
 import gka.AlgorithmManager.Extension.IAlgoReport;
 import gka.AlgorithmManager.Extension.Kruskal_Prim_Report;
 import gka.GraphBuilder.Extension.OwnEdge;
@@ -52,7 +53,7 @@ public class AlgorithmManager implements IAlgorithManager{
 
 	
 	@Override
-	public Pair<IAlgoReport,Graph> startKruksal() {
+	public Pair<IAlgoReport,Graph<OwnVertex, OwnEdge>> startKruksal() {
 		
 		Kruskal_Prim_Report reporter = new Kruskal_Prim_Report("Kruskal");
 		Kruskal algorithm = new Kruskal(graph,reporter);
@@ -60,19 +61,48 @@ public class AlgorithmManager implements IAlgorithManager{
 		algorithm.startKruskal();
 		
 		
-		return new Pair<IAlgoReport, Graph>((IAlgoReport) reporter,reporter.getMinimalSpanningTree());
+		return new Pair<IAlgoReport, Graph<OwnVertex, OwnEdge>>((IAlgoReport) reporter,reporter.getMinimalSpanningTree());
 	}
 
 	
 	@Override
-	public Pair<IAlgoReport,Graph> startPrim(OwnVertex start_node, boolean withFibHeap) {
+	public Pair<IAlgoReport,Graph<OwnVertex, OwnEdge>> startPrim(boolean withFibHeap) {
 		
-		Kruskal_Prim_Report reporter = new Kruskal_Prim_Report("Prim");
-		Prim algorithm = new Prim(graph, start_node, withFibHeap,reporter);
+		Kruskal_Prim_Report reporter; 
 		
-		algorithm.startPrim();
+		if(withFibHeap){
+			reporter = new Kruskal_Prim_Report("Prim FibHeap");
+			PrimFib algorithm = new PrimFib(graph, reporter);
+			algorithm.startPrim();
+		}else{
+			reporter = new Kruskal_Prim_Report("Prim");
+			Prim algorithm = new Prim(graph, reporter);
+			algorithm.startPrim();
+		}
+
+		return new Pair<IAlgoReport,Graph<OwnVertex, OwnEdge>>((IAlgoReport) reporter,reporter.getMinimalSpanningTree());
+	}
+
+	@Override
+	public IAlgoReport startHierholzer(OwnVertex start_node) {
+
+		Fleury_Hierholzer_Report reporter = new Fleury_Hierholzer_Report("Hierholzer");
+	
+		Hierholzer algortihm = new Hierholzer(graph, start_node, reporter);
+		algortihm.startHierholzer();
 		
-		return null;
+		return (IAlgoReport) reporter;
+	}
+
+	@Override
+	public IAlgoReport startFleury(OwnVertex start_node) {
+		
+		Fleury_Hierholzer_Report reporter = new Fleury_Hierholzer_Report("Fleury");
+		
+		Fleury algorithm = new Fleury(graph,start_node, reporter);
+		algorithm.startFleury();
+
+		return (IAlgoReport) reporter;
 	}
 
 }

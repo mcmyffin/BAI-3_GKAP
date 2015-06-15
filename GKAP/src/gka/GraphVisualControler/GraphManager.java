@@ -153,7 +153,7 @@ public class GraphManager implements IGraphManager{
 	public Pair<IAlgoReport,VisualizationViewer> startKruskal() {
 		
 		algoManager = new AlgorithmManager(adtGraph);
-		Pair<IAlgoReport,Graph> reportPair = algoManager.startKruksal();
+		Pair<IAlgoReport,Graph<OwnVertex, OwnEdge>> reportPair = algoManager.startKruksal();
 		
 		VisualizationViewer visualComponent = this.setUpGraphiew(reportPair.getValue());
 		
@@ -163,17 +163,40 @@ public class GraphManager implements IGraphManager{
 
 	// Algorithm Prim
 	@Override
-	public Pair<IAlgoReport,VisualizationViewer> startPrim(String start, boolean withFibHeap) {
+	public Pair<IAlgoReport,VisualizationViewer> startPrim(boolean withFibHeap) {
 		
-		OwnVertex start_node = graphBuilder.getVertexByName(start);
 		algoManager = new AlgorithmManager(adtGraph);
-		Pair<IAlgoReport,Graph> reportPair = algoManager.startPrim(start_node, withFibHeap);
+		Pair<IAlgoReport,Graph<OwnVertex, OwnEdge>> reportPair = algoManager.startPrim(withFibHeap);
 
 		VisualizationViewer visualComponent = this.setUpGraphiew(reportPair.getValue());
 		
 		return new Pair<IAlgoReport, VisualizationViewer>(reportPair.getKey(), visualComponent);
 	}
 
+	
+	// Algorithm Hierholzer
+	@Override
+	public IAlgoReport startHierholzer(String start) {
+		
+		algoManager 		 = new AlgorithmManager(adtGraph);
+		OwnVertex start_node = graphBuilder.getVertexByName(start);
+		
+		IAlgoReport report = algoManager.startHierholzer(start_node);
+		return report;
+	}
+
+	// Algorithm Fleury
+	@Override
+	public IAlgoReport startFleury(String start) {
+
+		algoManager 		 = new AlgorithmManager(adtGraph);
+		OwnVertex start_node = graphBuilder.getVertexByName(start);
+		
+		IAlgoReport report = algoManager.startFleury(start_node);
+		return report;
+	}
+	
+	
 	/*********Helper Method from loadGraph(String path)**********/
 	/**
 	 * Set up the Graphical Component "VisualizationViewer"
@@ -202,8 +225,8 @@ public class GraphManager implements IGraphManager{
 	}
 
 	@Override
-	public VisualizationViewer<OwnVertex, OwnEdge> generateNewGraph(int vertices, int edges, int spread, 
-			int edgeWeightMin, int edgeWeightMax, GraphType...type) throws GraphBuildException {
+	public VisualizationViewer<OwnVertex, OwnEdge> generateNewGraph(int vertices, int edges, boolean coherantly,
+																GraphType...type) throws GraphBuildException {
 
 		this.graphBuilder = new GraphBuilder();
 		this.adtGraph = graphBuilder.createNewGraph(type);
@@ -213,10 +236,10 @@ public class GraphManager implements IGraphManager{
 		
 		if(header.contains(GraphType.ATTRIBUTED.getValue()) && header.contains(GraphType.WEIGHTED.getValue())){
 			
-			generator.generateUndirectedWeightedAttributedGraph(adtGraph, vertices, edges, edgeWeightMin,edgeWeightMax, spread);
+			generator.generateUndirectedWeightedAttributedGraph(adtGraph, vertices, edges, coherantly);
 			
 		}else if(header.contains(GraphType.WEIGHTED.getValue())){
-			generator.generateUndirectedWeightedGraph(adtGraph, vertices, edges, edgeWeightMin, edgeWeightMax, spread);
+			generator.generateUndirectedWeightedGraph(adtGraph, vertices, edges, coherantly);
 			
 		}else{
 			throw new GraphBuildException();
@@ -224,4 +247,21 @@ public class GraphManager implements IGraphManager{
 		
 		return setUpGraphiew(adtGraph);
 	}
+
+	
+	@Override
+	public VisualizationViewer<OwnVertex, OwnEdge> generateNewCoherentlyEvenGraph(int vertices, int edges) throws GraphBuildException {
+		
+		this.graphBuilder = new GraphBuilder();
+		this.adtGraph = graphBuilder.createNewGraph();
+		
+		IGraphGenerator generator = new GraphGenerator();
+		String header = GraphType.createHeader();
+		
+		generator.generateUndirectedCoherentlyEvenGraph(adtGraph, vertices, edges);
+		
+		return setUpGraphiew(adtGraph);
+	}
+	
+	
 }
